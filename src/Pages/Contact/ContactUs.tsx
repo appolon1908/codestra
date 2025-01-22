@@ -32,7 +32,7 @@ const ContactUs = () => {
                 </div>
 
                 <div className='bg-[#151517] p-10 rounded-2xl border border-[#1f1f22] '>
-                    <h2 className='text-2l flex items-center gap-2'><LuMessageCircle  />Sales</h2>
+                    <h2 className='text-2xl flex items-center gap-2'><LuMessageCircle  />Support</h2>
                     <p className='text-sm py-4 text-[#B4B5B5] w-[60%]'>
                         Reach out with product inquiries, report issues, or share your feedback.
                     </p>

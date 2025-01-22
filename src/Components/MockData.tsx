@@ -99,3 +99,59 @@ export const investorData = [
         position: "Partner, Y Combinator",
     },  
 ]
+
+
+export const frontendData = [
+    {
+        name: 'Next.js',
+        description: 'React-based, excellent for server-side rendering',
+    },
+    {
+        name: 'React.js',
+        description: 'Component-based, highly flexible',
+    },
+
+    {
+        name: 'Gatsby',
+        description: 'React-based, focused on static sites',
+    },
+
+    {
+        name: 'Angular',
+        description: 'Full-featured framework by Google',
+    },
+
+    {
+        name: 'Vue.js',
+        description: 'Lightweight, approachable for smaller projects',
+    },
+
+    {
+        name: 'Bootstrap',
+        description: 'CSS framework for responsive designs',
+    },
+
+    {
+        name: 'Flutter',
+        description: 'Dart-based, cross-platform UI framework',
+    },
+
+    {
+        name: 'Svelte',
+        description: 'Compile-time framework for faster apps',
+    },
+
+
+    {
+        name: 'Tailwind CSS',
+        description: 'Utility-first CSS framework',
+    },
+
+]
+
+
+export const texts = [
+    "Craftsmanship in Every Line of Code",
+    "Turning Ideas into Reality",
+    "Delivering Excellence",
+  ];

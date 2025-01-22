@@ -2,7 +2,7 @@ import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdKeyboardArrowRight } from 'react-icons/md'
-import { Button2 } from '../../Components/components/Button'
+import { Button3 } from '../../Components/components/Button'
 import { Link } from 'react-router-dom'
 
 const ContactSupport = () => {
@@ -44,7 +44,7 @@ const ContactSupport = () => {
                 <div className='flex flex-col gap-3 justify-center items-center bg-[#161718] border border-[#232425] text-sm p-10 rounded-xl'>
                     <h2>Log in to your Codestra account so we can help you faster:</h2>
                     <Link to={'/login'}>
-                        <Button2 text='Log in'/>
+                        <Button3 text='Log in'/>
                     </Link>
                     <p>or email us at info@codestra.co</p>
                 </div>

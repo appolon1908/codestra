@@ -10,6 +10,10 @@ import QueryProvider from './Providers/QueryProvider'
 import AllRoutes from './Routes/AllRoutes'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+AOS.init();
 function App() {
 
   return (

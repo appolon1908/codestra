@@ -147,8 +147,9 @@ const ContactSales = () => {
                         </form>
                     </div>
                 </div>
-
-                <SuccessModal isOpen={isOpen} openModal={openModal} closeModal={closeModal}/>
+                {isOpen &&
+                    <SuccessModal isOpen={isOpen} openModal={openModal} closeModal={closeModal}/>
+                }
             </div>
         <Footer />
     </>

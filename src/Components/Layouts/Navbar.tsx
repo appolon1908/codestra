@@ -1,12 +1,20 @@
 import { useState } from "react"
 import { Button1, Button2 } from "../components/Button"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { RiMenu3Line } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const toggleMenu = () => setIsOpen(!isOpen)
+
+    const navigate = useNavigate()
+    const isAuthenticated = localStorage.getItem('accessToken')
+    const handleLogout = () =>{
+        localStorage.removeItem('accessToken')
+        navigate('/', { replace: true })
+    }
+
   return (
     <div className="relative justify-center flex lg:pt-10 pt-3">
         <div className="flex items-center justify-between text-xs fixed 2xl:w-[60%] xl:w-[70%] lg:w-[60%] w-[95%] rounded-lg z-50 p-2 px-5 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
@@ -34,22 +42,41 @@ const Navbar = () => {
                     <li>Contact us</li>
                 </Link>
             </ul>
+            
+            {isAuthenticated ? 
 
-            <div className="flex items-center gap-5">
-                <Link to={'/login'}>
-                    <Button1 text="Log in" />
-                </Link>
+                <div className="flex items-center gap-5">
+                    <Link to={'/auth/dashboard'}>
+                        <Button1 text="Dashboard" />
+                    </Link> 
 
-                <Link to={'/signup'}>
-                    <Button2 text="Sign up" />
-                </Link>
-                <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                    {!isOpen ? 
-                        <p><RiMenu3Line /></p> :
-                        <p><IoMdClose /></p> 
-                    }
+                    <Button2 text="Log out" onClick={handleLogout}/>
+
+                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
+                        {!isOpen ? 
+                            <p><RiMenu3Line /></p> :
+                            <p><IoMdClose /></p> 
+                        }
+                    </div>
                 </div>
-            </div>
+                : 
+
+                <div className="flex items-center gap-5">
+                    <Link to={'/login'}>
+                        <Button1 text="Log in" />
+                    </Link>
+
+                    <Link to={'/signup'}>
+                        <Button2 text="Sign up" />
+                    </Link>
+                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
+                        {!isOpen ? 
+                            <p><RiMenu3Line /></p> :
+                            <p><IoMdClose /></p> 
+                        }
+                    </div>
+                </div>
+            }
 
         </div>
         
