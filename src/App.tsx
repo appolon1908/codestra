@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import ElectronicBilling from './Pages/ElectronicBilling/ElectronicBilling'
 
 AOS.init();
 function App() {
@@ -28,6 +29,8 @@ function App() {
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/contact/sales" element={<ContactSales />} />
               <Route path="/contact/support" element={<ContactSupport />} />
+              <Route path="/electronic-billing" element={<ElectronicBilling />} />
+              
               <Route path="/*" element={<AuthProvider element={
                 <div>
                   <AllRoutes />

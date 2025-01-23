@@ -30,6 +30,8 @@ import { BsSuitDiamondFill } from "react-icons/bs";
 import { SiSimpleanalytics } from "react-icons/si";
 import { useEffect, useState } from 'react';
 import Footer from '../../Components/Layouts/Footer';
+import Products from './Products';
+import { Link } from 'react-router-dom';
 
 
 const Home = () => {
@@ -81,9 +83,11 @@ const Home = () => {
           <p className='lg:text-base text-base'>Development used to be magical—an art that  inspired innovation 
             <br className='hidden lg:block'/> and transformed ideas into reality.
           </p>
-          <button className='py-2.5 px-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white'>
-            Get in touch <GoArrowRight className='text-xl'/>
-          </button>
+          <Link to={'electronic-billing'}>
+            <button className='py-2.5 px-5 mt-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white'>
+              Get in touch <GoArrowRight className='text-xl'/>
+            </button>
+          </Link>
         </div>
         <div className='myDivImage lg:w-[80%] cursor-pointer w-[100%] mt-10 flex justify-center m-auto overflow-hidden'
           onMouseEnter={() => setIsHovered(true)}
@@ -339,6 +343,10 @@ const Home = () => {
               </div>
             </div>
 
+          </div>
+          
+          <div className='lg:pt-[10rem] pt-[5rem]'>
+            <Products />
           </div>
         </div>
       </div>
