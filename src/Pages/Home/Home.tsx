@@ -90,11 +90,11 @@ const Home = () => {
           </Link>
         </div>
         <div className='myDivImage lg:w-[80%] cursor-pointer w-[100%] mt-10 flex justify-center m-auto overflow-hidden'
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          style={{
-            transform: isHovered ? `translate(${position.x}px, ${position.y}px)` : "none",
-          }}
+          // onMouseEnter={() => setIsHovered(true)}
+          // onMouseLeave={() => setIsHovered(false)}
+          // style={{
+          //   transform: isHovered ? `translate(${position.x}px, ${position.y}px)` : "none",
+          // }}
           >
           <img src={image}
            className={`
