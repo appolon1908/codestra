@@ -13,6 +13,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ElectronicBilling from './Pages/ElectronicBilling/ElectronicBilling'
+import ElectronicBillingForm from './Pages/BillingForm/ElectronicBillingForm'
 
 AOS.init();
 function App() {
@@ -30,6 +31,7 @@ function App() {
               <Route path="/contact/sales" element={<ContactSales />} />
               <Route path="/contact/support" element={<ContactSupport />} />
               <Route path="/electronic-billing" element={<ElectronicBilling />} />
+              <Route path="/electronic-billing/form" element={<ElectronicBillingForm />} />
               
               <Route path="/*" element={<AuthProvider element={
                 <div>

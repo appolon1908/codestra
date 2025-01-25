@@ -1,6 +1,6 @@
 import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
-import { Button1, Button2, Button3 } from '../../Components/components/Button'
+import { Button2, Button3 } from '../../Components/components/Button'
 import { RiFolderTransferLine } from "react-icons/ri";
 import { BsStack } from "react-icons/bs";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -175,8 +175,9 @@ const ElectronicBilling = () => {
                         <div className='border-2 border-neutral-800 rounded-2xl border-dashed p-5'>
                             <h2>Bring out the Electronic Billing form</h2>
                             <div className='flex items-center gap-3 pt-3 m-auto justify-center'>
-                                <Button1 text='Form'/>
-                                <Button2 text='Form2'/>
+                                <Link to={'/electronic-billing/form'}>
+                                    <Button2 text='Billing Form'/>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -265,17 +266,6 @@ const ElectronicBilling = () => {
                         <h2 className='text-3xl text-[#FFD700]'>Frequently Asked Questions</h2>
                         <p>We are here to help you </p>
 
-                        {/* <div className='grid grid-cols-4 gap-4 mt-10'>
-                            {faqData.map((faq, index)=>(
-                                <div key={index} onClick={()=>handleSelectFAQ(faq.answer)} className='bg-neutral-900 p-6 rounded-xl border border-neutral-800 cursor-pointer'>
-                                    <div className='flex text-sm gap-4'>
-                                        <h2>{faq.question}</h2>
-                                        <GoPlusCircle className='ml-auto text-3xl'/>
-                                    </div>
-                                </div>
-                            ))}
-                        </div> */}
-
                         <div className="flex flex-col gap-4 mt-10">
                             {faqData.map((faq, index) => (
                                 <>
@@ -299,9 +289,8 @@ const ElectronicBilling = () => {
                                             <p className="p-6 pt-0 text-sm text-neutral-400">{faq.answer}</p>
                                         </div>
                                     </div>
-
-                            </>
-                        ))}
+                                </>
+                            ))}
                         </div>
                     </div>
                 </div>
