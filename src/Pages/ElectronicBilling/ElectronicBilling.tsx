@@ -28,80 +28,80 @@ const ElectronicBilling = () => {
   return (
     <div>
         <Navbar />
-        <div className='lg:px-[25rem] px-3 pt-[10rem]'>
-            <div className='myBg  flex gap-[7rem]'>
-                <div className='space-y-3 w-full'>
-                    <h2 className='text-4xl text-[#FFD700]'>Electronic Billing</h2>
-                    <p className='text-lg '>Modernize and streamline billing processes and comply with Law 32-23 of the DGII</p>
+        <div className='2xl:px-[25rem] xl:px-[10rem] lg:px-[8rem] px-5 lg:pt-[10rem] pt-[8rem]'>
+            <div className='myBg lg:h-[80vh] h-[100vh] flex lg:flex-row flex-col 2xl:gap-[5rem] xl:gap-[5rem] lg:gap-[4rem] gap-6'>
+                <div className='space-y-3 w-full' data-aos="fade-up" data-aos-duration="500">
+                    <h2 className='text-3xl text-[#FFD700]'>Electronic Billing</h2>
+                    <p className='text-base '>Modernize and streamline billing processes and comply with Law 32-23 of the DGII</p>
                     <Button2 text='Contact US'/>
                 </div>
 
-                <form className="space-y-6 p-8 rounded-3xl w-full bg-neutral-900 border border-neutral-800 h-fit">
+                <form data-aos="fade-up" data-aos-duration="500" className="space-y-6 p-5 rounded-3xl w-full bg-neutral-900 border border-neutral-800 h-fit">
                     <div className="space-y-4">
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-white">Full Name</label>
+                            <label className="lg:text-sm text-xs text-white">Full Name</label>
                             <input 
                                 type="text"
                                 placeholder="Kelvin Smith"
-                                className="bg-[#262729] text-sm border-0 text-white p-3 rounded-lg"
+                                className="bg-[#262729] 2xl:text-xs xl:text-xs lg:text-xs text-xs border-0 text-white p-3 rounded-lg"
                                 required
                             />
                         </div>
 
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-white">Email</label>
+                            <label className="lg:lg:text-sm text-xs text-white">Email</label>
                             <input 
                                 type="email"
                                 placeholder="kelvinsmith@gmail.com"
-                                className="bg-[#262729] text-sm border-0 text-white p-3 rounded-lg"
+                                className="bg-[#262729] 2xl:text-xs xl:text-xs lg:text-xs text-xs border-0 text-white p-3 rounded-lg"
                                 required
                             />
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-white">Phone</label>
+                            <label className="lg:text-sm text-xs text-white">Phone</label>
                             <input
                                 type='phone'
                                 placeholder="(000) 000 0000"
-                                className="bg-[#262729] text-sm border-0 text-white p-3 rounded-lg w-full"
+                                className="bg-[#262729] 2xl:text-xs xl:text-xs lg:text-xs text-xs border-0 text-white p-3 rounded-lg w-full"
                                 required
                             />
                         </div>
 
-                        <div className='text-sm'>
+                        <div className='lg:text-sm text-xs'>
 
                             <h2>Use ERP</h2>
                             <div className='flex items-center gap-3 pt-3'>
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" name="radio-1" className="radio w-6 h-6" defaultChecked />
+                                    <input type="radio" name="radio-1" className="radio w-5 h-5" defaultChecked />
                                     <p>Yes</p>
                                 </div>
 
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" name="radio-1" className="radio w-6 h-6" />
+                                    <input type="radio" name="radio-1" className="radio w-5 h-5" />
                                     <p>No</p>
                                 </div>
                             </div>
 
                             <div className='flex items-center gap-2 mt-5'>
-                                <input type="radio" name="radio-1" className="radio w-6 h-6" defaultChecked />
+                                <input type="radio" name="radio-1" className="radio w-5 h-5" defaultChecked />
                                 <p>I agree to be contacted by Codestra Dominican Republic.</p>
                             </div>
                         </div>
 
-                        <div className='flex justify-end ml-auto'>
+                        <div className='flex lg:justify-end lg:ml-auto'>
                             <Button2 text='Send Message'/>
                         </div>
                     </div>
                 </form>
             </div>
 
-            <div className=''>
-                <h2 className='text-center text-3xl'>Craftsmanship in Every Line of Code</h2>
-                <div className='pt-14'>
-                    <h2 className='text-[#FFD700] text-4xl pb-3'>What is Billing</h2>
+            <div className='lg:pt-0 pt-[8rem] text-sm'>
+                <h2 className='text-center text-2xl '>Craftsmanship in Every Line of Code</h2>
+                <div className='pt-14' data-aos="fade-up" data-aos-duration="500">
+                    <h2 className='text-[#FFD700] lg:text-3xl text-2xl pb-3'>What is Billing</h2>
                     <p>
                         In the Dominican Republic, the Electronic Invoicing Law (Law No. 32-23) 
                         offers tax incentives to <br /> encourage early adoption of electronic 
@@ -109,8 +109,8 @@ const ElectronicBilling = () => {
                     </p>
                 </div>
 
-                <div className='grid grid-cols-2 gap-10 mt-10 border-y border-neutral-700  text-center'>
-                    <div className='text-sm border-r border-neutral-700 space-y-5 py-10'>
+                <div className='grid lg:grid-cols-2 grid-cols-1 lg:gap-10  mt-10 border-y border-neutral-700  text-center'>
+                    <div data-aos="fade-up" data-aos-duration="500" className='lg:text-sm text-xs lg:border-r border-neutral-700 space-y-5 py-10'>
                         <h2 className='text-lg pb-3'>Contributor Category</h2>
                         <p>Large micro, small and medium-sized enterprises</p>
                         <p>Medium taxpayers</p>
@@ -118,7 +118,7 @@ const ElectronicBilling = () => {
                         <p>Micro and unclassified enterprises</p>
                     </div>
 
-                    <div className='text-sm space-y-5 py-10'>
+                    <div data-aos="fade-up" data-aos-duration="500" className='lg:text-sm text-xs space-y-5 lg:border-none border-t border-neutral-700 py-10'>
                         <h2 className='text-lg pb-3'>Maximum Tax Credit (DOP)</h2>
                         <p>300, 000</p>
                         <p>200, 000</p>
@@ -127,8 +127,8 @@ const ElectronicBilling = () => {
                     </div>
                 </div>
 
-                <div className='grid grid-cols-2 items-start gap-10 mt-10 '>
-                    <div className='bg-gradient-to-l from-black to-neutral-900 border-2 text-sm space-y-4 border-neutral-800 p-10 rounded-3xl'>
+                <div className='grid lg:grid-cols-2 grid-cols-1 items-start gap-10 mt-10 '>
+                    <div className='bg-gradient-to-l from-black to-neutral-900 border-2 lg:text-sm text-xs space-y-4 border-neutral-800 lg:p-10 p-5 rounded-3xl'>
                         <h2>
                             Use of Tax Credit  . These tax credits can 
                             be applied within the same fiscal year against:
@@ -139,8 +139,8 @@ const ElectronicBilling = () => {
                         <p className='flex gap-2'><IoIosWallet className='text-lg'/>Asset tax</p>
                     </div>
 
-                    <div className='relative text-xs'>
-                        <div className='bg-neutral-900 border-2 space-y-4 border-neutral-800 p-5 rounded-3xl'>
+                    <div className='lg:relative text-xs'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='bg-neutral-900 border-2 space-y-4 border-neutral-800 p-5 rounded-3xl'>
                             <h2 className='text-lg'>
                                 Requeirements
                             </h2>
@@ -152,7 +152,7 @@ const ElectronicBilling = () => {
                             </p>
                         </div>
 
-                        <div className='bg-neutral-900 absolute z-20 left-14 top-[120px] bg-opacity-80  border-2 space-y-4 border-neutral-800 p-5 rounded-3xl'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='bg-neutral-900 lg:absolute z-20 lg:mt-0 mt-5 left-14 top-[120px] lg:bg-opacity-80  border-2 space-y-4 border-neutral-800 p-5 rounded-3xl'>
                             <h2 className='text-lg'>
                                 Requeirements
                             </h2>
@@ -166,14 +166,14 @@ const ElectronicBilling = () => {
                     </div>
                 </div>
 
-                <div className='flex relative justify-center m-auto'>
+                <div className='flex relative justify-center m-auto lg:mt-0 mt-[5rem]'> 
                     <div className='w-full'>
                         <img src={formImage} alt="" className='w-full'/>
                     </div>
 
-                    <div className='absolute bottom-24 bg-neutral-900 rounded-3xl p-5 bg-opacity-90 border-2 border-neutral-900'>
-                        <div className='border-2 border-neutral-800 rounded-2xl border-dashed p-5'>
-                            <h2>Bring out the Electronic Billing form</h2>
+                    <div data-aos="fade-up" data-aos-duration="500" className='absolute bottom-0 bg-neutral-900 rounded-3xl lg:p-5 p-3 bg-opacity-90 border-2 border-neutral-900'>
+                        <div className='border-2 border-neutral-800 rounded-2xl border-dashed lg:p-5 p-3'>
+                            <h2 className='lg:text-sm text-xs'>Bring out the Electronic Billing form</h2>
                             <div className='flex items-center gap-3 pt-3 m-auto justify-center'>
                                 <Link to={'/electronic-billing/form'}>
                                     <Button2 text='Billing Form'/>
@@ -185,38 +185,38 @@ const ElectronicBilling = () => {
 
 
                 <div className='lg:pt-[10rem] pt-[5rem]'>
-                    <h2 className='text-3xl text-[#FFD700]'>Benefits</h2>
+                    <h2 className='lg:text-3xl text-2xl text-[#FFD700]'>Benefits</h2>
 
-                    <div className='grid grid-cols-2 gap-10 mt-8'>
-                        <div className='grid lg:grid-cols-2 grid-cols-1 gap-5 text-sm'>
+                    <div className='grid lg:grid-cols-2 grid-cols-1 lg:gap-10 gap-5 lg:mt-8 mt-5'>
+                        <div data-aos="fade-up" data-aos-duration="700" className='grid lg:grid-cols-2 grid-cols-1 gap-5 lg:text-sm text-xs'>
                             {benefitsData.map((frontdata)=>(
                             <div className='flex bg-neutral-900 hover:bg-neutral-800 eachImage rounded-xl lg:p-2 p-4 cursor-pointer'>
                                 <p><TbMinusVertical className={frontdata.id !== 1 ? 'text-2xl text-white' : 'text-2xl text-[#FFD700]'}/></p>
                                 <div>
-                                <h2 className='text-sm'>{frontdata.name}</h2>
+                                <h2 className='lg:text-sm text-xs'>{frontdata.name}</h2>
                                 <p className='text-[13px] pt-2'>{frontdata.description}</p>
                                 </div>
                             </div>
                             ))}
                         </div>
 
-                        <div className='w-full'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='w-full'>
                             <img src={benefitImage} alt="" className='w-full'/>
                         </div>
                     </div>
                 </div>
 
                 <div className='lg:pt-[10rem] pt-[5rem]'>
-                    <h2 className='text-3xl text-[#FFD700]'>Plans and Prices</h2>
+                    <h2 className='lg:text-3xl text-2xl pb-3 text-[#FFD700]'>Plans and Prices</h2>
                     <p>* Prices exempt from ITBIS</p>
 
-                    <div className='grid grid-cols-2 px-0 gap-10 mt-10 text-sm'>
-                        <div className='bg-neutral-900 border-2 border-neutral-800  rounded-3xl'>
+                    <div className='grid lg:grid-cols-2 grid-cols-1 px-0 lg:gap-10 gap-5 lg:mt-10 mt-5 lg:text-sm text-xs'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='bg-neutral-900 border-2 border-neutral-800  rounded-3xl'>
                             <div className=''>
-                                <h2 className='text-xl px-10 py-10  border-b border-neutral-800'>For ERP Business Management</h2>
-                                <p className='border-b px-10 py-10  border-neutral-800'>RD13,800 - Implementation</p>
+                                <h2 className='xl:text-xl text-lg lg:p-10 p-5  border-b border-neutral-800'>For ERP Business Management</h2>
+                                <p className='border-b lg:p-10 p-5  border-neutral-800'>RD13,800 - Implementation</p>
                             </div>
-                            <ul className='space-y-6 p-10'>
+                            <ul className='space-y-6 lg:p-10 p-5'>
                                 <li className='flex gap-2'><IoCheckmarkCircleSharp className='text-lg'/>Up to 1,000 transactions RD$210</li>
                                 <li className='flex gap-2'><IoCheckmarkCircleSharp className='text-lg'/>From 1,001 to 5,000 transactions RD$545</li>
                                 <li className='flex gap-2'><IoCheckmarkCircleSharp className='text-lg'/>From 5,001 to 10,000 transactions RD$915</li>
@@ -231,12 +231,12 @@ const ElectronicBilling = () => {
                             </div>
                         </div>
 
-                        <div className='bg-neutral-900 border-2 border-neutral-800  rounded-3xl'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='bg-neutral-900 border-2 border-neutral-800  rounded-3xl'>
                             <div className=''>
-                                <h2 className='text-xl p-10  border-b border-neutral-800'>For standalone ERPs</h2>
-                                <p className='border-b p-10  border-neutral-800'>RD68,500 - Implementation</p>
+                                <h2 className='xl:text-xl text-lg lg:p-10  p-5 border-b border-neutral-800'>For standalone ERPs</h2>
+                                <p className='border-b lg:p-10  p-5 border-neutral-800'>RD68,500 - Implementation</p>
                             </div>
-                            <ul className='space-y-6 p-10'>
+                            <ul className='space-y-6 lg:p-10 p-5'>
                                 <li className='flex gap-2'><IoCheckmarkCircleSharp className='text-lg'/>Up to 1,000 transactions RD$830</li>
                                 <li className='flex gap-2'><IoCheckmarkCircleSharp className='text-lg'/>From 1,001 to 5,000 transactions RD$2,180</li>
                                 <li className='flex gap-2'><IoCheckmarkCircleSharp className='text-lg'/>From 5,001 to 10,000 transactions RD$3,650</li>
@@ -252,6 +252,7 @@ const ElectronicBilling = () => {
                         </div>
 
                     </div>
+
                     <div className='flex flex-col text-center pt-10 justify-center m-auto '>
                         <h2>Learn more details about Claro Cloud Electronic Billing</h2>
 
@@ -263,15 +264,15 @@ const ElectronicBilling = () => {
                     </div>
 
                     <div className='mt-10'>
-                        <h2 className='text-3xl text-[#FFD700]'>Frequently Asked Questions</h2>
+                        <h2 className='lg:text-3xl text-2xl pb-3 text-[#FFD700]'>Frequently Asked Questions</h2>
                         <p>We are here to help you </p>
 
-                        <div className="flex flex-col gap-4 mt-10">
+                        <div  className="flex flex-col gap-4 lg:mt-10 mt-5">
                             {faqData.map((faq, index) => (
                                 <>
-                                    <div key={index} className="bg-[#151517] rounded-xl border border-[#262629] overflow-hidden">
+                                    <div data-aos="fade-up" data-aos-duration="500" key={index} className="bg-[#151517] rounded-xl border border-[#262629] overflow-hidden">
                                         <div onClick={() => handleToggle(index)} className="p-6 cursor-pointer">
-                                            <div className="flex items-center text-sm gap-4">
+                                            <div className="flex items-center lg:text-sm text-xs gap-4">
                                             <h2 className="flex-grow">{faq.question}</h2>
                                             {openIndex === index ? (
                                                 <AiOutlineMinusCircle className="text-xl flex-shrink-0" />
@@ -286,7 +287,7 @@ const ElectronicBilling = () => {
                                             openIndex === index ? "max-h-40" : "max-h-0"
                                             }`}
                                         >
-                                            <p className="p-6 pt-0 text-sm text-neutral-400">{faq.answer}</p>
+                                            <p className="p-6 pt-0 lg:text-sm text-xs text-neutral-400">{faq.answer}</p>
                                         </div>
                                     </div>
                                 </>

@@ -70,7 +70,7 @@ export const SuccessModal2:React.FC<SuccessModalProps> = ({closeModal, isOpen}: 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeModal}
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed inset-0 z-40 flex items-center justify-center"
           >
             <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
 
@@ -79,12 +79,12 @@ export const SuccessModal2:React.FC<SuccessModalProps> = ({closeModal, isOpen}: 
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#121212] border border-[#1f2229] text-white rounded-lg shadow-xl p-6 w-full max-w-md z-10"
+              className="bg-[#121212] border border-[#1f2229] text-white rounded-lg shadow-xl p-6 lg:w-full w-[95%] max-w-md z-10"
             >
               <div className="text-center">
                 <IoMdCheckmarkCircleOutline className="mx-auto h-12 w-12 text-[#FFD700]" />
-                <h3 className="mt-2 text-xl font-semibold">Sent Successfully! 🚀🎉</h3>
-                <p className="mt-2 text-sm">Your message has been sent successfully.</p>
+                <h3 className="mt-2 lg:text-xl text-lg font-semibold">Sent Successfully! 🚀🎉</h3>
+                <p className="mt-2 lg:text-sm text-xs">Your message has been sent successfully.</p>
                 
                 <div className="flex justify-center gap-4 m-auto mt-4">
                     <Button2 text="Close" onClick={closeModal}/>

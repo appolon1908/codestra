@@ -10,8 +10,8 @@ const ContactSupport = () => {
 
     <>
         <Navbar />
-        <div className='lg:px-[25rem] px-5 lg:pt-[10rem] pt-[8rem] '>
-            <div className='grid grid-cols-2 gap-20'>
+        <div className='2xl:px-[25rem] xl:px-[10rem] lg:px-[8rem] px-5 lg:pt-[10rem] pt-[8rem]'>
+            <div className='grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-10'>
                 <div className='space-y-10'>
 
                     <div>

@@ -2,11 +2,13 @@
 import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button2, Button2b } from '../../Components/components/Button';
 import useTask from '../../hooks/mutations/useTask';
 import { useForm } from 'react-hook-form';
 import { SuccessModal2 } from '../../Components/components/Modals';
+import { Alert } from '../../Components/components/Alert';
+import { BiUpload } from 'react-icons/bi';
 
 
 type TaskProps = {
@@ -33,11 +35,21 @@ type TaskProps = {
     tax_payer_number:string
     tax_payer_sector:string
     tax_payer_province:string
+    // media_file: UploadedFile[]
 }
+
+
+interface UploadedFile {
+    file: File
+    progress: number
+  }
+
+
 const ElectronicBillingForm = () => {
 
+
+    // ============ NEXT SLIDE FUNCTION =============
     const [position, setPosition] = useState(1)
-    
     const handlePrevious = () => {
         if (position > 1) {
             setPosition(position - 1)
@@ -50,30 +62,75 @@ const ElectronicBillingForm = () => {
         }
     }
     
-
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isOpen, setIsOpen] = useState(false);
     const openModal = () => setIsOpen(true)
     const closeModal = () => setIsOpen(false)
 
+
+
+    // ================ IMAGE UPLOAD ================
+    const [files, setFiles] = useState<UploadedFile[]>([])
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+        const selectedFiles = Array.from(e.target.files)
+        handleFiles(selectedFiles)
+        }
+    }
+
+    const handleFiles = (newFiles: File[]) => {
+        if (files.length + newFiles.length > 5) {
+        alert("You can only upload up to 5 files")
+        return
+    }
+
+    const newUploadedFiles = newFiles.map((file) => ({
+        file,
+        progress: 0,
+    }))
+
+        setFiles((prev) => [...prev, ...newUploadedFiles])
+    }
+
+
+    const handleCancel = () => {
+        setFiles([])
+    }
+
+
+    console.log('This is are files', files);
+    
+
+    // =================== API REQUEST SUBMISSION =================
     const {mutate, isPending} = useTask()
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { isValid },
     } = useForm<TaskProps>({mode: 'all'})
 
     const onSubmit = (data:TaskProps) => {
+        // data.media_file = files
         mutate(data, {
             onSuccess: (details) => {
                 console.log('Task created successfully', details)
                 setIsOpen(true)
+                setIsAlertOpen(true)
+                reset()
             },
             onError: (error) => {
-                console.error('Error creating task', error)
+                console.log('Error creating task', error)
             }
         })
     }
+
+    setTimeout(() => {
+        setIsAlertOpen(false);
+    }, 4000);
 
 
     
@@ -81,10 +138,11 @@ const ElectronicBillingForm = () => {
   return (
     <>
         <Navbar />
-        <div className='2xl:px-[25rem] xl:px-[10rem] lg:px-[8rem] px-5 lg:pt-[10rem] pt-[6rem]'>
-            <h2>Form Title</h2>
-            <p className='text-sm pt-2'>Taxpayer Registration Application</p>
-
+        <div className='2xl:px-[25rem] xl:px-[10rem] relative lg:px-[8rem] px-5 lg:pt-[10rem] pt-[6rem]'>
+            <p className='text-base pt-2'>Taxpayer Registration Application</p>
+            
+            {isAlertOpen === true && <Alert />}
+            
             <div className='py-4 border-y text-xs border-neutral-800 lg:mt-10 mt-7'>
 
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -92,7 +150,7 @@ const ElectronicBillingForm = () => {
                         <div>
                             
                             <div className="flex flex-col gap-2 ">
-                                <label className="text-sm text-white">Taxpayer's RNC</label>
+                                <label className="text-white">Taxpayer's RNC</label>
                                 <input 
                                     type="text"
                                     placeholder="Input field for RNC"
@@ -101,9 +159,9 @@ const ElectronicBillingForm = () => {
                                 />
                             </div>
 
-                            <div className='grid lg:grid-cols-2 grid-cols-2 lg:gap-6 gap-4 lg:mt-10 mt-8'>
+                            <div className='grid lg:grid-cols-2 grid-cols-1 lg:gap-6 gap-6 lg:mt-10 mt-8'>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Name of Taxpayer</label>
+                                    <label className="text-white">Name of Taxpayer</label>
                         
                                     <input 
                                         type="text"
@@ -114,7 +172,7 @@ const ElectronicBillingForm = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Trade Name</label>
+                                    <label className="text-white">Trade Name</label>
                                     <input 
                                         type="text"
                                         placeholder="Business name input field"
@@ -124,9 +182,9 @@ const ElectronicBillingForm = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Taxpayer's Telephone</label>
+                                    <label className="text-white">Taxpayer's Telephone</label>
                                     <input 
-                                        type="phone"
+                                        type="number"
                                         placeholder="Input field for phone number"
                                         className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                         {...register('tax_payer_telephone', {required: true})}
@@ -135,9 +193,9 @@ const ElectronicBillingForm = () => {
 
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Taxpayer's Cell Phone</label>
+                                    <label className="text-white">Taxpayer's Cell Phone</label>
                                     <input 
-                                        type="phone"
+                                        type="number"
                                         placeholder="Input field for cell phone number"
                                         className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                         {...register('tax_payer_cell_phone', {required: true})}
@@ -146,7 +204,7 @@ const ElectronicBillingForm = () => {
 
 
                                 <div className="flex flex-col gap-2 ">
-                                    <label className="text-sm text-white">Taxpayer's Email</label>
+                                    <label className="text-white">Taxpayer's Email</label>
                                     <input 
                                         type="email"
                                         placeholder="Email input field"
@@ -159,34 +217,44 @@ const ElectronicBillingForm = () => {
                             <div className='mt-10'>
                                 <h2 className='text-neutral-400 '>Taxpayer's Address</h2>
                                 
-                                <div className='grid lg:grid-cols-3 grid-cols-1 gap-6 pt-5'>
+                                <div className='grid lg:grid-cols-2 grid-cols-1 gap-6 pt-5'>
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-sm text-white">Address</label>
-                                        <input 
-                                            type="text"
-                                            placeholder="Input field for number"
-                                            className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
-                                            {...register('address_reference', {required: true})}
-                                        />
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm text-white">Visiting Hours</label>
+                                        <label className="text-white">Number</label>
                                         <input 
                                             type="number"
-                                            placeholder="Input field for sector"
+                                            placeholder="Input field for number"
                                             className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
-                                            {...register('visiting_hours', {required: true})}
+                                            {...register('tax_payer_number', {required: true})}
                                         />
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-sm text-white">Province</label>
+                                        <label className="text-white">Sector</label>
+                                        <input 
+                                            type="text"
+                                            placeholder="input field for sector"
+                                            className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
+                                            {...register('tax_payer_sector', {required: true})}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-white">Province</label>
                                         <input 
                                             type="text"
                                             placeholder="Dropdown or input field for province"
                                             className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                             {...register('tax_payer_province', {required: true})}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-white">Visiting Hours</label>
+                                        <input 
+                                            type="number"
+                                            placeholder="Input field for sector"
+                                            className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
+                                            {...register('visiting_hours', {required: true})}
                                         />
                                     </div>
                                 </div>
@@ -196,11 +264,11 @@ const ElectronicBillingForm = () => {
 
                     {position === 2 && 
                         <div>
-                            <h2 className='text-neutral-400 '>Legal Representative</h2>
+                            <h2 className='text-sm text-neutral-500'>Legal Representative</h2>
 
-                            <div className='grid lg:grid-cols-2 grid-cols-1 gap-6 mt-10'>
+                            <div className='grid lg:grid-cols-2 grid-cols-1 gap-6 mt-5'>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Representative's RNC</label>
+                                    <label className="text-white">Representative's RNC</label>
                         
                                     <input 
                                         type="text"
@@ -211,7 +279,7 @@ const ElectronicBillingForm = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Name of Representative/Applicant</label>
+                                    <label className="text-white">Name of Representative/Applicant</label>
                                     <input 
                                         type="text"
                                         placeholder="Input field for name"
@@ -221,9 +289,9 @@ const ElectronicBillingForm = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Representative Phone</label>
+                                    <label className="text-white">Representative Phone</label>
                                     <input 
-                                        type="phone"
+                                        type="number"
                                         placeholder="Input field for phone number"
                                         className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                         {...register('representative_phone', {required: true})}
@@ -232,9 +300,9 @@ const ElectronicBillingForm = () => {
 
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-sm text-white">Representative's cell phone</label>
+                                    <label className="text-white">Representative's cell phone</label>
                                     <input 
-                                        type="phone"
+                                        type="number"
                                         placeholder="Input field for cell phone number"
                                         className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                         {...register('representative_cell_phone', {required: true})}
@@ -243,7 +311,7 @@ const ElectronicBillingForm = () => {
 
 
                                 <div className="flex flex-col gap-2 ">
-                                    <label className="text-sm text-white">Representative's Email</label>
+                                    <label className="text-white">Representative's Email</label>
                                     <input 
                                         type="email"
                                         placeholder="Email input field"
@@ -252,14 +320,71 @@ const ElectronicBillingForm = () => {
                                     />
                                 </div>
                             </div>
+
+                            <div className='border border-neutral-800 bg-[#18181a] mt-10 p-5 rounded-lg space-y-3'>
+                                <h2>Media Upload</h2>
+                                <h2 className='text-xs text-neutral-400'>Add your documents here, and you can upload up to 5 files max</h2>
+
+                                <div
+                                    className={`
+                                        border-2 border-dashed rounded-lg p-12 border-zinc-800 bg-neutral-800 
+                                        ${files.length > 0 ? "bg-zinc-800/50" : ""}
+                                        transition-colors duration-200
+                                    `}
+                                    >
+                                    <div className="flex flex-col items-center gap-4">
+                                        <BiUpload className="h-12 w-12 text-zinc-400" />
+                                        <p className="text-xs text-center">
+                                        {files.length > 0
+                                            ? `${files.length} file${files.length > 1 ? "s" : ""} selected`
+                                            : "Drag your file(s) to start uploading"}
+                                        </p>
+                                        <p className="text-zinc-400">Or</p>
+                                        <p className='bg-[#FFD700] text-black cursor-pointer px-6 py-3 rounded-lg' onClick={() => fileInputRef.current?.click()}>Browse files</p>
+                                        
+                                        <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        multiple
+                                        className="hidden"
+                                        onChange={handleFileInput}
+                                        accept="image/*,application/pdf"
+                                        />
+                                    </div>
+                                </div>
+                                <p
+                                    onClick={handleCancel}
+                                    className="bg-white w-fit px-6 py-3 rounded-lg text-black cursor-pointer flex ml-auto"
+                                    >
+                                    Cancel
+                                </p>
+
+                                <div>
+                                    {files.length > 0 && (
+                                    <div className="mt-6 space-y-3">
+                                        {files.map((file, index) => (
+                                        <div key={index} className="flex items-center gap-4 text-sm">
+                                            <div className="w-full bg-zinc-800 rounded-full h-2">
+                                            <div
+                                                className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
+                                                style={{ width: `${file.progress}%` }}
+                                            />
+                                            </div>
+                                            <span className="text-zinc-400 text-xs whitespace-nowrap">{file.file.name.slice(0,10)}</span>
+                                        </div>
+                                        ))}
+                                    </div>
+                                    )}
+                                </div>
+                            </div>
+
                             
                             <div className='mt-10'>
 
                                 <div className="flex flex-col gap-2 ">
-                                    <label className="text-sm text-white">Carry out operations in a premises or warehouse at another address</label>
+                                    <label className="text-white">Carry out operations in a premises or warehouse at another address</label>
                                     <div className='relative'>
                                         <select
-                                        //  className="border-2 border-neutral-400 lg:w-[50%] w-full rounded-lg p-3 text-white bg-[#18181a]"
                                         className="appearance-none bg-[#18181a] outline-none focus:border-2 focus:border-gray-600 w-full text-white p-3 rounded-md cursor-pointer"
                                             defaultValue=""
                                         {...register('operation_carried_out_in_premise', {required: true})}
@@ -288,10 +413,10 @@ const ElectronicBillingForm = () => {
                                 
 
                                 <div className='mt-10'>
-                                    <h2>Store or Warehouse Data (If Applicable)</h2>
-                                    <div className='grid lg:grid-cols-3 grid-cols-2 gap-6 pt-5'>
+                                    <h2 className='text-sm text-neutral-500'>Store or Warehouse Data (If Applicable)</h2>
+                                    <div className='grid lg:grid-cols-3 grid-cols-1 gap-6 pt-5'> 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm text-white">Street of the Local or Warehouse</label>
+                                            <label className="text-white">Street of the Local or Warehouse</label>
                                             <input 
                                                 type="number"
                                                 placeholder="Street input field"
@@ -302,7 +427,7 @@ const ElectronicBillingForm = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm text-white">Store or Warehouse Number</label>
+                                            <label className="text-white">Store or Warehouse Number</label>
                                             <input 
                                                 type="text"
                                                 placeholder="Input field for number"
@@ -313,7 +438,7 @@ const ElectronicBillingForm = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm text-white">Local or Warehouse Sector</label>
+                                            <label className="text-white">Local or Warehouse Sector</label>
                                             <input 
                                                 type="text"
                                                 placeholder="Input field for sector"
@@ -324,7 +449,7 @@ const ElectronicBillingForm = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm text-white">Province of the Local or Warehouse</label>
+                                            <label className="text-white">Province of the Local or Warehouse</label>
                                             <input 
                                                 type="text"
                                                 placeholder="Dropdown or input field for province"
@@ -335,7 +460,7 @@ const ElectronicBillingForm = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm text-white">Local or Warehouse Reference</label>
+                                            <label className="text-white">Local or Warehouse Reference</label>
                                             <input 
                                                 type="text"
                                                 placeholder="Input field for address reference"
@@ -346,7 +471,7 @@ const ElectronicBillingForm = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm text-white">Local Administration</label>
+                                            <label className="text-white">Local Administration</label>
                                             <input 
                                                 type="text"
                                                 placeholder="Input field for administration related details"
@@ -362,22 +487,34 @@ const ElectronicBillingForm = () => {
 
                     <div className='flex ml-auto gap-4 justify-start mt-10'>
 
-                        {position === 1 ? 
-                            <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handleNext}>Next</p>
-                        :
-                            <div>
-                                {!isValid ? 
-                                    <div className='flex gap-4'>
-                                        <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
-                                        <Button2 text='Submit Data'/>
-                                    </div>
-                                    :
-                                    <div className='flex gap-4'>
-                                        <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
-                                        <Button2b text='Submit Data' isPending={isPending}/>
-                                    </div>
-                                }
-                            </div>
+                        {position === 1 && !isValid && 
+                            <>
+                                <button type='submit' className='text-xs p-6 py-2.5 lg:w-[30%] w-full rounded-lg bg-white text-black cursor-pointer' >Next</button>
+                            </>
+                        }
+
+                        {position === 1 && isValid && 
+                            <>
+                                <p className='text-xs p-6 py-2.5 lg:w-[30%] w-full text-center rounded-lg bg-white text-black cursor-pointer' onClick={handleNext}>Next</p>
+                            </>
+                        }
+
+
+
+                        {position === 2 &&  
+                        <div>
+                            {!isValid ? 
+                                <div className='flex gap-4'>
+                                    <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
+                                    <Button2 text='Submit Data'/>
+                                </div>
+                                :
+                                <div className='flex gap-4'>
+                                    <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
+                                    <Button2b text='Submit Data' isPending={isPending}/>
+                                </div>
+                            }
+                        </div>
                         }
                     </div>
                 </form>
