@@ -3,9 +3,10 @@ import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { useState } from 'react';
-import { Button1, Button2b, Button2c } from '../../Components/components/Button';
+import { Button2, Button2b } from '../../Components/components/Button';
 import useTask from '../../hooks/mutations/useTask';
 import { useForm } from 'react-hook-form';
+import { SuccessModal2 } from '../../Components/components/Modals';
 
 
 type TaskProps = {
@@ -50,6 +51,10 @@ const ElectronicBillingForm = () => {
     }
     
 
+    const [isOpen, setIsOpen] = useState(false);
+    const openModal = () => setIsOpen(true)
+    const closeModal = () => setIsOpen(false)
+
     const {mutate, isPending} = useTask()
 
     const {
@@ -62,6 +67,7 @@ const ElectronicBillingForm = () => {
         mutate(data, {
             onSuccess: (details) => {
                 console.log('Task created successfully', details)
+                setIsOpen(true)
             },
             onError: (error) => {
                 console.error('Error creating task', error)
@@ -69,14 +75,17 @@ const ElectronicBillingForm = () => {
         })
     }
 
+
+    
+
   return (
     <>
         <Navbar />
-        <div className='lg:px-[25rem] px-3 pt-[10rem]'>
+        <div className='2xl:px-[25rem] xl:px-[10rem] lg:px-[8rem] px-5 lg:pt-[10rem] pt-[6rem]'>
             <h2>Form Title</h2>
-            <p>Taxpayer Registration Application</p>
+            <p className='text-sm pt-2'>Taxpayer Registration Application</p>
 
-            <div className='py-4 border-y text-sm border-neutral-800 mt-10'>
+            <div className='py-4 border-y text-xs border-neutral-800 lg:mt-10 mt-7'>
 
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                     {position === 1 && 
@@ -92,7 +101,7 @@ const ElectronicBillingForm = () => {
                                 />
                             </div>
 
-                            <div className='grid grid-cols-2 gap-6 mt-10'>
+                            <div className='grid lg:grid-cols-2 grid-cols-2 lg:gap-6 gap-4 lg:mt-10 mt-8'>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm text-white">Name of Taxpayer</label>
                         
@@ -150,11 +159,11 @@ const ElectronicBillingForm = () => {
                             <div className='mt-10'>
                                 <h2 className='text-neutral-400 '>Taxpayer's Address</h2>
                                 
-                                <div className='grid grid-cols-3 gap-6 pt-5'>
+                                <div className='grid lg:grid-cols-3 grid-cols-1 gap-6 pt-5'>
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm text-white">Address</label>
                                         <input 
-                                            type="number"
+                                            type="text"
                                             placeholder="Input field for number"
                                             className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                             {...register('address_reference', {required: true})}
@@ -164,7 +173,7 @@ const ElectronicBillingForm = () => {
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm text-white">Visiting Hours</label>
                                         <input 
-                                            type="text"
+                                            type="number"
                                             placeholder="Input field for sector"
                                             className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
                                             {...register('visiting_hours', {required: true})}
@@ -177,7 +186,7 @@ const ElectronicBillingForm = () => {
                                             type="text"
                                             placeholder="Dropdown or input field for province"
                                             className="bg-[#18181a] border-0 text-white p-3 rounded-lg"
-                                            {...register('province_of_warehouse', {required: true})}
+                                            {...register('tax_payer_province', {required: true})}
                                         />
                                     </div>
                                 </div>
@@ -189,7 +198,7 @@ const ElectronicBillingForm = () => {
                         <div>
                             <h2 className='text-neutral-400 '>Legal Representative</h2>
 
-                            <div className='grid grid-cols-2 gap-6 mt-10'>
+                            <div className='grid lg:grid-cols-2 grid-cols-1 gap-6 mt-10'>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm text-white">Representative's RNC</label>
                         
@@ -280,7 +289,7 @@ const ElectronicBillingForm = () => {
 
                                 <div className='mt-10'>
                                     <h2>Store or Warehouse Data (If Applicable)</h2>
-                                    <div className='grid grid-cols-3 gap-6 pt-5'>
+                                    <div className='grid lg:grid-cols-3 grid-cols-2 gap-6 pt-5'>
                                         <div className="flex flex-col gap-2">
                                             <label className="text-sm text-white">Street of the Local or Warehouse</label>
                                             <input 
@@ -352,15 +361,24 @@ const ElectronicBillingForm = () => {
                     }
 
                     <div className='flex ml-auto gap-4 justify-start mt-10'>
-                        <Button1 text='Next' />
 
-                        <div>
-                            {!isValid ? 
-                                <Button2c text='Submit Data'/>
-                                :
-                                <Button2b text='Submit Data' isPending={isPending}/>
-                            }
-                        </div>
+                        {position === 1 ? 
+                            <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handleNext}>Next</p>
+                        :
+                            <div>
+                                {!isValid ? 
+                                    <div className='flex gap-4'>
+                                        <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
+                                        <Button2 text='Submit Data'/>
+                                    </div>
+                                    :
+                                    <div className='flex gap-4'>
+                                        <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
+                                        <Button2b text='Submit Data' isPending={isPending}/>
+                                    </div>
+                                }
+                            </div>
+                        }
                     </div>
                 </form>
             </div>
@@ -374,6 +392,10 @@ const ElectronicBillingForm = () => {
                 </div>
             </div>
         </div>
+
+        {isOpen &&
+            <SuccessModal2 isOpen={isOpen} openModal={openModal} closeModal={closeModal}/>
+        }
         <Footer />
     </>
   )

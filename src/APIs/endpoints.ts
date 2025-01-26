@@ -13,4 +13,4 @@ export const EMPLOYEE_LIST_ENDPOINT = "/api/employee/"
 // export const EMPLOYEE_DELETE_ENDPOINT = "/api/employee/delete/"
 
 //TASK ENDPOINT
-export const TASK_ENDPOINT_CREATE = "/cms/tax-payer/"
+export const TASK_ENDPOINT_CREATE = "/api/cms/tax-payer/"
