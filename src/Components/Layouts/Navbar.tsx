@@ -3,6 +3,7 @@ import { Button1, Button2 } from "../components/Button"
 import { Link, useNavigate } from "react-router-dom"
 import { RiMenu3Line } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
+// import useLogo from "../../hooks/queries/useLogo";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -14,6 +15,12 @@ const Navbar = () => {
         localStorage.removeItem('accessToken')
         navigate('/', { replace: true })
     }
+
+    // const {data, isLoading} = useLogo()
+
+    // const logoData = data
+
+    
 
   return (
     <div className="relative justify-center flex lg:pt-10 pt-3">

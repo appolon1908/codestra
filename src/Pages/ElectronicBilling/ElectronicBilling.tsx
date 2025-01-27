@@ -7,15 +7,21 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import { IoIosWallet } from "react-icons/io";
 import formImage from '../../assets/form.png'
 import benefitImage from '../../assets/benefit.png'
-import { benefitsData, faqData } from '../../Components/MockData';
+import { benefitsData } from '../../Components/MockData';
 import { TbMinusVertical } from 'react-icons/tb';
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { GoPlusCircle } from "react-icons/go";
 import { useState } from 'react';
 import { AiOutlineMinusCircle } from 'react-icons/ai';
+import useFAQ from '../../hooks/queries/useFAQ';
+import Loading from '../../Components/components/Loading';
 
 
+interface FAQ{
+    question: string;
+    answer: string;
+}
 const ElectronicBilling = () => {
 
     const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -24,6 +30,10 @@ const ElectronicBilling = () => {
       setOpenIndex(openIndex === index ? null : index)
     }
 
+
+    const {data, isLoading} = useFAQ()
+    const faqData = data?.data as FAQ[] || []
+    console.log('This is data', data)
 
   return (
     <div>
@@ -266,14 +276,17 @@ const ElectronicBilling = () => {
                     <div className='mt-10'>
                         <h2 className='lg:text-3xl text-2xl pb-3 text-[#FFD700]'>Frequently Asked Questions</h2>
                         <p>We are here to help you </p>
-
+                        
+                        {isLoading ? 
+                        <Loading /> :
+                        
                         <div  className="flex flex-col gap-4 lg:mt-10 mt-5">
-                            {faqData.map((faq, index) => (
+                            {faqData?.map((faq, index) => (
                                 <>
                                     <div data-aos="fade-up" data-aos-duration="500" key={index} className="bg-[#151517] rounded-xl border border-[#262629] overflow-hidden">
                                         <div onClick={() => handleToggle(index)} className="p-6 cursor-pointer">
                                             <div className="flex items-center lg:text-sm text-xs gap-4">
-                                            <h2 className="flex-grow">{faq.question}</h2>
+                                            <h2 className="flex-grow">{faq?.question}</h2>
                                             {openIndex === index ? (
                                                 <AiOutlineMinusCircle className="text-xl flex-shrink-0" />
                                             ) : (
@@ -287,12 +300,13 @@ const ElectronicBilling = () => {
                                             openIndex === index ? "max-h-40" : "max-h-0"
                                             }`}
                                         >
-                                            <p className="p-6 pt-0 lg:text-sm text-xs text-neutral-400">{faq.answer}</p>
+                                            <p className="p-6 pt-0 lg:text-sm text-xs text-neutral-400">{faq?.answer}</p>
                                         </div>
                                     </div>
                                 </>
                             ))}
                         </div>
+                        }
                     </div>
                 </div>
 
