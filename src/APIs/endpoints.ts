@@ -20,3 +20,6 @@ export const LOGO_ENDPOINT = "/api/cms/logo/"
 
 //FAQs
 export const FAQS_ENDPOINT_GET = "/api/cms/faqs/"
+
+//TESTOMINIES
+export const TESTIMONIALS_ENDPOINT_GET = "/api/cms/testimonial/"

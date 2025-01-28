@@ -30,8 +30,9 @@ import { BsSuitDiamondFill } from "react-icons/bs";
 import { SiSimpleanalytics } from "react-icons/si";
 import { useEffect, useState } from 'react';
 import Footer from '../../Components/Layouts/Footer';
-import Products from './Products';
+import {Products} from './Products';
 import { Link } from 'react-router-dom';
+import { Testimonies } from './Products';
 
 
 const Home = () => {
@@ -58,21 +59,21 @@ const Home = () => {
     }, [charIndex, currentTextIndex]);
 
 
-    const [isHovered, setIsHovered] = useState(false)
-    const [position, setPosition] = useState({ x: 0, y: 0 })
+    // const [isHovered, setIsHovered] = useState(false)
+    // const [position, setPosition] = useState({ x: 0, y: 0 })
   
-    useEffect(() => {
-      if (isHovered) {
-        const interval = setInterval(() => {
-          setPosition({
-            x: Math.sin(Date.now() / 1000) * 20,
-            y: Math.cos(Date.now() / 800) * 20,
-          })
-        }, 1000 / 90) // 60 FPS
+    // useEffect(() => {
+    //   if (isHovered) {
+    //     const interval = setInterval(() => {
+    //       setPosition({
+    //         x: Math.sin(Date.now() / 1000) * 20,
+    //         y: Math.cos(Date.now() / 800) * 20,
+    //       })
+    //     }, 1000 / 90) // 60 FPS
   
-        return () => clearInterval(interval)
-      }
-    }, [isHovered])
+    //     return () => clearInterval(interval)
+    //   }
+    // }, [isHovered])
 
   return (
     <>
@@ -97,15 +98,16 @@ const Home = () => {
           // }}
           >
           <img src={image}
-           className={`
-            transition-all duration-300 ease-in-out w-full
-            ${isHovered ? "scale-110 shadow-lg" : ""}
-          `}  alt="" />
+          //  className={`
+          //   transition-all duration-300 ease-in-out w-full
+          //   ${isHovered ? "scale-110 shadow-lg" : ""}
+          // `}  
+          alt="" />
 
 
         </div>
 
-        <div className='lg:px-[25rem] px-3'>
+        <div className='2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-3'>
           <div className='space-y-6 text-center lg:pt-[10rem] pt-[5rem]'>
             <h2 className='text-base'>Meet some of our 100+ Customers</h2>
 
@@ -130,7 +132,7 @@ const Home = () => {
               <p className='text-base pt-3'>From next-gen startups to established enterprises</p>
             </div>
 
-            <div className="text-left flex lg:flex-row flex-col gap-10 mt-10">
+            <div className="text-left grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1  gap-10 mt-10">
               <div
                 data-aos="fade-up"
                 data-aos-duration="700"
@@ -346,7 +348,13 @@ const Home = () => {
           </div>
           
           <div className='lg:pt-[10rem] pt-[5rem]'>
+            <h2 className='text-center lg:text-3xl text-2xl pb-5'>Our Products</h2>
             <Products />
+          </div>
+
+          <div className='lg:pt-[10rem] pt-[5rem]'>
+            <h2 className='text-center lg:text-3xl text-2xl pb-5'>Our Testimonials</h2>
+            <Testimonies />
           </div>
         </div>
       </div>
