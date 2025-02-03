@@ -8,3 +8,9 @@ services:
     volumes:
       - .:/app
     restart: always
+    networks:
+      - odoo_proxy_network
+
+networks:
+  odoo_proxy_network:
+    external: true
