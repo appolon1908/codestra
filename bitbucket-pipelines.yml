@@ -13,5 +13,6 @@ pipelines:
                 cd codestra &&
                 docker compose down &&
                 git pull origin dev &&
-                docker compose up -d
+                docker compose up -d &&
+                docker network connect odoo_proxy_network $(docker ps -q --filter 'name=web')
               "
