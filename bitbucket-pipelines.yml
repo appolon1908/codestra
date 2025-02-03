@@ -12,6 +12,6 @@ pipelines:
                 [ -d codestra ] &&
                 cd codestra &&
                 docker compose down &&
-                git pull origin main &&
+                git pull origin dev &&
                 docker compose up -d
               "
