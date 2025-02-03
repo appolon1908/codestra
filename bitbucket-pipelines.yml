@@ -1,0 +1,17 @@
+image: atlassian/default-image:3
+
+pipelines:
+  default:
+    - step:
+        name: Deploy to Server
+        script:
+          - apt-get update && apt-get install -y sshpass
+          - echo "Deploying to server..."
+          - sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
+              [ -d codestra ] &&
+              cd codestra &&
+              docker compose down &&
+              git pull origin main &&
+              docker compose up -d
+            "
+
