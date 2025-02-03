@@ -1,0 +1,58 @@
+pipeline {
+    agent { label 'Codestra' }
+
+    environment {
+        IMAGE_NAME = "codestra829/codestra"
+        DOCKER_REGISTRY = "registry.hub.docker.com"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    // Use the provided snippet for Git checkout
+                    checkout scmGit(
+                        branches: [[name: '*/main']],
+                        extensions: [],
+                        userRemoteConfigs: [[
+                            credentialsId: '081e83cd-d937-40ba-9b30-471b16c206ef',
+                            url: 'https://azer2@bitbucket.org/codestra902101/codestra.git'
+                        ]]
+                    )
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo "Building Docker image: ${DOCKER_IMAGE}"
+                    sh "docker build -t ${DOCKER_IMAGE} ."
+                }
+            }
+        }
+
+        // stage('Push Docker Image') {
+        //     steps {
+        //         script {
+        //             withDockerRegistry([credentialsId: '8286b2ee-bc18-4aaf-9159-f5900bfe3c5b', url: "https://${DOCKER_REGISTRY}"]) {
+        //                 echo "Pushing Docker image: ${DOCKER_IMAGE}"
+        //                 sh "docker push ${DOCKER_IMAGE}"
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    sh """
+                    docker stop frontend || true
+                    docker rm frontend || true
+                    docker run -d --name frontend ${DOCKER_IMAGE}
+                    """
+                }
+            }
+        }
+    }
+}
