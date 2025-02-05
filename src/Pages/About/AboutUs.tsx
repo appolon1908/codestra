@@ -36,7 +36,7 @@ const AboutUs = () => {
 
     const {data, isLoading} = useEmployee()
 
-    const employeeData = data?.data?.results as Employee | []
+    const employeeData = data?.data?.results as  []
 
     console.log('This is Mutate', employeeData);
     
@@ -121,120 +121,133 @@ const AboutUs = () => {
                     </div>
                 </div>  
 
+
+                {/* ========= this is Loading section ============ */}
                 {isLoading ? 
                     <div className='flex justify-center items-center z-30 pt-[5rem]'>
                         <span className="loading loading-spinner loading-md text-white"></span>
                     </div>
 
                     : 
-                    <div className="lg:pt-[10rem] pt-[5rem] lg:px-0 px-5">
-                        {employeeData && (
-                            <>
-                            {Object.entries(groupedData!).map(([category, items]) => (
-                                <div key={category}>
-                                <h2 className="lg:text-2xl lg:text-left text-2xl">{category}</h2>
-                                <div className="w-full grid lg:grid-cols-5 grid-cols-1 gap-8 pt-5 pb-[5rem] lg:px-[3rem] px-0">
-                                    {items.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="relative"
-                                        onMouseEnter={() => setHoveredId(item.id)}
-                                        onMouseLeave={() => setHoveredId(null)}
-                                    >
-                                        <div className="flex items-center gap-3 lg:px-0 px-5 cursor-pointer">
-                                        {item.profile_picture ? (
-                                            <img className="w-5 h-5" src={item.image || "/placeholder.svg"} alt={item.first_name} />
-                                        ) : (
-                                            <p className="bg-neutral-800 text-sm font-semibold rounded-full flex h-9 w-9 justify-center items-center text-white">
-                                            {item.first_name.slice(0, 1)}
-                                            {item.last_name.slice(0, 1)}
-                                            </p>
-                                        )}
-                                        <h3 className="text-sm">
-                                            {item.first_name} {item.last_name}
-                                        </h3>
-                                        </div>
 
-                                        <div
-                                        className={`absolute top-full left-0 right-0 m-auto flex lg:justify-center transform lg:translate-x-0 cursor-pointer lg:w-[18rem] mt-2 border border-neutral-800 bg-neutral-900 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out ${
-                                            hoveredId === item.id ? "opacity-100 visible" : "opacity-0 invisible"
-                                        }`}
-                                        >
-                                        <div className="p-4">
-                                            <div className="flex items-center justify-center m-auto gap-4 w-full">
-                                            <div className="flex items-center gap-3">
-                                                {item.profile_picture ? (
-                                                <img className="w-5 h-5" src={item.image || "/placeholder.svg"} alt={item.first_name} />
-                                                ) : (
-                                                <p className="bg-white text-sm font-semibold rounded-full flex h-9 w-9 justify-center items-center text-black">
-                                                    {item.first_name.slice(0, 1)}
-                                                    {item.last_name.slice(0, 1)}
-                                                </p>
-                                                )}
-                                                <div>
-                                                <h3 className="text-sm">
-                                                    {item.first_name} {item.last_name}
-                                                </h3>
-                                                <p className="text-xs text-[#B4B5B5] text-justify">{item.position}</p>
+                    <> 
+                                        
+                        <div className="lg:pt-[10rem] pt-[5rem] lg:px-0 px-5">
+                            {employeeData && (
+                                <>
+
+                                {employeeData.length > 0 ? <>
+                                
+                                    {Object.entries(groupedData!).map(([category, items]) => (
+                                        <div key={category}>
+                                            <h2 className="lg:text-2xl lg:text-left text-2xl">{category}</h2>
+
+                                            <div className="w-full grid lg:grid-cols-5 grid-cols-1 gap-8 pt-5 pb-[5rem] lg:px-[3rem] px-0">
+                                                {items.map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    className="relative"
+                                                    onMouseEnter={() => setHoveredId(item.id)}
+                                                    onMouseLeave={() => setHoveredId(null)}
+                                                >
+                                                    <div className="flex items-center gap-3 lg:px-0 px-5 cursor-pointer">
+                                                    {item.profile_picture ? (
+                                                        <img className="w-5 h-5" src={item.image || "/placeholder.svg"} alt={item.first_name} />
+                                                    ) : (
+                                                        <p className="bg-neutral-800 text-sm font-semibold rounded-full flex h-9 w-9 justify-center items-center text-white">
+                                                        {item.first_name.slice(0, 1)}
+                                                        {item.last_name.slice(0, 1)}
+                                                        </p>
+                                                    )}
+                                                    <h3 className="text-sm">
+                                                        {item.first_name} {item.last_name}
+                                                    </h3>
+                                                    </div>
+
+                                                    <div
+                                                    className={`absolute top-full left-0 right-0 m-auto flex lg:justify-center transform lg:translate-x-0 cursor-pointer lg:w-[18rem] mt-2 border border-neutral-800 bg-neutral-900 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out ${
+                                                        hoveredId === item.id ? "opacity-100 visible" : "opacity-0 invisible"
+                                                    }`}
+                                                    >
+                                                    <div className="p-4">
+                                                        <div className="flex items-center justify-center m-auto gap-4 w-full">
+                                                        <div className="flex items-center gap-3">
+                                                            {item.profile_picture ? (
+                                                            <img className="w-5 h-5" src={item.image || "/placeholder.svg"} alt={item.first_name} />
+                                                            ) : (
+                                                            <p className="bg-white text-sm font-semibold rounded-full flex h-9 w-9 justify-center items-center text-black">
+                                                                {item.first_name.slice(0, 1)}
+                                                                {item.last_name.slice(0, 1)}
+                                                            </p>
+                                                            )}
+                                                            <div>
+                                                            <h3 className="text-sm">
+                                                                {item.first_name} {item.last_name}
+                                                            </h3>
+                                                            <p className="text-xs text-[#B4B5B5] text-justify">{item.position}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-1 ml-auto">
+                                                            {item.socials.map((social, socialIndex) => (
+                                                            <React.Fragment key={socialIndex}>
+                                                                {social.name === "Facebook" && (
+                                                                <Link to={social.link}>
+                                                                    <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
+                                                                    <FaFacebook />
+                                                                    </p>
+                                                                </Link>
+                                                                )}
+                                                                {social.name === "Twitter" && (
+                                                                <Link to={social.link}>
+                                                                    <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
+                                                                    <FaTwitter />
+                                                                    </p>
+                                                                </Link>
+                                                                )}
+                                                                {social.name === "Instagram" && (
+                                                                <Link to={social.link}>
+                                                                    <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
+                                                                    <FaInstagram />
+                                                                    </p>
+                                                                </Link>
+                                                                )}
+
+                                                                {social.name === "Linkedin" && (
+                                                                <Link to={social.link}>
+                                                                    <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
+                                                                    <FaLinkedin />
+                                                                    </p>
+                                                                </Link>
+                                                                )}
+                                                            </React.Fragment>
+                                                            ))}
+                                                        </div>
+                                                        </div>
+
+                                                        <div className="pt-5 flex items-center">
+                                                        <p className="flex items-center gap-2 text-xs">
+                                                            <IoMdCall className="text-lg" />
+                                                            {item.phone}
+                                                        </p>
+                                                        <p className="flex items-center gap-2 text-lg ml-auto">
+                                                            <IoLogoWhatsapp className="text-xl hover:text-neutral-200 transition-colors duration-200" />
+                                                            <FaCalendarDays className="hover:text-neutral-200 transition-colors duration-200" />
+                                                        </p>
+                                                        </div>
+                                                    </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center gap-1 ml-auto">
-                                                {item.socials.map((social, socialIndex) => (
-                                                <React.Fragment key={socialIndex}>
-                                                    {social.name === "Facebook" && (
-                                                    <Link to={social.link}>
-                                                        <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
-                                                        <FaFacebook />
-                                                        </p>
-                                                    </Link>
-                                                    )}
-                                                    {social.name === "Twitter" && (
-                                                    <Link to={social.link}>
-                                                        <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
-                                                        <FaTwitter />
-                                                        </p>
-                                                    </Link>
-                                                    )}
-                                                    {social.name === "Instagram" && (
-                                                    <Link to={social.link}>
-                                                        <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
-                                                        <FaInstagram />
-                                                        </p>
-                                                    </Link>
-                                                    )}
-
-                                                    {social.name === "Linkedin" && (
-                                                    <Link to={social.link}>
-                                                        <p className="rounded-full bg-neutral-800 hover:bg-neutral-700 p-2 text-sm text-neutral-300 transition-colors duration-200">
-                                                        <FaLinkedin />
-                                                        </p>
-                                                    </Link>
-                                                    )}
-                                                </React.Fragment>
                                                 ))}
                                             </div>
-                                            </div>
-
-                                            <div className="pt-5 flex items-center">
-                                            <p className="flex items-center gap-2 text-xs">
-                                                <IoMdCall className="text-lg" />
-                                                {item.phone}
-                                            </p>
-                                            <p className="flex items-center gap-2 text-lg ml-auto">
-                                                <IoLogoWhatsapp className="text-xl hover:text-neutral-200 transition-colors duration-200" />
-                                                <FaCalendarDays className="hover:text-neutral-200 transition-colors duration-200" />
-                                            </p>
-                                            </div>
                                         </div>
-                                        </div>
-                                    </div>
                                     ))}
-                                </div>
-                                </div>
-                            ))}
-                            </>
-                        )}
-                    </div>
+                                </> : <p className='text-xl text-neutral-300 text-center py-5'>-- No Employee Data --</p> }
+
+                                </>
+                            )}
+                        </div>
+               
+                    </>
                 }
 
                 <div className='lg:pt-[10rem] pt-[5rem]'>

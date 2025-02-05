@@ -59,22 +59,6 @@ const Home = () => {
     }, [charIndex, currentTextIndex]);
 
 
-    // const [isHovered, setIsHovered] = useState(false)
-    // const [position, setPosition] = useState({ x: 0, y: 0 })
-  
-    // useEffect(() => {
-    //   if (isHovered) {
-    //     const interval = setInterval(() => {
-    //       setPosition({
-    //         x: Math.sin(Date.now() / 1000) * 20,
-    //         y: Math.cos(Date.now() / 800) * 20,
-    //       })
-    //     }, 1000 / 90) // 60 FPS
-  
-    //     return () => clearInterval(interval)
-    //   }
-    // }, [isHovered])
-
   return (
     <>
       <Navbar />
@@ -91,17 +75,8 @@ const Home = () => {
           </Link>
         </div>
         <div className='myDivImage lg:w-[80%] cursor-pointer w-[100%] mt-10 flex justify-center m-auto overflow-hidden'
-          // onMouseEnter={() => setIsHovered(true)}
-          // onMouseLeave={() => setIsHovered(false)}
-          // style={{
-          //   transform: isHovered ? `translate(${position.x}px, ${position.y}px)` : "none",
-          // }}
           >
           <img src={image}
-          //  className={`
-          //   transition-all duration-300 ease-in-out w-full
-          //   ${isHovered ? "scale-110 shadow-lg" : ""}
-          // `}  
           alt="" />
 
 

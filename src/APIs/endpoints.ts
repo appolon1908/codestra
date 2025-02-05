@@ -2,6 +2,11 @@
 // LOGIN
 export const LOGIN_ENDPOINT = "/api/auth/login/";
 
+
+// REGISTER
+export const REGISTER_ENDPOINT = "/api/auth/signup/";
+
+
 //CONTACT US
 export const CONTACT_US_ENDPOINT = "/api/cms/contact-us/"
 

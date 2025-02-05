@@ -4,12 +4,23 @@ import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from 'react-router-dom'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
-
+import { ToastContainer, toast } from 'react-toastify';
 
 type FormData = {
   email: string,
   password: string,
 }
+
+
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string
+    }
+  }
+}
+
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const {mutate, isPending} = useLogin()
@@ -25,28 +36,29 @@ const Login = () => {
   const onSubmit = (data:FormData) => {
     mutate(data, {
       onSuccess: (details) => {
-        console.log('This is data', details?.data?.token);
         localStorage.setItem("accessToken", details?.data?.token?.access);
         reset()
         console.log('Login successful')
         navigate('/auth/dashboard', { replace: true })
       },
       onError: (error) => {
-        console.error('Login failed:', error.message)
-        // setError(error.message)
+        const err = error as ErrorResponse;
+        toast(err?.response?.data?.message)
       },
     })
   }
 
 
   return (
-    <div className="min-h-screen text-xs flex items-center justify-center bg-[#080808]">
-      <div className="lg:w-[25%] w-[95%] relative bg-[#121212] border border-[#1b1b1b] rounded-xl p-8">
+    <div className="min-h-screen text-xs flex items-center justify-center bg-[#080808] px-3">
+      <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] border border-[#1b1b1b] rounded-xl p-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold text-white">Log in</h1>
             <p className="text-gray-400">Please login to continue to your account</p>
           </div>
+
+          <ToastContainer theme='light' autoClose={4000}/>
 
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
@@ -57,6 +69,7 @@ const Login = () => {
                 className="bg-[#262729] border-0 text-white p-3 rounded-lg"
                 {...register('email', { required: true })}
               />
+              
 
             </div>
 
