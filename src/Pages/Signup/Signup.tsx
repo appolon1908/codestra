@@ -44,8 +44,7 @@ interface ErrorResponse {
           console.log('This is data', details?.data?.token);
           localStorage.setItem("accessToken", details?.data?.token?.access);
           reset()
-          console.log('Login successful')
-          navigate('/auth/dashboard', { replace: true })
+          navigate('/login', { replace: true })
         },
         onError: (error) => {
           const err = error as ErrorResponse;
