@@ -6,7 +6,6 @@ services:
     container_name: web_container
     ports:
       - "5000:5000"
-      - "5000:5000"
     volumes:
       - .:/app
     restart: always
