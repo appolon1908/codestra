@@ -25,7 +25,7 @@ const Navbar = () => {
   return (
     <div className="relative justify-center flex lg:pt-10 pt-3">
         <div className="flex items-center justify-between text-xs fixed 2xl:w-[60%] xl:w-[80%] lg:w-[80%] w-[95%] rounded-lg z-50 p-2 px-5 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
-            <h2>Logo</h2>
+            <h2>Codestra</h2>
 
             <ul className="lg:flex hidden items-center gap-10 ">
                 <Link to={'/'}>
