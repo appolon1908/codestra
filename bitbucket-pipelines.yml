@@ -13,5 +13,6 @@ pipelines:
                 cd codestra &&
                 git pull origin main &&
                 docker compose down &&
-                docker compose up -d
+                docker compose up -d &&
+                docker network connect odoo_proxy_network codestra_container
               "
