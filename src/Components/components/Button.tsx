@@ -26,7 +26,7 @@ export const Button2a: React.FC<ButtonProps> = ({text, onClick, isPending}: Butt
     return (
       <button className='flex !text-xs items-center bg-white text-[#080808] border-none transition-all ease-linear delay-75 rounded-md px-4 py-2 w-fit' onClick={onClick}>
         {isPending ? <p className='flex items-center gap-2'>
-          <span className="loader"></span> Loading</p> : text
+          <span className="loadera "></span> Loading</p> : text
         }
       </button>
     )

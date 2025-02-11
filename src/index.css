@@ -109,6 +109,16 @@ body{
     height: 70vh;
     padding-bottom: 20px;
   }
+
+
+  .myBg2{
+    background-image: url('./assets/services.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 60vh;
+    padding-bottom: 20px;
+  }
   
 
   @layer base {
