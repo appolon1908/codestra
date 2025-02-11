@@ -1,11 +1,16 @@
+version: "3.8"
+
 services:
   web:
     container_name: codestra_container
     build: .
     ports:
       - "5000:5000"
-    volumes:
-      - .:/app
     restart: always
-    stdin_open: true
-    tty: true
+    networks:
+      - odoo_proxy_network
+    command: ["serve", "-s", "dist", "-l", "5000"]
+
+networks:
+  odoo_proxy_network:
+    external: true
