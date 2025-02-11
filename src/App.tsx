@@ -15,6 +15,8 @@ import 'aos/dist/aos.css';
 import ElectronicBilling from './Pages/ElectronicBilling/ElectronicBilling'
 import ElectronicBillingForm from './Pages/BillingForm/ElectronicBillingForm'
 import HiringPosition from './Pages/Hiring/HiringPosition'
+import CaseStudies from './Pages/CaseStudies/CaseStudies'
+import Services from './Pages/Services/Services'
 
 AOS.init();
 function App() {
@@ -28,12 +30,14 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/about" element={<AboutUs />} />
+              <Route path="/case-studies" element={<CaseStudies />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/contact/sales" element={<ContactSales />} />
               <Route path="/contact/support" element={<ContactSupport />} />
               <Route path="/electronic-billing" element={<ElectronicBilling />} />
               <Route path="/electronic-billing/form" element={<ElectronicBillingForm />} />
               <Route path="/hiring/positions" element={<HiringPosition />} />
+              <Route path="/services" element={<Services />} />
               
               <Route path="/*" element={<AuthProvider element={
                 <div>
