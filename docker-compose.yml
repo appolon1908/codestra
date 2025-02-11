@@ -7,7 +7,5 @@ services:
     volumes:
       - .:/app
     restart: always
-    networks:
-      - odoo_proxy_network
     stdin_open: true
     tty: true
