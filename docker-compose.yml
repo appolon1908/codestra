@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   web:
+    name: codestra_container
     build: .
     ports:
       - "5000:5000"
