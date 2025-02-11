@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   web:
     container_name: codestra_container
@@ -11,7 +9,5 @@ services:
     restart: always
     networks:
       - odoo_proxy_network
-
-networks:
-  odoo_proxy_network:
-    external: true
+    stdin_open: true
+    tty: true
