@@ -11,7 +11,7 @@ pipelines:
             - sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
                 [ -d codestra ] &&
                 cd codestra &&
-                docker compose down &&
                 git pull origin main &&
+                docker compose down &&
                 docker compose up -d
               "
