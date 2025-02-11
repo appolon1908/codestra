@@ -20,7 +20,7 @@ import React from 'react'
 
 interface Employee {
     id: number;
-    team: string;
+    department: string;
     profile_picture: string | null;
     image?: string;
     first_name: string;
@@ -36,7 +36,7 @@ const AboutUs = () => {
 
     const {data, isLoading} = useEmployee()
 
-    const employeeData = data?.data?.results as  []
+    const employeeData = data?.data as  []
 
     console.log('This is Mutate', employeeData);
     
@@ -44,10 +44,10 @@ const AboutUs = () => {
 
     const groupedData = Array.isArray(employeeData)
     ? employeeData.reduce((acc: { [key: string]: Employee[] }, item: Employee) => {
-        if (!acc[item.team]) {
-            acc[item.team] = [];
+        if (!acc[item.department]) {
+            acc[item.department] = [];
         }
-        acc[item.team].push(item);
+        acc[item.department].push(item);
         return acc;
         }, {})
     : {};
@@ -57,42 +57,42 @@ const AboutUs = () => {
     <>
         <Navbar />
         <div className='px-5'>
-            <div className='lg:pt-[10rem] pt-[8rem] overflow-hidden'>
+            <div className='lg:pt-[10rem] pt-[5rem] overflow-hidden' data-aos="fade-up" data-aos-duration="500">
                 <h2 className='text-center lg:text-4xl text-2xl lg:leading-[3rem] lg:pb-10 pb-5'>
                     Empowering Businesses with Innovative Digital 
                     <br className='hidden lg:block'/> Solutions and Intelligent Automation
                 </h2>
-                <div className='lg:w-[70%] w-[150%] flex m-auto'>
+                <div className='lg:w-[70%] w-[100%] flex m-auto'>
                     <img src={heroImage} className='w-full' alt="" />
                 </div>
             </div>
 
-            <div className='lg:px-[25rem]'>
+            <div className='2xl:px-[25rem] xl:px-[10rem] lg:px-[8rem]'>
 
-                <div className='grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-5 lg:pt-[10rem] pt-[5rem]'>
-                    <h2 className='lg:text-3xl text-xl'>
+                <div data-aos="fade-up" data-aos-duration="500" className='grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-5 lg:pt-[10rem] pt-[5rem]'>
+                    <h2 className='lg:text-3xl text-lg' >
                         We create innovative digital solutions and automation tools for businesses that value quality and growth
                     </h2>
 
-                    <div className='space-y-5 text-sm leading-relaxed text-justify text-[#B4B5B5]'>
+                    <div className='space-y-5 lg:text-sm text-xs leading-relaxed text-justify'>
                         <p>
                             Digital solutions used to be captivating, but over time, 
                             their magic faded, replaced by inefficient tools and processes 
-                            that slow teams down and hinder great work. Frustrated with the 
+                            that slow departments down and hinder great work. Frustrated with the 
                             status quo, we decided to build something better—solutions that 
-                            teams would actually enjoy using.
+                            departments would actually enjoy using.
                         </p>
 
                         <p>
                             We named it Codestra to signify development and progress. 
                             What started as a simple solution has evolved into a powerful 
                             platform for creating and automating business processes, 
-                            streamlining workflows, and helping teams work more efficiently. 
+                            streamlining workflows, and helping departments work more efficiently. 
                         </p>
 
                         <p>
                             We don’t think of Codestra as just a "tool," but as a "way" to build business. 
-                            Today, thousands of teams worldwide—from startups to large companies—use our 
+                            Today, thousands of departments worldwide—from startups to large companies—use our 
                             solutions to optimize their processes. We help them focus on what matters most: 
                             creating products and services that inspire and drive growth.
                         </p>
@@ -100,14 +100,14 @@ const AboutUs = () => {
                 </div>
 
                 <div className='grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-5 lg:pt-[10rem] pt-[5rem]'>
-                    <div className='space-y-6'>
-                        <h2 className='lg:text-3xl text-xl'>
+                    <div className='space-y-6' data-aos="fade-up" data-aos-duration="500">
+                        <h2 className='lg:text-3xl text-lg'>
                             We place great importance on the quality of our work.
                         </h2>
 
-                        <p className='text-sm text-[#B4B5B5] text-justify'>
+                        <p className='lg:text-sm text-xs text-justify'>
                         Codestra has always been a fully remote company. Today, our small 
-                        but strong team is distributed across North and Latin America. What 
+                        but strong department is distributed across North and Latin America. What 
                         unites us is relentless focus, fast execution, and our passion for 
                         digital craftsmanship. We are all creators at heart and place great 
                         importance on the quality of our work, paying attention to every detail.
@@ -116,7 +116,7 @@ const AboutUs = () => {
                         <Button3 text='We`re hiring'/>
                     </div>
 
-                    <div className='w-full'>
+                    <div className='w-full' data-aos="fade-up" data-aos-duration="500">
                         <img src={aboutImage} className='w-full' alt="" />
                     </div>
                 </div>  
@@ -127,9 +127,7 @@ const AboutUs = () => {
                     <div className='flex justify-center items-center z-30 pt-[5rem]'>
                         <span className="loading loading-spinner loading-md text-white"></span>
                     </div>
-
                     : 
-
                     <> 
                                         
                         <div className="lg:pt-[10rem] pt-[5rem] lg:px-0 px-5">
@@ -254,16 +252,16 @@ const AboutUs = () => {
                     <p className='text-xs pb-2 lg:mb-8 mb-5 border-b border-[#242424]'>Investors</p>
                     
                     <div className='flex lg:flex-row flex-col lg:gap-[10rem] gap-5'>
-                        <div>
-                            <h2 className='lg:text-3xl text-xl'>We place great importance on the quality of our work</h2>
-                            <p className='pt-5 text-[#B4B5B5]'>
+                        <div data-aos="fade-up" data-aos-duration="500">
+                            <h2 className='lg:text-3xl text-lg'>We place great importance on the quality of our work</h2>
+                            <p className='pt-5 lg:text-sm text-xs leading-normal'>
                                 We are proud to work with some of the top investors in the industry. 
                                 Our backers include leading venture firms and exceptional founders 
                                 and product creators from around the world.
                             </p>
                         </div>
 
-                        <div className='flex  gap-5 lg:w-[70%] w-full lg:ml-auto'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='flex  gap-5 lg:w-[70%] w-full lg:ml-auto'>
                             <div className=''>
                                 <img src={investor} alt=""  className='w-full'/>
                                 <h2 className='text-base pt-4'>Phillip Jortiny</h2>
@@ -281,7 +279,7 @@ const AboutUs = () => {
 
                     </div>
 
-                    <div className='grid lg:grid-cols-6 lg:gap-6 gap-3 grid-cols-2 text-sm items-center mt-20'>
+                    <div className='grid lg:grid-cols-6 lg:gap-6 gap-3 grid-cols-2 text-sm items-center mt-20' data-aos="fade-up" data-aos-duration="500">
                         {investorData.map((investor)=>(
                             <div className='lg:w-full w-fit'>
                                 <h2>{investor.name}</h2>
@@ -297,22 +295,22 @@ const AboutUs = () => {
                     
                     <div className=''>
 
-                        <div className='flex text-sm items-center justify-between p-5 rounded-md hover:bg-neutral-900 cursor-pointer'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='flex lg:text-sm text-xs items-center justify-between p-5 rounded-md hover:bg-neutral-900 cursor-pointer'>
                             <h2>Title of the news</h2>
-                            <p className='text-sm text-[#B4B5B5]'>A little bit of information</p>
-                            <p className='text-sm'>website.com</p>
+                            <p className=' text-[#B4B5B5]'>A little bit of information</p>
+                            <p className=''>website.com</p>
                         </div>
 
-                        <div className='flex text-sm items-center justify-between p-5 rounded-md hover:bg-neutral-900 cursor-pointer mt-10'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='flex lg:text-sm text-xs items-center justify-between p-5 rounded-md hover:bg-neutral-900 cursor-pointer mt-10'>
                             <h2>Title of the news</h2>
-                            <p className='text-sm text-[#B4B5B5]'>A little bit of information</p>
-                            <p className='text-sm'>website.com</p>
+                            <p className='text-[#B4B5B5]'>A little bit of information</p>
+                            <p className=''>website.com</p>
                         </div>
 
-                        <div className='flex text-sm items-center justify-between p-5 rounded-md hover:bg-neutral-900 cursor-pointer mt-10'>
+                        <div data-aos="fade-up" data-aos-duration="500" className='flex lg:text-sm text-xs items-center justify-between p-5 rounded-md hover:bg-neutral-900 cursor-pointer mt-10'>
                             <h2>Title of the news</h2>
-                            <p className='text-sm text-[#B4B5B5]'>A little bit of information</p>
-                            <p className='text-sm'>website.com</p>
+                            <p className=' text-[#B4B5B5]'>A little bit of information</p>
+                            <p className=''>website.com</p>
                         </div>
                     </div>
                 </div>
@@ -320,7 +318,7 @@ const AboutUs = () => {
                 <div className='lg:pt-[10rem] pt-[5rem]'>
                     <p className='text-xs pb-2 lg:mb-8 mb-5 border-b border-[#242424]'>Vision</p>
 
-                    <div className='flex justify-center text-sm gap-20 '>
+                    <div className='flex justify-center text-sm gap-20' data-aos="fade-up" data-aos-duration="500">
                         <div>
                             <h2 className=''>Enabling success</h2>
                             <p className='text-sm pt-5 text-[#B4B5B5]'>
@@ -339,7 +337,7 @@ const AboutUs = () => {
                         </div>
                     </div>
                     
-                    <div className='flex gap-5 text-sm justify-center m-auto pt-16 items-center'>
+                    <div className='flex lg:flex-row flex-col gap-5 text-sm justify-center m-auto pt-16 items-center' data-aos="fade-up" data-aos-duration="500">
                         <h2>Still not sure? Get to know us better.</h2>
                         <Button1 text='Our Works'/>
                     </div>

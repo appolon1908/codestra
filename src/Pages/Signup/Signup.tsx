@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import useSignup from '@/hooks/mutations/useSignup';
 import { toast, ToastContainer } from 'react-toastify';
+import logo from '../../assets/logo.png'
 
 
 type FormData = {
@@ -56,7 +57,13 @@ interface ErrorResponse {
     }
 
   return (
-    <div className="min-h-screen flex text-xs items-center justify-center bg-[#080808] px-3">
+    <div className="min-h-screen flex flex-col gap-4 text-xs items-center justify-center bg-[#080808] px-3">
+
+        <div className='pb-6'>
+          <Link to={'/'}>
+            <img src={logo} alt="" className='w-40'/>
+          </Link>
+        </div>
       <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] rounded-xl p-8">
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -148,7 +155,7 @@ interface ErrorResponse {
             <p className="text-center text-gray-400 text-sm">
               Have an account?{' '}
               <Link to="/login" className="text-white underline hover:text-gray-200">
-                Create one
+                Login
               </Link>
             </p>
           </div>

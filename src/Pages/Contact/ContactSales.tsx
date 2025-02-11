@@ -8,6 +8,7 @@ import { useContact } from "../../hooks/mutations/useContact"
 import { useForm } from "react-hook-form"
 import { SuccessModal } from "../../Components/components/Modals";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 
 
@@ -17,6 +18,14 @@ type ContactProps = {
     company_size: string,
     message: string,
 }
+
+interface ErrorResponse {
+    response?: {
+      data?: {
+        message?: string
+      }
+    }
+  }
 
 const ContactSales = () => {
 
@@ -38,10 +47,15 @@ const ContactSales = () => {
             onSuccess(details) {
                 console.log(details);
                 setIsOpen(true);
+                toast.success(details.data.message)
             },
 
             onError(error) {
                 console.log(error)
+                const err = error as ErrorResponse;
+                console.error('Login failed:', error)
+                const errorMessage = err.response?.data?.message || "An unexpected error occurred"
+                toast.error(errorMessage)
             },
         })
     }
@@ -52,7 +66,11 @@ const ContactSales = () => {
     <>
         <Navbar />
             <div className="lg:px-[25rem] px-5 lg:pt-[10rem] pt-[8rem]">
+
+                <ToastContainer theme='light' autoClose={4000}/>
+
                 <div className="grid lg:grid-cols-2 lg:justify-center grid-cols-1 lg:gap-0 gap-10 text-sm">
+                    
                     <div>
                         <h2 className="lg:text-4xl text-2xl">Contact sales</h2>
 
