@@ -49,31 +49,31 @@ const Navbar = () => {
                 <img src={logo} alt="" />
             </div>
 
-            <ul className="lg:flex hidden items-center gap-10 ">
+            <ul className="lg:flex hidden items-center gap-7 ">
                 <Link to={'/'}>
                     <li>Home</li>
                 </Link>
 
                 <Link to={'/about'}>
                     <li>About</li>
-                </Link>   
+                </Link>  
 
                 <div className="relative">
                     <li className="cursor-pointer flex items-center gap-2" onClick={()=>setShowServices(!showServices)}>Services 
                         {showServices === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</li>
                     {showServices && 
-                        <ul className="absolute bg-neutral-900 border border-neutral-800 top-10 p-5 rounded-lg w-[17rem] space-y-1">
+                        <ul className="absolute bg-neutral-900 border border-neutral-800 top-10 p-3 rounded-lg w-[15rem] space-y-1">
                             <Link to={'/services'}>
-                                <li className="cursor-pointer hover:bg-neutral-800 rounded-full p-3 px-6 flex items-center gap-2"><FaBrain />AI Automation</li>
+                                <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><FaBrain />AI Automation</li>
                             </Link>
 
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><LiaReact />React JS</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoPython />Python</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
                         </ul>
                     }
                 </div>
@@ -85,11 +85,15 @@ const Navbar = () => {
                 <Link to={'/contact'}>
                     <li>Contact us</li>
                 </Link>
+
+                <Link to={'/'}>
+                    <li>Join The Team</li>
+                </Link> 
             </ul>
             
             {isAuthenticated ? 
 
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-3">
                     <Link to={'/auth/dashboard'}>
                         <Button1 text="Dashboard" />
                     </Link> 
@@ -105,7 +109,7 @@ const Navbar = () => {
                 </div>
                 : 
 
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-3">
                     <Link to={'/login'}>
                         <Button1 text="Log in" />
                     </Link>
@@ -125,7 +129,7 @@ const Navbar = () => {
         </div>
         
         {isOpen && 
-            <ul className="lg:hidden fixed rounded-lg text-lg top-20 right-0 left-0 flex m-auto p-5 flex-col gap-6 h-[80vh] w-[90%] z-30 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
+            <ul className="lg:hidden fixed rounded-lg text-lg top-20 right-0 left-0 flex m-auto p-5 flex-col gap-12 h-[80vh] w-[90%] z-30 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
                     <Link to={'/'}>
                         <li>Home</li>
                     </Link>
@@ -145,16 +149,16 @@ const Navbar = () => {
                     {showServices2 && 
                         <ul className="absolute bg-neutral-900 border backdrop-blur-3xl bg-opacity-100 text-sm border-neutral-800 top-10 p-5 rounded-lg w-full space-y-1">
                             <Link to={'/services'}>
-                                <li className="cursor-pointer hover:bg-neutral-800 rounded-full p-3 px-6 flex items-center gap-2"><FaBrain />AI Automation</li>
+                                <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><FaBrain />AI Automation</li>
                             </Link>
 
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li>
+                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
                         </ul>
                     }
                 </div>
