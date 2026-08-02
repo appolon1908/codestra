@@ -19,6 +19,7 @@ const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicB
 const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
 const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
 const Services = lazy(() => import('./Pages/Services/Services'))
+const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 
 AOS.init();
 function App() {
@@ -41,6 +42,7 @@ function App() {
               <Route path="/electronic-billing/form" element={<ElectronicBillingForm />} />
               <Route path="/hiring/positions" element={<HiringPosition />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/privacy" element={<Privacy />} />
               
               <Route path="/*" element={<AuthProvider element={
                 <div>

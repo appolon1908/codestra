@@ -157,7 +157,7 @@ const ContactSales = () => {
 
                             <div className="flex lg:flex-row flex-col gap-4 lg:items-center lg:justify-between">
                                 <h2>You can also email us at sales@codestra.co</h2>
-                                <Button2a text="Send Message" isPending={isPending}/>
+                                <Button2a type="submit" text="Send Message" isPending={isPending}/>
                             </div>
                         </form>
                     </div>

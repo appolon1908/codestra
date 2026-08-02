@@ -2,6 +2,7 @@ import {Button2 } from "@/Components/components/Button"
 import Footer from "@/Components/Layouts/Footer"
 import Navbar from "@/Components/Layouts/Navbar"
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 
 const Services = () => {
@@ -13,7 +14,7 @@ const Services = () => {
                 <div className="2xl:w-[60%] xl:w-[70%] lg:w-[80%] w-full font-semibold space-y-6">
                     <h2 className="2xl:text-4xl xl:text-3xl lg:text-3xl text-xl lg:pb-5 pb-0 !leading-normal">Empower Your Workflow with Smarter AI Agents, Automate, Optimize, Achieve</h2>
                     <p className="lg:text-lg text-sm">Smart AI agents designed to automate tasks, optimize workflows, and save you time</p>
-                    <Button2 text="Lets Build Together"/>
+                    <Link to="/contact/sales"><Button2 text="Let's Build Together"/></Link>
                 </div>
                 
             </div>

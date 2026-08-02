@@ -502,12 +502,12 @@ const ElectronicBillingForm = () => {
                             {!isValid ? 
                                 <div className='flex gap-4'>
                                     <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
-                                    <Button2 text='Submit Data'/>
+                                    <Button2 type='submit' text='Submit Data'/>
                                 </div>
                                 :
                                 <div className='flex gap-4'>
                                     <p className='text-xs p-6 py-2.5 rounded-lg bg-white text-black cursor-pointer' onClick={handlePrevious}>Back</p>
-                                    <Button2b text='Submit Data' isPending={isPending}/>
+                                    <Button2b type='submit' text='Submit Data' isPending={isPending}/>
                                 </div>
                             }
                         </div>

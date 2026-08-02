@@ -112,7 +112,7 @@ const AboutUs = () => {
                         importance on the quality of our work, paying attention to every detail.
                         </p>
 
-                        <Button3 text='We`re hiring'/>
+                        <Link to='/hiring/positions'><Button3 text="We're hiring"/></Link>
                     </div>
 
                     <div className='w-full' data-aos="fade-up" data-aos-duration="500">
@@ -338,7 +338,7 @@ const AboutUs = () => {
                     
                     <div className='flex lg:flex-row flex-col gap-5 text-sm justify-center m-auto pt-16 items-center' data-aos="fade-up" data-aos-duration="500">
                         <h2>Still not sure? Get to know us better.</h2>
-                        <Button1 text='Our Works'/>
+                        <Link to='/case-studies'><Button1 text='Our Work'/></Link>
                     </div>
 
                 </div>

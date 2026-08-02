@@ -68,7 +68,7 @@ const Home = () => {
           <p className='lg:text-base text-base'>Development used to be magical—an art that  inspired innovation 
             <br className='hidden lg:block'/> and transformed ideas into reality.
           </p>
-          <Link to={'electronic-billing'}>
+          <Link to={'/electronic-billing'}>
             <button className='py-2.5 px-5 mt-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white'>
               Get in touch <GoArrowRight className='text-xl'/>
             </button>

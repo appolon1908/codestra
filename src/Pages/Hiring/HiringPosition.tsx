@@ -2,6 +2,7 @@ import { Button1 } from "@/Components/components/Button";
 import Footer from "@/Components/Layouts/Footer"
 import Navbar from "@/Components/Layouts/Navbar"
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const HiringPosition = () => {
   return (
@@ -23,7 +24,7 @@ const HiringPosition = () => {
                     </ul>
 
                     <div className="mt-5">
-                        <Button1 text="Apply Now"/>
+                        <Link to="/contact"><Button1 text="Apply Now"/></Link>
                     </div>
                 </div>
 
@@ -38,7 +39,7 @@ const HiringPosition = () => {
                     </ul>
 
                     <div className="mt-5">
-                        <Button1 text="Apply Now"/>
+                        <Link to="/contact"><Button1 text="Apply Now"/></Link>
                     </div>
                 </div>
 
@@ -54,7 +55,7 @@ const HiringPosition = () => {
                     </ul>
 
                     <div className="mt-5">
-                        <Button1 text="Apply Now"/>
+                        <Link to="/contact"><Button1 text="Apply Now"/></Link>
                     </div>
                 </div>
 
@@ -70,7 +71,7 @@ const HiringPosition = () => {
                     </ul>
 
                     <div className="mt-5">
-                        <Button1 text="Apply Now"/>
+                        <Link to="/contact"><Button1 text="Apply Now"/></Link>
                     </div>
                 </div>
             </div>
