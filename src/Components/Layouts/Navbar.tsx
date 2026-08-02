@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button1, Button2 } from "../components/Button"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router"
 import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth"
 import { RiMenu3Line } from "react-icons/ri";
 import { IoIosArrowUp, IoMdClose } from "react-icons/io";

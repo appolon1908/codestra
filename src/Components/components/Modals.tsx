@@ -3,7 +3,7 @@ import React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { Button1, Button2 } from "./Button";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 interface SuccessModalProps{
     closeModal?: () => void;

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HiEye, HiEyeOff } from "react-icons/hi"
 import { FcGoogle } from "react-icons/fc"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
 import { ToastContainer, toast } from 'react-toastify';

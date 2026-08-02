@@ -31,7 +31,7 @@ import { SiSimpleanalytics } from "react-icons/si";
 import { useEffect, useState } from 'react';
 import Footer from '../../Components/Layouts/Footer';
 import {Products} from './Products';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Testimonies } from './Products';
 
 

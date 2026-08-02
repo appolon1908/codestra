@@ -3,7 +3,7 @@ import Navbar from "../../Components/Layouts/Navbar"
 import { Button2a } from "../../Components/components/Button"
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { Link } from "react-router-dom"
+import { Link } from "react-router"
 import { useContact } from "../../hooks/mutations/useContact"
 import { useForm } from "react-hook-form"
 import { SuccessModal } from "../../Components/components/Modals";

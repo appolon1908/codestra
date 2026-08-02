@@ -56,10 +56,7 @@ Prepare `/srv/codestra` on the target host and authorize the deployment key befo
 - Authorization must always be enforced by the backend.
 - The current backend returns a bearer token consumed by the SPA. Moving authentication to secure `HttpOnly` cookies requires a coordinated backend change and remains recommended.
 - Never commit `.env` files or credentials.
-- React Router `7.18.2` has an upstream high-severity advisory limited to RSC
-  mode and server actions, neither of which this client-rendered Vite SPA uses.
-  `npm run audit:production` allows only that advisory and fails on any other
-  production advisory.
+- Production dependencies are audited without exceptions in CI.
 
 ## License
 

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router"
 import { clearAccessToken } from "@/lib/auth"
 import { Button2 } from "../../Components/components/Button"
 
