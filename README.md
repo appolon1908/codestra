@@ -24,7 +24,7 @@ npm run dev
 npm run lint
 npm test
 npm run build
-npm audit --omit=dev
+npm run audit:production
 ```
 
 ## Container
@@ -56,6 +56,7 @@ Prepare `/srv/codestra` on the target host and authorize the deployment key befo
 - Authorization must always be enforced by the backend.
 - The current backend returns a bearer token consumed by the SPA. Moving authentication to secure `HttpOnly` cookies requires a coordinated backend change and remains recommended.
 - Never commit `.env` files or credentials.
+- Production dependencies are audited without exceptions in CI.
 
 ## License
 

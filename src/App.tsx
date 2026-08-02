@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import AuthProvider from './Providers/AuthProvider'
 import QueryProvider from './Providers/QueryProvider'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router'
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';

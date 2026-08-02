@@ -3,7 +3,7 @@ import Footer from '../../Components/Layouts/Footer'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { Button3 } from '../../Components/components/Button'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const ContactSupport = () => {
   return (

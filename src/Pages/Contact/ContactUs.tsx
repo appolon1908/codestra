@@ -5,7 +5,7 @@ import { GrMail } from "react-icons/gr";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import Footer from '../../Components/Layouts/Footer';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 
 const ContactUs = () => {

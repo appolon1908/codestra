@@ -10,7 +10,7 @@ import benefitImage from '../../assets/benefit.png'
 import { benefitsData } from '../../Components/MockData';
 import { TbMinusVertical } from 'react-icons/tb';
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { GoPlusCircle } from "react-icons/go";
 import { useState } from 'react';
 import { AiOutlineMinusCircle } from 'react-icons/ai';

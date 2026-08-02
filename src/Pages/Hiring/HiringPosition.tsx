@@ -2,7 +2,7 @@ import { Button1 } from "@/Components/components/Button";
 import Footer from "@/Components/Layouts/Footer"
 import Navbar from "@/Components/Layouts/Navbar"
 import { IoMdCheckmarkCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const HiringPosition = () => {
   return (

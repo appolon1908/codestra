@@ -14,7 +14,7 @@ import investlogoa from '../../assets/investlogoa.png'
 import Footer from '../../Components/Layouts/Footer'
 import useEmployee from '../../hooks/queries/useEmployee'
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import React from 'react'
 
 

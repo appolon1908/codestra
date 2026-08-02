@@ -11,7 +11,7 @@ import { GoArrowRight } from "react-icons/go";
 import { HiSquare3Stack3D } from "react-icons/hi2";
 import { FaShapes } from "react-icons/fa6";
 import { Button1, Button2 } from '@/Components/components/Button';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 
 

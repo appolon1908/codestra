@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import logo from '../../assets/logo.png'
 
 const serviceLinks = ['Software Development', 'Mobile App Development', 'AI Development', 'Software Consulting', 'UI/UX Design', 'Web Design', 'Branding']
