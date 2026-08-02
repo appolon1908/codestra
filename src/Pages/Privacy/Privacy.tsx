@@ -1,18 +1,2 @@
-import Footer from '../../Components/Layouts/Footer'
-import Navbar from '../../Components/Layouts/Navbar'
-
-const Privacy = () => (
-  <>
-    <Navbar />
-    <main className="2xl:px-[25rem] xl:px-[10rem] lg:px-[8rem] px-5 pt-[10rem] text-sm leading-7">
-      <h1 className="text-3xl mb-6">Privacy Policy</h1>
-      <p className="mb-4">Codestra uses the information you submit to respond to requests, provide services, maintain account security, and meet legal obligations.</p>
-      <p className="mb-4">Form information may be stored in Codestra systems and synchronized with our customer relationship platform. We do not sell personal information.</p>
-      <p className="mb-4">To request access, correction, or deletion of your information, email <a className="text-[#FFD700]" href="mailto:support@codestra.co">support@codestra.co</a>.</p>
-      <p>Last updated: August 2, 2026.</p>
-    </main>
-    <Footer />
-  </>
-)
-
+const Privacy = () => <section className="section-pad page-hero"><article className="page-wrap prose-page"><p className="eyebrow">Privacy</p><h1>Privacy, in plain language.</h1><p>Codestra only collects information you choose to provide through account and contact forms, plus limited technical information required to operate and secure this website.</p><h2>How information is used</h2><p>We use submitted information to respond to requests, provide support, operate accounts, improve our services, and meet legal obligations. We do not sell personal information.</p><h2>Data choices</h2><p>You may ask us to access, correct, or delete information associated with you by contacting support@codestra.com.</p><h2>Security and retention</h2><p>We apply reasonable technical and organizational safeguards and retain information only as long as needed for the purpose it was collected or as required by law.</p><h2>Contact</h2><p>Questions about privacy can be sent to <a href="mailto:support@codestra.com">support@codestra.com</a>.</p></article></section>
 export default Privacy

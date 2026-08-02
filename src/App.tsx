@@ -1,60 +1,43 @@
-import { lazy, Suspense } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import AboutUs from './Pages/About/AboutUs'
+import ElectronicBillingForm from './Pages/BillingForm/ElectronicBillingForm'
+import CaseStudies from './Pages/CaseStudies/CaseStudies'
+import ContactSales from './Pages/Contact/ContactSales'
+import ContactSupport from './Pages/Contact/ContactSupport'
+import ContactUs from './Pages/Contact/ContactUs'
+import HomeDash from './Pages/Dashboard/HomeDash'
+import ElectronicBilling from './Pages/ElectronicBilling/ElectronicBilling'
+import HiringPosition from './Pages/Hiring/HiringPosition'
+import Home from './Pages/Home/Home'
+import Insights from './Pages/Insights/Insights'
+import Login from './Pages/Login/Login'
+import NotFound from './Pages/NotFound'
+import Privacy from './Pages/Privacy/Privacy'
+import Services from './Pages/Services/Services'
+import Signup from './Pages/Signup/Signup'
+import SiteLayout from './Components/Layouts/SiteLayout'
 import AuthProvider from './Providers/AuthProvider'
 import QueryProvider from './Providers/QueryProvider'
-import { BrowserRouter, Routes, Route } from 'react-router'
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
-const AboutUs = lazy(() => import('./Pages/About/AboutUs'))
-const ContactSales = lazy(() => import('./Pages/Contact/ContactSales'))
-const ContactSupport = lazy(() => import('./Pages/Contact/ContactSupport'))
-const ContactUs = lazy(() => import('./Pages/Contact/ContactUs'))
-const Home = lazy(() => import('./Pages/Home/Home'))
-const Login = lazy(() => import('./Pages/Login/Login'))
-const Signup = lazy(() => import('./Pages/Signup/Signup'))
-const AllRoutes = lazy(() => import('./Routes/AllRoutes'))
-const ElectronicBilling = lazy(() => import('./Pages/ElectronicBilling/ElectronicBilling'))
-const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicBillingForm'))
-const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
-const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
-const Services = lazy(() => import('./Pages/Services/Services'))
-const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
-
-AOS.init();
-function App() {
-
-  return (
-    <>
-    <QueryProvider> 
-          <BrowserRouter>
-            <Suspense fallback={<div className="min-h-screen bg-[#080808]" aria-label="Loading" />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/case-studies" element={<CaseStudies />} />
-              <Route path="/contact" element={<ContactUs />} />
-              <Route path="/contact/sales" element={<ContactSales />} />
-              <Route path="/contact/support" element={<ContactSupport />} />
-              <Route path="/electronic-billing" element={<ElectronicBilling />} />
-              <Route path="/electronic-billing/form" element={<ElectronicBillingForm />} />
-              <Route path="/hiring/positions" element={<HiringPosition />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/privacy" element={<Privacy />} />
-              
-              <Route path="/*" element={<AuthProvider element={
-                <div>
-                  <AllRoutes />
-                </div>
-              }/>} />
-            </Routes>
-            </Suspense>
-          </BrowserRouter>
-      </QueryProvider>
-    </>
-  )
-}
+const App = () => <QueryProvider><BrowserRouter><Routes>
+  <Route element={<SiteLayout />}>
+    <Route index element={<Home />} />
+    <Route path="about" element={<AboutUs />} />
+    <Route path="services" element={<Services />} />
+    <Route path="case-studies" element={<CaseStudies />} />
+    <Route path="contact" element={<ContactUs />} />
+    <Route path="contact/sales" element={<ContactSales />} />
+    <Route path="contact/support" element={<ContactSupport />} />
+    <Route path="electronic-billing" element={<ElectronicBilling />} />
+    <Route path="electronic-billing/form" element={<ElectronicBillingForm />} />
+    <Route path="hiring/positions" element={<HiringPosition />} />
+    <Route path="insights" element={<Insights />} />
+    <Route path="privacy" element={<Privacy />} />
+    <Route path="auth/dashboard" element={<AuthProvider element={<HomeDash />} />} />
+    <Route path="*" element={<NotFound />} />
+  </Route>
+  <Route path="login" element={<Login />} />
+  <Route path="signup" element={<Signup />} />
+</Routes></BrowserRouter></QueryProvider>
 
 export default App

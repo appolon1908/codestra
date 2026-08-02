@@ -1,161 +1,22 @@
-
 import { useState } from 'react'
-import { HiEye } from "react-icons/hi";
-import { HiEyeOff } from "react-icons/hi";
-import { Link, useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
-import useSignup from '@/hooks/mutations/useSignup';
-import { toast, ToastContainer } from 'react-toastify';
+import { ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { Link, useNavigate } from 'react-router'
+import { useForm } from 'react-hook-form'
+import { toast, ToastContainer } from 'react-toastify'
+import useSignup from '../../hooks/mutations/useSignup'
 import logo from '../../assets/logo.png'
+import { setAccessToken } from '../../lib/auth'
 
+type FormData = { first_name: string; last_name: string; email: string; password: string }
+interface ErrorResponse { response?: { data?: { email?: string[]; non_field_errors?: string[] } } }
 
-type FormData = {
-  first_name: string,
-  last_name: string,
-  email: string,
-  password: string,
-}
-
-
-interface ErrorResponse {
-  response?: {
-    data?: {
-      email?: string[]
-      non_field_errors?: string[] 
-    }
-  }
-}
-
- const Signup = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const {mutate, isPending} = useSignup()
+  const { mutate, isPending } = useSignup()
   const navigate = useNavigate()
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
+  const onSubmit = (data: FormData) => mutate(data, { onSuccess: (details) => { const token = details?.data?.token?.access; if (typeof token === 'string' && token.trim()) { setAccessToken(token); navigate('/auth/dashboard', { replace: true }) } else { navigate('/login', { replace: true }) } }, onError: (error) => { const err = error as ErrorResponse; toast.error(err.response?.data?.email?.[0] || err.response?.data?.non_field_errors?.[0] || 'Unable to create your account. Please try again.') } })
 
-    const {
-      register, 
-      handleSubmit,
-      reset,
-      formState: { errors },
-    } = useForm<FormData>({mode: 'all'})
-  
-    const onSubmit = (data:FormData) => {
-      mutate(data, {
-        onSuccess: () => {
-          reset()
-          navigate('/login', { replace: true })
-        },
-        onError: (error) => {
-          const err = error as ErrorResponse;
-          console.error('Login failed:', error)
-          const errorMessage = err.response?.data?.email?.[0] || "An unexpected error occurred"
-          toast.error(errorMessage)
-        },
-      })
-    }
-
-  return (
-    <div className="min-h-screen flex flex-col gap-4 text-xs items-center justify-center bg-[#080808] px-3">
-
-        <div className='pb-6'>
-          <Link to={'/'}>
-            <img src={logo} alt="" className='w-40'/>
-          </Link>
-        </div>
-      <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] rounded-xl p-8">
-        
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-semibold text-white">Create account</h1>
-            <p className="text-gray-400">Quickly sign up for an account now</p>
-          </div>
-
-          <ToastContainer theme='light' autoClose={4000}/>
-
-
-          <div className="space-y-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">First Name</label>
-              <input 
-                type="text"
-                {...register('first_name', {required: true})}
-                placeholder="write full name here"
-                className="bg-[#262729] border-0 text-white p-3 rounded-lg"   
-              />
-              <p className="text-red-200 pt-1">{errors?.first_name && 'First Name Required'}</p>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">Last Name</label>
-              <input 
-                type="text"
-                {...register('last_name', {required: true})}
-                placeholder="write full name here"
-                className="bg-[#262729] border-0 text-white p-3 rounded-lg"   
-              />
-              <p className="text-red-200 pt-1">{errors?.last_name && 'Last Name Required'}</p>
-            </div>
-
-
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">Email</label>
-              <input 
-                type="email"
-                {...register('email', {required: true})}
-                placeholder="write email adress"
-                className="bg-[#262729] border-0 text-white p-3 rounded-lg"   
-              />
-              <p className="text-red-200 pt-1">{errors?.email && 'Email Required'}</p>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  {...register('password', {required: true})}
-                  placeholder="write your password"
-                  className="bg-[#262729] border-0 text-white p-3 rounded-lg w-full"
-                />
-                <button 
-                  type='button'
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-500"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
-                </button>
-                <p className="text-red-200 pt-1">{errors?.password && 'Password Required'}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <input type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
-              <label htmlFor="remember" className="text-sm text-gray-300">
-                Keep me logged in
-              </label>
-            </div>
-
-            {!isPending ? 
-              <button type="submit" className="w-full bg-white p-3 rounded-lg text-black hover:bg-gray-200">
-                Sign Up
-              </button> :
-              <button type="button" className="w-full flex justify-center items-center gap-3 bg-white p-3 rounded-lg text-neutral-400 hover:bg-gray-200">
-                <span className="loading loading-spinner loading-sm"></span>
-                Loading
-              </button>
-            }
-
-            <p className="text-center text-gray-400 text-sm">
-              Have an account?{' '}
-              <Link to="/login" className="text-white underline hover:text-gray-200">
-                Login
-              </Link>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
-  )
+  return <main className="auth-page"><ToastContainer theme="dark" /><section className="auth-brand-panel"><Link to="/"><img src={logo} alt="Codestra home" /></Link><div><p className="eyebrow">Work with us</p><h1>Turn your next initiative into a clear plan.</h1></div><p>Create an account to save project details and continue with our team.</p></section><section className="auth-form-panel"><Link className="back-link" to="/"><ArrowLeft size={16} />Back to website</Link><form className="auth-form" onSubmit={handleSubmit(onSubmit)} noValidate><div><p className="eyebrow">Create account</p><h2>Let’s get you set up</h2><p>Use your work details so we can support you properly.</p></div><div className="form-row"><label>First name<input autoComplete="given-name" {...register('first_name', { required: 'Required' })} />{errors.first_name && <span className="field-error">{errors.first_name.message}</span>}</label><label>Last name<input autoComplete="family-name" {...register('last_name', { required: 'Required' })} />{errors.last_name && <span className="field-error">{errors.last_name.message}</span>}</label></div><label>Email<input type="email" autoComplete="email" {...register('email', { required: 'Enter your email address' })} />{errors.email && <span className="field-error">{errors.email.message}</span>}</label><label>Password<div className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete="new-password" {...register('password', { required: 'Enter a password', minLength: { value: 8, message: 'Use at least 8 characters' } })} /><button type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff /> : <Eye />}</button></div>{errors.password && <span className="field-error">{errors.password.message}</span>}</label><label className="checkbox-label"><input type="checkbox" required />I agree to the <Link to="/privacy">privacy notice</Link>.</label><button className="button button-primary full" type="submit" disabled={isPending}>{isPending ? 'Creating account…' : <>Create account <ArrowRight size={17} /></>}</button><p className="auth-switch">Already have an account? <Link to="/login">Log in</Link></p></form></section></main>
 }
-
-
 export default Signup

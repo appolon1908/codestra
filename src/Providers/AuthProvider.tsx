@@ -1,27 +1,12 @@
+import { Navigate, useLocation } from 'react-router'
+import { hasUsableAccessToken } from '../lib/auth'
 
+interface AuthProps { element: React.ReactNode }
 
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth";
-
-
-interface AuthProps {
-    element: React.ReactNode
-}
-
-const AuthProvider = ({element} : AuthProps) => {
-
-    const navigate = useNavigate()
-    const isAuthenticated = hasUsableAccessToken()
-    
-    useEffect(() => {
-        if (!isAuthenticated) {
-            clearAccessToken()
-            navigate('/login', { replace: true })
-        }
-    }, [isAuthenticated, navigate])
-
-  return isAuthenticated ? element : null
+const AuthProvider = ({ element }: AuthProps) => {
+  const location = useLocation()
+  const authenticated = hasUsableAccessToken()
+  return authenticated ? element : <Navigate to="/login" replace state={{ from: location.pathname }} />
 }
 
 export default AuthProvider
