@@ -5,7 +5,6 @@ export const base_url = axios.create({
     timeout: 35000,
 });
 
-
 export const setAuthToken = () => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -13,7 +12,29 @@ export const setAuthToken = () => {
     } else {
       delete base_url.defaults.headers.common["Authorization"];
     }
-  };
-  
-  base_url.interceptors.response.use((response) => response);
+};
+
+base_url.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+
+  if (token) {
+    config.headers.set("Authorization", `Bearer ${token}`);
+  } else {
+    config.headers.delete("Authorization");
+  }
+
+  return config;
+});
+
+base_url.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("accessToken");
+      delete base_url.defaults.headers.common["Authorization"];
+    }
+
+    return Promise.reject(error);
+  },
+);
   

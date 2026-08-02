@@ -42,15 +42,21 @@ interface ErrorResponse {
     const onSubmit = (data:FormData) => {
       mutate(data, {
         onSuccess: (details) => {
-          console.log('This is data', details?.data?.token);
-          localStorage.setItem("accessToken", details?.data?.token?.access);
+          const accessToken = details?.data?.token?.access
+
           reset()
-          navigate('/login', { replace: true })
+          if (typeof accessToken === 'string' && accessToken.trim()) {
+            localStorage.setItem("accessToken", accessToken)
+            navigate('/auth/dashboard', { replace: true })
+          } else {
+            navigate('/login', { replace: true })
+          }
         },
         onError: (error) => {
           const err = error as ErrorResponse;
-          console.error('Login failed:', error)
-          const errorMessage = err.response?.data?.email?.[0] || "An unexpected error occurred"
+          const errorMessage = err.response?.data?.email?.[0]
+            || err.response?.data?.non_field_errors?.[0]
+            || "Unable to create your account. Please try again."
           toast.error(errorMessage)
         },
       })
@@ -61,7 +67,7 @@ interface ErrorResponse {
 
         <div className='pb-6'>
           <Link to={'/'}>
-            <img src={logo} alt="" className='w-40'/>
+            <img src={logo} alt="Codestra" className='w-40'/>
           </Link>
         </div>
       <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] rounded-xl p-8">
@@ -77,9 +83,11 @@ interface ErrorResponse {
 
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">First Name</label>
+              <label htmlFor="signup-first-name" className="text-sm text-white">First Name</label>
               <input 
+                id="signup-first-name"
                 type="text"
+                autoComplete="given-name"
                 {...register('first_name', {required: true})}
                 placeholder="write full name here"
                 className="bg-[#262729] border-0 text-white p-3 rounded-lg"   
@@ -88,9 +96,11 @@ interface ErrorResponse {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">Last Name</label>
+              <label htmlFor="signup-last-name" className="text-sm text-white">Last Name</label>
               <input 
+                id="signup-last-name"
                 type="text"
+                autoComplete="family-name"
                 {...register('last_name', {required: true})}
                 placeholder="write full name here"
                 className="bg-[#262729] border-0 text-white p-3 rounded-lg"   
@@ -100,9 +110,11 @@ interface ErrorResponse {
 
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">Email</label>
+              <label htmlFor="signup-email" className="text-sm text-white">Email</label>
               <input 
+                id="signup-email"
                 type="email"
+                autoComplete="email"
                 {...register('email', {required: true})}
                 placeholder="write email adress"
                 className="bg-[#262729] border-0 text-white p-3 rounded-lg"   
@@ -111,16 +123,19 @@ interface ErrorResponse {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-white">Password</label>
+              <label htmlFor="signup-password" className="text-sm text-white">Password</label>
               <div className="relative">
                 <input
+                  id="signup-password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
                   {...register('password', {required: true})}
                   placeholder="write your password"
                   className="bg-[#262729] border-0 text-white p-3 rounded-lg w-full"
                 />
                 <button 
                   type='button'
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-500"
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -131,7 +146,7 @@ interface ErrorResponse {
             </div>
 
             <div className="flex items-center space-x-2">
-              <input type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
+              <input id="remember" type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
               <label htmlFor="remember" className="text-sm text-gray-300">
                 Keep me logged in
               </label>
@@ -147,7 +162,7 @@ interface ErrorResponse {
               </button>
             }
 
-            <button className="w-full flex items-center gap-3 p-3 justify-center m-auto bg-[#262729] rounded-lg text-white hover:bg-[#1A1A1A] hover:text-white">
+            <button type="button" className="w-full flex items-center gap-3 p-3 justify-center m-auto bg-[#262729] rounded-lg text-white hover:bg-[#1A1A1A] hover:text-white">
                 Sign Up with Google
               <FcGoogle />
             </button>

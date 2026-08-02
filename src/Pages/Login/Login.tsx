@@ -37,14 +37,20 @@ const Login = () => {
   const onSubmit = (data:FormData) => {
     mutate(data, {
       onSuccess: (details) => {
-        localStorage.setItem("accessToken", details?.data?.token?.access);
+        const accessToken = details?.data?.token?.access
+
+        if (typeof accessToken !== 'string' || !accessToken.trim()) {
+          toast.error('Login succeeded, but the server did not return an access token.')
+          return
+        }
+
+        localStorage.setItem("accessToken", accessToken)
         reset()
-        console.log('Login successful')
         navigate('/auth/dashboard', { replace: true })
       },
       onError: (error) => {
         const err = error as ErrorResponse;
-        toast(err?.response?.data?.message)
+        toast.error(err.response?.data?.message || 'Unable to log in. Please try again.')
       },
     })
   }
@@ -54,7 +60,7 @@ const Login = () => {
     <div className="min-h-screen text-xs w-full flex flex-col gap-4 items-center justify-center m-auto bg-[#080808] px-3">
         <div className='pb-6'>
           <Link to={'/'}>
-            <img src={logo} alt="" className='w-40'/>
+            <img src={logo} alt="Codestra" className='w-40'/>
           </Link>
         </div>
         <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] border border-[#1b1b1b] rounded-xl p-8">
@@ -68,9 +74,11 @@ const Login = () => {
 
             <div className="space-y-4">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-white">Email</label>
+                <label htmlFor="login-email" className="text-sm text-white">Email</label>
                 <input 
+                  id="login-email"
                   type="email"
+                  autoComplete="email"
                   placeholder="Write email address"
                   className="bg-[#262729] border-0 text-white p-3 rounded-lg"
                   {...register('email', { required: true })}
@@ -80,10 +88,12 @@ const Login = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-white">Password</label>
+                <label htmlFor="login-password" className="text-sm text-white">Password</label>
                 <div className="relative">
                   <input
+                    id="login-password"
                     type={showPassword ? "text" : "password"}
+                    autoComplete="current-password"
                     placeholder="Write your password"
                     className="bg-[#262729] border-0 text-white p-3 rounded-lg w-full"
                     {...register('password', { required: true })}
@@ -91,6 +101,7 @@ const Login = () => {
                   />
                   <button 
                     type="button"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-500"
                     onClick={() => setShowPassword(!showPassword)}
                   >
@@ -100,7 +111,7 @@ const Login = () => {
               </div>
 
               <div className="flex items-center space-x-2">
-                <input type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
+                <input id="remember" type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
                 <label htmlFor="remember" className="text-sm text-gray-300">
                   Keep me logged in
                 </label>
@@ -139,4 +150,3 @@ const Login = () => {
 }
 
 export default Login
-
