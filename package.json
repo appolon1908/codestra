@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
+    "audit:production": "node scripts/audit-production.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
@@ -25,7 +26,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.4.0",
-    "react-router-dom": "^6.30.3",
+    "react-router-dom": "7.18.2",
     "react-toastify": "^11.0.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"

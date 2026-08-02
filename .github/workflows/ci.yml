@@ -24,7 +24,7 @@ jobs:
       - run: npm run build
         env:
           VITE_API_ENDPOINT: https://api.example.com
-      - run: npm audit --omit=dev --audit-level=high
+      - run: npm run audit:production
 
   container:
     runs-on: ubuntu-latest
