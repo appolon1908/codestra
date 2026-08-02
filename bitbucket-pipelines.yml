@@ -1,17 +1,27 @@
-image: atlassian/default-image:3
-
 pipelines:
   branches:
     main:
       - step:
-          name: Deploy to Server
+          name: Validate release
+          image: node:20.19-alpine
+          caches:
+            - node
           script:
-            - apt-get update && apt-get install -y sshpass
-            - echo "Deploying to server..."
-            - sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
-                [ -d codestra ] &&
-                cd codestra &&
-                git pull origin main &&
-                docker compose down &&
-                docker compose up -d
-              "
+            - npm ci
+            - npm run lint
+            - npm run build
+      - step:
+          name: Deploy to server
+          image: atlassian/default-image:4
+          deployment: production
+          script:
+            - test -n "$SERVER_IP" && test -n "$SERVER_USER" && test -n "$SERVER_PASSWORD"
+            - apt-get update && apt-get install -y --no-install-recommends sshpass
+            - install -d -m 700 ~/.ssh
+            - ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
+            - chmod 600 ~/.ssh/known_hosts
+            - >-
+              sshpass -p "$SERVER_PASSWORD" ssh "$SERVER_USER@$SERVER_IP"
+              'set -e; cd codestra; git pull --ff-only origin main;
+              docker compose up -d --build --remove-orphans;
+              docker compose ps'

@@ -1,179 +1,36 @@
-import { useState } from "react"
-import { Button1, Button2 } from "../components/Button"
-import { Link, useNavigate } from "react-router-dom"
-import { RiMenu3Line } from "react-icons/ri";
-import { IoIosArrowUp, IoMdClose } from "react-icons/io";
+import { useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { ArrowRight, Menu, X } from 'lucide-react'
 import logo from '../../assets/logo.png'
-// import useLogo from "../../hooks/queries/useLogo";
-import { IoIosArrowDown } from "react-icons/io";
-import { FaBrain } from "react-icons/fa";
-import { TbMessage2Filled } from "react-icons/tb";
-import { TbBrandCake } from "react-icons/tb";
-import { IoLogoBuffer } from "react-icons/io";
-import { IoLogoAppleAr } from "react-icons/io5";
-import { LiaReact } from "react-icons/lia";
-import { IoLogoPython } from "react-icons/io5";
-import { TbBrandSocketIo } from "react-icons/tb";
 
-
-
-
-
+const links = [
+  ['Services', '/services'], ['Approach', '/about'], ['Work', '/case-studies'], ['Billing', '/electronic-billing'], ['Insights', '/insights'],
+]
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const toggleMenu = () => setIsOpen(!isOpen)
+  const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
+  const authenticated = Boolean(localStorage.getItem('accessToken'))
+  const close = () => setOpen(false)
+  const logout = () => { localStorage.removeItem('accessToken'); close(); navigate('/') }
 
-    const navigate = useNavigate()
-    const isAuthenticated = localStorage.getItem('accessToken')
-    const handleLogout = () =>{
-        localStorage.removeItem('accessToken')
-        navigate('/', { replace: true })
-    }
-
-
-    const [showServices, setShowServices] = useState(false)
-    const [showServices2, setShowServices2] = useState(false)
-
-    // const {data, isLoading} = useLogo()
-
-    // const logoData = data
-
-    
-
-  return (
-    <div className="relative justify-center flex lg:pt-10 pt-3">
-        <div className="flex items-center justify-between text-xs fixed 2xl:w-[60%] xl:w-[80%] lg:w-[80%] w-[95%] rounded-lg z-50 p-2 px-5 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
-            
-            <div className="lg:w-32 w-20">
-                <img src={logo} alt="" />
-            </div>
-
-            <ul className="lg:flex hidden items-center gap-7 ">
-                <Link to={'/'}>
-                    <li>Home</li>
-                </Link>
-
-                <Link to={'/about'}>
-                    <li>About</li>
-                </Link>  
-
-                <div className="relative">
-                    <li className="cursor-pointer flex items-center gap-2" onClick={()=>setShowServices(!showServices)}>Services 
-                        {showServices === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</li>
-                    {showServices && 
-                        <ul className="absolute bg-neutral-900 border border-neutral-800 top-10 p-3 rounded-lg w-[15rem] space-y-1">
-                            <Link to={'/services'}>
-                                <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><FaBrain />AI Automation</li>
-                            </Link>
-
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><LiaReact />React JS</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoPython />Python</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
-                        </ul>
-                    }
-                </div>
-
-                <Link to={'/case-studies'}>
-                    <li>Case Studies</li>
-                </Link>
-
-                <Link to={'/contact'}>
-                    <li>Contact us</li>
-                </Link>
-
-                <Link to={'/'}>
-                    <li>Join The Team</li>
-                </Link> 
-            </ul>
-            
-            {isAuthenticated ? 
-
-                <div className="flex items-center gap-3">
-                    <Link to={'/auth/dashboard'}>
-                        <Button1 text="Dashboard" />
-                    </Link> 
-
-                    <Button2 text="Log out" onClick={handleLogout}/>
-
-                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                        {!isOpen ? 
-                            <p><RiMenu3Line /></p> :
-                            <p><IoMdClose /></p> 
-                        }
-                    </div>
-                </div>
-                : 
-
-                <div className="flex items-center gap-3">
-                    <Link to={'/login'}>
-                        <Button1 text="Log in" />
-                    </Link>
-
-                    <Link to={'/signup'}>
-                        <Button2 text="Sign up" />
-                    </Link>
-                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                        {!isOpen ? 
-                            <p><RiMenu3Line /></p> :
-                            <p><IoMdClose /></p> 
-                        }
-                    </div>
-                </div>
-            }
-
+  return <header className="site-header">
+    <nav className="page-wrap nav-inner" aria-label="Main navigation">
+      <Link to="/" onClick={close} className="brand"><img src={logo} alt="Codestra home" /></Link>
+      <div className={`nav-links ${open ? 'is-open' : ''}`}>
+        {links.map(([label, href]) => <NavLink key={href + label} to={href} onClick={close}>{label}</NavLink>)}
+        <NavLink to="/hiring/positions" onClick={close}>Careers</NavLink>
+        <div className="mobile-account-links">
+          {authenticated ? <><Link to="/auth/dashboard" onClick={close}>Dashboard</Link><button onClick={logout}>Log out</button></> : <><Link to="/login" onClick={close}>Log in</Link><Link to="/signup" onClick={close}>Create account</Link></>}
         </div>
-        
-        {isOpen && 
-            <ul className="lg:hidden fixed rounded-lg text-lg top-20 right-0 left-0 flex m-auto p-5 flex-col gap-12 h-[80vh] w-[90%] z-30 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
-                    <Link to={'/'}>
-                        <li>Home</li>
-                    </Link>
-
-                    <Link to={'/about'}>
-                        <li>About</li>
-                    </Link>
-
-
-                    {/* <Link to={'/services'}>
-                        <li>Services</li>
-                    </Link> */}
-
-                    <div className="relative">
-                    <li className="cursor-pointer flex items-center gap-2" onClick={()=>setShowServices2(!showServices2)}>Services 
-                        {showServices2 === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</li>
-                    {showServices2 && 
-                        <ul className="absolute bg-neutral-900 border backdrop-blur-3xl bg-opacity-100 text-sm border-neutral-800 top-10 p-5 rounded-lg w-full space-y-1">
-                            <Link to={'/services'}>
-                                <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><FaBrain />AI Automation</li>
-                            </Link>
-
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
-                        </ul>
-                    }
-                </div>
-
-                    <Link to={'/case-studies'}>
-                        <li>Case Studies</li>
-                    </Link>
-
-                    <Link to={'/contact'}>
-                        <li>Contact us</li>
-                    </Link>
-            </ul>
-        }
-    </div>
-  )
+      </div>
+      <div className="nav-actions">
+        {authenticated ? <><Link className="text-link" to="/auth/dashboard">Dashboard</Link><button className="button button-secondary compact" onClick={logout}>Log out</button></> : <Link className="text-link" to="/login">Log in</Link>}
+        <Link className="button button-primary compact" to="/contact/sales">Talk to our team <ArrowRight size={16} /></Link>
+      </div>
+      <button className="menu-button" aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
+    </nav>
+  </header>
 }
 
 export default Navbar

@@ -1,15 +1,12 @@
-version: "3.8"
-
 services:
   web:
     container_name: codestra_container
     build: .
     ports:
-      - "5000:5000"
+      - "5000:80"
     restart: always
     networks:
       - odoo_proxy_network
-    command: ["serve", "-s", "dist", "-l", "5000"]
 
 networks:
   odoo_proxy_network:
