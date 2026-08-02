@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { HiEye, HiEyeOff } from "react-icons/hi"
-import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from 'react-router'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
@@ -119,11 +118,6 @@ const Login = () => {
                   Loading
                 </button>
               }
-
-              <button type="button" className="w-full flex items-center gap-3 p-3 justify-center m-auto bg-[#262729] rounded-lg text-white hover:bg-[#1A1A1A] hover:text-white">
-                Log in with Google
-                <FcGoogle />
-              </button>
 
               <p className="text-center text-gray-400 text-sm">
                 Need an account?{' '}

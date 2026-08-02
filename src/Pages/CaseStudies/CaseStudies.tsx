@@ -11,6 +11,7 @@ import { GoArrowRight } from "react-icons/go";
 import { HiSquare3Stack3D } from "react-icons/hi2";
 import { FaShapes } from "react-icons/fa6";
 import { Button1, Button2 } from '@/Components/components/Button';
+import { Link } from 'react-router';
 
 
 
@@ -203,8 +204,8 @@ const CaseStudies = () => {
                         <br /> Build the future
                     </h2>
                     <div className='flex items-center gap-5'>
-                        <Button2 text='Get Started'/>   
-                        <Button1 text='Talk to Sales'/>
+                        <Link to='/signup'><Button2 text='Get Started'/></Link>
+                        <Link to='/contact/sales'><Button1 text='Talk to Sales'/></Link>
                     </div>
                 </div>
             </div>

@@ -64,7 +64,7 @@ const ContactUs = () => {
                     <p className='text-xs py-4 text-[#B4B5B5] lg:w-[60%] w-full'>
                         Explore Codestra's features, integrations, and learn how to make the most of them.
                     </p>
-                    <p className='flex items-center gap-2'>Codestra Docs <MdKeyboardArrowRight  /></p>
+                    <a href='/api/docs/' className='flex items-center gap-2 hover:text-[#FFD700]'>Codestra Docs <MdKeyboardArrowRight /></a>
                 </div>
 
                 <div>
@@ -72,7 +72,7 @@ const ContactUs = () => {
                     <p className='text-xs py-4 text-[#B4B5B5] w-[70%]'>
                         Learn how to use our tools to extend functionality in digital product development.
                     </p>
-                    <p className='flex items-center gap-2'>Codestra API <MdKeyboardArrowRight  /></p>
+                    <a href='/api/schema/' className='flex items-center gap-2 hover:text-[#FFD700]'>Codestra API Schema <MdKeyboardArrowRight /></a>
                 </div>
             </div>
 
