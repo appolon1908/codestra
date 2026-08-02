@@ -1,22 +1,24 @@
-import AboutUs from './Pages/About/AboutUs'
-import ContactSales from './Pages/Contact/ContactSales'
-import ContactSupport from './Pages/Contact/ContactSupport'
-import ContactUs from './Pages/Contact/ContactUs'
-import Home from './Pages/Home/Home'
-import Login from './Pages/Login/Login'
-import Signup from './Pages/Signup/Signup'
+import { lazy, Suspense } from 'react'
 import AuthProvider from './Providers/AuthProvider'
 import QueryProvider from './Providers/QueryProvider'
-import AllRoutes from './Routes/AllRoutes'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import ElectronicBilling from './Pages/ElectronicBilling/ElectronicBilling'
-import ElectronicBillingForm from './Pages/BillingForm/ElectronicBillingForm'
-import HiringPosition from './Pages/Hiring/HiringPosition'
-import CaseStudies from './Pages/CaseStudies/CaseStudies'
-import Services from './Pages/Services/Services'
+
+const AboutUs = lazy(() => import('./Pages/About/AboutUs'))
+const ContactSales = lazy(() => import('./Pages/Contact/ContactSales'))
+const ContactSupport = lazy(() => import('./Pages/Contact/ContactSupport'))
+const ContactUs = lazy(() => import('./Pages/Contact/ContactUs'))
+const Home = lazy(() => import('./Pages/Home/Home'))
+const Login = lazy(() => import('./Pages/Login/Login'))
+const Signup = lazy(() => import('./Pages/Signup/Signup'))
+const AllRoutes = lazy(() => import('./Routes/AllRoutes'))
+const ElectronicBilling = lazy(() => import('./Pages/ElectronicBilling/ElectronicBilling'))
+const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicBillingForm'))
+const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
+const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
+const Services = lazy(() => import('./Pages/Services/Services'))
 
 AOS.init();
 function App() {
@@ -25,6 +27,7 @@ function App() {
     <>
     <QueryProvider> 
           <BrowserRouter>
+            <Suspense fallback={<div className="min-h-screen bg-[#080808]" aria-label="Loading" />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -45,6 +48,7 @@ function App() {
                 </div>
               }/>} />
             </Routes>
+            </Suspense>
           </BrowserRouter>
       </QueryProvider>
     </>

@@ -41,9 +41,7 @@ interface ErrorResponse {
   
     const onSubmit = (data:FormData) => {
       mutate(data, {
-        onSuccess: (details) => {
-          console.log('This is data', details?.data?.token);
-          localStorage.setItem("accessToken", details?.data?.token?.access);
+        onSuccess: () => {
           reset()
           navigate('/login', { replace: true })
         },

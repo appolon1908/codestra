@@ -100,7 +100,6 @@ const ElectronicBillingForm = () => {
     }
 
 
-    console.log('This is are files', files);
     
 
     // =================== API REQUEST SUBMISSION =================
@@ -116,15 +115,12 @@ const ElectronicBillingForm = () => {
     const onSubmit = (data:TaskProps) => {
         // data.media_file = files
         mutate(data, {
-            onSuccess: (details) => {
-                console.log('Task created successfully', details)
+            onSuccess: () => {
                 setIsOpen(true)
                 setIsAlertOpen(true)
                 reset()
             },
-            onError: (error) => {
-                console.log('Error creating task', error)
-            }
+            onError: () => setIsAlertOpen(false)
         })
     }
 

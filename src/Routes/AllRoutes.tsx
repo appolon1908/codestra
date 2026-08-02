@@ -1,6 +1,8 @@
+import { lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import HomeDash from '../Pages/Dashboard/HomeDash'
-import NotFound from '../Pages/NotFound'
+
+const HomeDash = lazy(() => import('../Pages/Dashboard/HomeDash'))
+const NotFound = lazy(() => import('../Pages/NotFound'))
 
 const AllRoutes = () => {
   return (

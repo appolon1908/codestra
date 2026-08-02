@@ -6,6 +6,7 @@ import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
 import { ToastContainer, toast } from 'react-toastify';
 import logo from '../../assets/logo.png'
+import { setAccessToken } from '@/lib/auth'
 
 type FormData = {
   email: string,
@@ -37,9 +38,8 @@ const Login = () => {
   const onSubmit = (data:FormData) => {
     mutate(data, {
       onSuccess: (details) => {
-        localStorage.setItem("accessToken", details?.data?.token?.access);
+        setAccessToken(details.data.token.access);
         reset()
-        console.log('Login successful')
         navigate('/auth/dashboard', { replace: true })
       },
       onError: (error) => {
@@ -139,4 +139,3 @@ const Login = () => {
 }
 
 export default Login
-

@@ -33,7 +33,6 @@ const ElectronicBilling = () => {
 
     const {data, isLoading} = useFAQ()
     const faqData = data?.data as FAQ[] || []
-    console.log('This is data', data)
 
   return (
     <div>

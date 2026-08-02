@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom"
+import { clearAccessToken } from "@/lib/auth"
 import { Button2 } from "../../Components/components/Button"
 
 const HomeDash = () => {
 
   const navigate = useNavigate()
   const handleLogout = () =>{
-       localStorage.removeItem('accessToken')
+       clearAccessToken()
        navigate('/', { replace: true })
    }  
 

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth";
 
 
 interface AuthProps {
@@ -11,10 +12,11 @@ interface AuthProps {
 const AuthProvider = ({element} : AuthProps) => {
 
     const navigate = useNavigate()
-    const isAuthenticated = localStorage.getItem('accessToken')
+    const isAuthenticated = hasUsableAccessToken()
     
     useEffect(() => {
         if (!isAuthenticated) {
+            clearAccessToken()
             navigate('/login', { replace: true })
         }
     }, [isAuthenticated, navigate])
