@@ -1,0 +1,9 @@
+.git
+node_modules
+dist
+qa-evidence
+test-results
+playwright-report
+*.log
+.env*
+design-qa.md
