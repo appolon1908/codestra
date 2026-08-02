@@ -1,4 +1,5 @@
 import axios from "axios";
+import { clearAccessToken, getAccessToken } from "@/lib/auth";
 
 export const base_url = axios.create({
     baseURL: import.meta.env.VITE_API_ENDPOINT,
@@ -6,14 +7,17 @@ export const base_url = axios.create({
 });
 
 
-export const setAuthToken = () => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      base_url.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete base_url.defaults.headers.common["Authorization"];
-    }
-  };
-  
-  base_url.interceptors.response.use((response) => response);
+base_url.interceptors.request.use((config) => {
+  const token = getAccessToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+base_url.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) clearAccessToken();
+    return Promise.reject(error);
+  },
+);
   
