@@ -38,7 +38,6 @@ const AboutUs = () => {
 
     const employeeData = data?.data as  []
 
-    console.log('This is Mutate', employeeData);
     
 
 

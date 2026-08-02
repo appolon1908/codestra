@@ -105,7 +105,6 @@ export const Testimonies = () => {
 
   const {data} = useTestimonials()
   const myTestimonials = data?.data as TestimonialsProps[] || []
-  console.log('This is console', myTestimonials);
   
 
 
@@ -145,4 +144,3 @@ export const Testimonies = () => {
     </Carousel>
   )
 }
-

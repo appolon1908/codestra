@@ -45,15 +45,12 @@ const ContactSales = () => {
     const onSubmit = (data : ContactProps) =>{
         mutate(data, {
             onSuccess(details) {
-                console.log(details);
                 setIsOpen(true);
                 toast.success(details.data.message)
             },
 
             onError(error) {
-                console.log(error)
                 const err = error as ErrorResponse;
-                console.error('Login failed:', error)
                 const errorMessage = err.response?.data?.message || "An unexpected error occurred"
                 toast.error(errorMessage)
             },
