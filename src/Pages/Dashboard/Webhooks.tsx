@@ -4,7 +4,7 @@ import { base_url } from "@/APIs/base";
 import AuthProvider from "@/Providers/AuthProvider";
 
 type Subscription = { id:number; name:string; url:string; events:string[]; enabled:boolean; secret_hint:string };
-type Delivery = { id:number; event_id:string; event_type:string; status:string; attempts:number; response_code:number|null; error:string; created_at:string };
+type Delivery = { id:number; event_id:string; event_type:string; status:string; attempts:number; attempt_history:{attempt:number;status?:string;response_code?:number;error?:string}[]; response_code:number|null; error:string; created_at:string };
 
 const eventOptions = ["test", "lead.created", "delivery.updated", "payment.succeeded", "payment.failed"];
 
