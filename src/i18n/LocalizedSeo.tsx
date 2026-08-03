@@ -29,7 +29,10 @@ export default function LocalizedSeo() {
     meta('meta[property="og:description"]', {property:"og:description",content:description});
     meta('meta[property="og:url"]', {property:"og:url",content:canonicalUrl});
     meta('meta[property="og:locale"]', {property:"og:locale",content:OG_LOCALE[locale]});
-    document.head.querySelectorAll('link[data-codestra-locale]').forEach((node) => node.remove());
+    // The prerendered document already contains canonical and hreflang links.
+    // Replace the complete set on navigation so hydration never leaves duplicate
+    // canonical or alternate entries in the document head.
+    document.head.querySelectorAll('link[rel="canonical"], link[rel="alternate"]').forEach((node) => node.remove());
     const addLink = (rel:string, href:string, hreflang?:string) => { const node=document.createElement("link"); node.rel=rel; node.href=href; node.dataset.codestraLocale="true"; if(hreflang) node.hreflang=hreflang; document.head.appendChild(node); };
     addLink("canonical", canonicalUrl);
     supportedLocales.forEach((lang) => addLink("alternate", `https://codestra.co${localizePath(location.pathname, lang)}`, lang));

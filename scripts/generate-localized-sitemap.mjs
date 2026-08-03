@@ -1,8 +1,8 @@
 import { writeFileSync } from "node:fs";
-import { coreRoutes, industries, locales, localizedPath } from "./seo-manifest.mjs";
+import { coreRoutes, industries, locales, localizedPath, industryEntry } from "./seo-manifest.mjs";
 
 const base = "https://codestra.co";
-const paths = [...coreRoutes.map((route) => route.path), ...industries.map((slug) => `industries/${slug}`)];
+const paths = [...coreRoutes.filter((route) => route.indexable).map((route) => route.path), ...industries.map((slug) => industryEntry(slug, "en")).filter((route) => route.indexable).map((route) => route.path)];
 const escape = (value) => value.replaceAll("&", "&amp;");
 const urls = paths.flatMap((path) => locales.map((locale) => {
   const localized = `${base}${localizedPath(locale, path)}`;

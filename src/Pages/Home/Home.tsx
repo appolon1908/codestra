@@ -1,5 +1,5 @@
 import Navbar from "../../Components/Layouts/Navbar";
-import image from "../../assets/Rectangle.png";
+import imageWebp from "../../assets/Rectangle.webp";
 import { GoArrowRight } from "react-icons/go";
 
 
@@ -105,7 +105,7 @@ const Home = () => {
           </LocalizedLink>
         </div>
         <div className="myDivImage lg:w-[80%] cursor-pointer w-[100%] mt-10 flex justify-center m-auto overflow-hidden">
-          <img src={image} alt="Codestra software platform preview" width="1200" height="650" fetchPriority="high" decoding="async" />
+          <img src={imageWebp} alt="Codestra software platform preview" width="1600" height="621" fetchPriority="high" decoding="async" />
         </div>
 
         <div className="2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-3">
@@ -284,7 +284,7 @@ const Home = () => {
                     className="bg-neutral-900 eachImage lg:p-5 p-3 cursor-pointer rounded-xl"
                   >
                     <h3 className="text-base flex items-center gap-2">
-                      <Icon className="text-xl" />
+                      <Icon aria-hidden="true" focusable="false" className="text-xl" />
                       {tool.name}
                     </h3>
                     <p className="pt-2">{tool.description}</p>

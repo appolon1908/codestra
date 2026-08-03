@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --host",
     "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/prerender-localized-routes.mjs",
+    "serve:prerendered": "node scripts/serve-prerendered.mjs",
+    "test:seo": "node scripts/validate-prerendered-seo.mjs",
     "generate:sitemap": "node scripts/generate-localized-sitemap.mjs",
     "sync:i18n-industries": "node scripts/sync-industry-source-catalog.mjs",
     "audit:i18n": "node scripts/audit-untranslated-ui.mjs",
