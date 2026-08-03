@@ -1,5 +1,9 @@
 FROM node:22.22.2-alpine3.23 AS build
 
+ARG SOURCE_REVISION=unknown
+ARG APP_VERSION=development
+ARG BUILD_CREATED=unknown
+
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -15,6 +19,14 @@ ENV VITE_PUBLIC_SITE_URL=${VITE_PUBLIC_SITE_URL}
 RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:1.29-alpine
+
+ARG SOURCE_REVISION=unknown
+ARG APP_VERSION=development
+ARG BUILD_CREATED=unknown
+LABEL org.opencontainers.image.source="https://github.com/appolon1908-hue/codestra" \
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.version="${APP_VERSION}" \
+      org.opencontainers.image.created="${BUILD_CREATED}"
 
 USER root
 RUN apk upgrade --no-cache
