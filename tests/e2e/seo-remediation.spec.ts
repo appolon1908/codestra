@@ -29,6 +29,24 @@ test.describe("SEO remediation browser checks", () => {
     expect(missing?.status()).toBe(404);
   });
 
+  test("services and industries dropdowns support keyboard operation", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/en/");
+    const services = page.getByRole("button", { name: "Services" }).first();
+    await services.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("link", { name: "AI Automation" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("link", { name: "AI Automation" })).toHaveCount(0);
+    const industries = page.getByRole("button", { name: "Industries" }).first();
+    await industries.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("link", { name: "View all industries" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("link", { name: "View all industries" })).toHaveCount(0);
+    await expect(page.getByRole("contentinfo").getByRole("link", { name: "Healthcare" })).toHaveAttribute("href", "/en/industries/healthcare-ai");
+  });
+
   test("responsive layout has no serious accessibility violations", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [360, 390, 768, 1024, 1280, 1440]) {

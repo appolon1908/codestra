@@ -23,8 +23,5 @@ export function industryEntry(slug, locale) {
   const name = slug.replace(/-ai$/, "").replaceAll("-", " ").replace(/\b\w/g, (c) => c.toUpperCase());
   const copy = { en: `Build practical AI and software workflows for ${name}.`, es: `Crea flujos prácticos de IA y software para ${name}.`, fr: `Créez des flux IA et logiciels utiles pour ${name}.` };
   const titles = { en: `${name} AI Solutions | Codestra`, es: `Soluciones de IA para ${name} | Codestra`, fr: `Solutions IA pour ${name} | Codestra` };
-  // Industry pages are intentionally withheld from indexing until their content,
-  // proof and translations have owner approval. They remain routable as noindex
-  // pages so visitors and internal links do not receive a broken URL.
-  return { path: `industries/${slug}`, key: `industry-${slug}`, indexable: false, heading: copy, titles, descriptions: copy };
+  return { path: `industries/${slug}`, key: `industry-${slug}`, indexable: true, heading: copy, titles, descriptions: copy };
 }

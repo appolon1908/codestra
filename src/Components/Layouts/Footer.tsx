@@ -7,13 +7,13 @@ const serviceLinks = [
   "softwareDevelopment", "mobileDevelopment", "aiDevelopment", "softwareConsulting", "uiUx", "webDesign", "branding",
 ];
 const industryLinks = [
-  "finance", "healthcare", "gaming", "realEstate", "education", "web3",
+  ["finance", "financial-services-ai"], ["healthcare", "healthcare-ai"], ["gaming", "gaming-entertainment-ai"], ["realEstate", "real-estate-ai"], ["education", "education-ai"], ["web3", "industries"],
 ];
 
 const Footer = () => {
   const { t } = useTranslation(["common", "navigation", "legal"]);
   return (
-  <footer className="flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-8 bg-[#08090A] border-t border-neutral-800 lg:py-20 pt-10 pb-10 lg:mt-[10rem] mt-[5rem] justify-between">
+  <footer className="flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-8 bg-[#08090A] border-t border-neutral-800 lg:py-20 pt-10 pb-10 lg:mt-[10rem] mt-[5rem] justify-between overflow-hidden">
     <div>
       <h2 className="text-base text-white font-bold">{t("common:office")}</h2>
       <div className="text-xs">
@@ -56,7 +56,7 @@ const Footer = () => {
       </div>
     </div>
     <div className="flex lg:flex-row flex-col lg:gap-28 gap-8 text-white">
-      <ul className="space-y-5 text-sm lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
+      <ul className="space-y-5 text-sm lg:border-none border-t lg:pt-0 pt-5 border-neutral-800 min-w-0">
         <li className="text-base font-bold">{t("common:services")}</li>
         {serviceLinks.map((item) => (
           <li key={item}>
@@ -66,11 +66,11 @@ const Footer = () => {
           </li>
         ))}
       </ul>
-      <ul className="space-y-5 lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
+      <ul className="space-y-5 lg:border-none border-t lg:pt-0 pt-5 border-neutral-800 min-w-0">
         <li className="text-base font-bold">{t("common:industries")}</li>
-        {industryLinks.map((item) => (
-          <li key={item}>
-            <LocalizedLink className="hover:text-[#FFD700]" to="/case-studies">
+        {industryLinks.map(([item, path]) => (
+          <li key={item} className="min-w-0">
+            <LocalizedLink className="inline-block max-w-full whitespace-normal break-words hover:text-[#FFD700]" to={path === "industries" ? "/industries" : `/industries/${path}`}>
               {t(`common:footer.industries.${item}`)}
             </LocalizedLink>
           </li>
