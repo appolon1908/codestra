@@ -1,127 +1,189 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: "Sora", serif;
 }
 
+html {
+  overflow-x: clip;
+}
 
-body{
+body {
   background-color: #080808;
   color: white;
+  min-width: 320px;
+  overflow-x: clip;
+}
+
+main,
+section,
+article,
+form,
+fieldset,
+div {
+  min-width: 0;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+a,
+button,
+label {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1024px) {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  [role="dialog"] {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .loader {
   width: 18px;
   height: 18px;
-  border: 2px solid #FFF;
+  border: 2px solid #fff;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
-  }
+}
 
+.loadera {
+  width: 18px;
+  height: 18px;
+  border: 2px solid gray;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
 
-  .loadera {
-    width: 18px;
-    height: 18px;
-    border: 2px solid gray;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    }
-
-  @keyframes rotation {
+@keyframes rotation {
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
-  } 
+}
 
-  .eachImage {
-    transition: transform 0.5s ease !important;
-  }
-  
-  .eachImage:hover {
-    transform: scale(1.08) !important; 
-  }
+.eachImage {
+  transition: transform 0.5s ease !important;
+}
 
-  .eachImagea {
-    transition: transform 0.5s ease !important;
-  }
-  
-  .eachImagea:hover {
-    transform: scale(0.96) !important; 
-  }
+.eachImage:hover {
+  transform: scale(1.08) !important;
+}
 
+.eachImagea {
+  transition: transform 0.5s ease !important;
+}
 
+.eachImagea:hover {
+  transform: scale(0.96) !important;
+}
 
-  @keyframes float {
-    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-    25% { transform: translateY(-10px) translateX(5px) rotate(2deg); }
-    50% { transform: translateY(0px) translateX(10px) rotate(0deg); }
-    75% { transform: translateY(10px) translateX(5px) rotate(-2deg); }
-    100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
   }
-  /* .myDivImage:hover {
+  25% {
+    transform: translateY(-10px) translateX(5px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0px) translateX(10px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(10px) translateX(5px) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+}
+/* .myDivImage:hover {
     animation: float 3s ease-in-out infinite;
   } */
 
+.swiper {
+  width: 100%;
+  height: 100%;
+}
 
-  .swiper {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .myBg{
-    background-image: url('./assets/bg.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 70vh;
-    padding-bottom: 20px;
-  }
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
+.myBg {
+  background-image: url("./assets/bg.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 70vh;
+  padding-bottom: 20px;
+}
 
-  .myBg2{
-    background-image: url('./assets/services.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 60vh;
-    padding-bottom: 20px;
-  }
-  
+.myBg2 {
+  background-image: url("./assets/services.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 60vh;
+  padding-bottom: 20px;
+}
 
-  @layer base {
+@layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -176,9 +238,8 @@ body{
     --chart-5: 340 75% 55%;
   }
 }
-  
 
-  @layer base {
+@layer base {
   * {
     @apply border-border;
   }
@@ -186,3 +247,16 @@ body{
     @apply bg-background text-foreground;
   }
 }
+html { scroll-behavior: smooth; }
+.codestra-language-selector select {
+  min-width: 9.5rem; min-height: 44px; padding: .55rem 2rem .55rem .75rem;
+  color: #fff; background: #151517; border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px; font: inherit; cursor: pointer;
+}
+.codestra-language-selector select:focus-visible { outline: 2px solid #ffe500; outline-offset: 3px; }
+@media (max-width: 374px) { .codestra-language-selector select { min-width: 8.4rem; max-width: 42vw; } }
+.codestra-language-prompt { position:fixed; z-index:900; right:max(1rem,env(safe-area-inset-right)); bottom:max(1rem,env(safe-area-inset-bottom)); width:min(28rem,calc(100% - 2rem)); padding:1rem; color:#fff; background:#171717; border:1px solid rgba(255,255,255,.18); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.45); }
+.codestra-language-prompt div { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem; }
+.codestra-language-prompt button { min-height:44px; padding:.55rem .85rem; color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:999px; }
+.codestra-language-prompt button:first-child { color:#000; background:#ffe500; border-color:#ffe500; }
+.codestra-language-prompt button:focus-visible { outline:2px solid #ffe500; outline-offset:3px; }

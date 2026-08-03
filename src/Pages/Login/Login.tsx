@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { HiEye, HiEyeOff } from "react-icons/hi"
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
+import { useTranslation } from 'react-i18next'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
 import { ToastContainer, toast } from 'react-toastify';
 import logo from '../../assets/logo.png'
 import { setAccessToken } from '@/lib/auth'
+import LocalizedLink from '../../i18n/LocalizedLink'
 
 type FormData = {
   email: string,
@@ -26,6 +28,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const {mutate, isPending} = useLogin()
   const navigate = useNavigate()
+  const { t } = useTranslation('auth')
 
   const {
     register, 
@@ -52,25 +55,24 @@ const Login = () => {
   return (
     <div className="min-h-screen text-xs w-full flex flex-col gap-4 items-center justify-center m-auto bg-[#080808] px-3">
         <div className='pb-6'>
-          <Link to={'/'}>
-            <img src={logo} alt="" className='w-40'/>
-          </Link>
+          <LocalizedLink to={'/'}><img src={logo} alt={t('codestraHome')} className='w-40'/></LocalizedLink>
         </div>
         <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] border border-[#1b1b1b] rounded-xl p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
-              <h1 className="text-2xl font-semibold text-white">Log in</h1>
-              <p className="text-gray-400">Please login to continue to your account</p>
+              <h1 className="text-2xl font-semibold text-white">{t('login.title')}</h1>
+              <p className="text-gray-400">{t('login.body')}</p>
             </div>
 
             <ToastContainer theme='light' autoClose={4000}/>
 
             <div className="space-y-4">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-white">Email</label>
+                <label htmlFor="login-email" className="text-sm text-white">{t('email.label')}</label>
                 <input 
+                  id="login-email"
                   type="email"
-                  placeholder="Write email address"
+                  placeholder={t('email.placeholder')}
                   className="bg-[#262729] border-0 text-white p-3 rounded-lg"
                   {...register('email', { required: true })}
                 />
@@ -79,11 +81,12 @@ const Login = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-white">Password</label>
+                <label htmlFor="login-password" className="text-sm text-white">{t('password.label')}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Write your password"
+                    id="login-password"
+                    placeholder={t('password.placeholder')}
                     className="bg-[#262729] border-0 text-white p-3 rounded-lg w-full"
                     {...register('password', { required: true })}
 
@@ -92,6 +95,7 @@ const Login = () => {
                     type="button"
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-500"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={t(showPassword ? 'password.hide' : 'password.show')}
                   >
                     {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
                   </button>
@@ -99,9 +103,9 @@ const Login = () => {
               </div>
 
               <div className="flex items-center space-x-2">
-                <input type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
-                <label htmlFor="remember" className="text-sm text-gray-300">
-                  Keep me logged in
+                <input id="login-remember" type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
+                <label htmlFor="login-remember" className="text-sm text-gray-300">
+                  {t('remember')}
                 </label>
               </div>
 
@@ -111,19 +115,17 @@ const Login = () => {
 
               {!isPending ? 
                 <button type="submit" className="w-full bg-white p-3 rounded-lg text-black hover:bg-gray-200">
-                  Log In
+                  {t('login.submit')}
                 </button> : 
                 <button type="button" className="w-full flex justify-center items-center gap-3 bg-white p-3 rounded-lg text-neutral-400 hover:bg-gray-200">
                   <span className="loading loading-spinner loading-sm"></span>
-                  Loading
+                  {t('loading')}
                 </button>
               }
 
               <p className="text-center text-gray-400 text-sm">
-                Need an account?{' '}
-                <Link to="/signup" className="text-white underline hover:text-gray-200">
-                  Create one
-                </Link>
+                {t('login.needAccount')}{' '}
+                <LocalizedLink to="/signup" className="text-white underline hover:text-gray-200">{t('login.create')}</LocalizedLink>
               </p>
             </div>
           </form>

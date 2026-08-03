@@ -1,0 +1,45 @@
+{
+  "language": "Language",
+  "languagePrompt": "We detected that you may prefer {{language}}. Would you like to view this page in {{language}}?",
+  "viewLanguage": "View in {{language}}",
+  "keepEnglish": "Keep English",
+  "close": "Close",
+  "continue": "Continue",
+  "carousel": { "previous": "Previous slide", "next": "Next slide" },
+  "status": {
+    "dataSent": "Data was sent successfully.",
+    "messageSent": "Message Sent!",
+    "messageSentBody": "Your message has been sent successfully.",
+    "sentSuccessfully": "Sent Successfully!"
+  },
+  "loading": "Loading",
+  "codestraHome": "Codestra home",
+  "copyright": "© {{year}} Codestra",
+  "office": "Offices",
+  "services": "Services",
+  "industries": "Industries",
+  "company": "Company",
+  "dashboard": {"title": "Dashboard", "logout": "Log out", "home": "Home"},
+  "footer": {
+    "craftsmanship": "Craftsmanship in Every Line of Code.",
+    "reliableProducts": "We turn ideas into reliable digital products.",
+    "ourWork": "Our Work",
+    "services": {
+      "softwareDevelopment": "Software Development",
+      "mobileDevelopment": "Mobile App Development",
+      "aiDevelopment": "AI Development",
+      "softwareConsulting": "Software Consulting",
+      "uiUx": "UI/UX Design",
+      "webDesign": "Web Design",
+      "branding": "Branding"
+    },
+    "industries": {
+      "finance": "Finance",
+      "healthcare": "Healthcare",
+      "gaming": "iGaming",
+      "realEstate": "Real Estate",
+      "education": "Education",
+      "web3": "Web3 & Blockchain"
+    }
+  }
+}
