@@ -17,6 +17,7 @@ const HomeDash = () => {
       <h1>{t("dashboard.title")}</h1>
       <Button2 text={t("dashboard.logout")} onClick={handleLogout}/>
       <LocalizedLink to="/">{t("dashboard.home")}</LocalizedLink>
+      <LocalizedLink to="/auth/webhooks">{t("dashboard.webhooks")}</LocalizedLink>
     </div>
   )
 }
