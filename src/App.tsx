@@ -1,5 +1,4 @@
 import { lazy, Suspense } from "react";
-import AuthProvider from "./Providers/AuthProvider";
 import QueryProvider from "./Providers/QueryProvider";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -15,7 +14,7 @@ const ContactUs = lazy(() => import("./Pages/Contact/ContactUs"));
 const Home = lazy(() => import("./Pages/Home/Home"));
 const Login = lazy(() => import("./Pages/Login/Login"));
 const Signup = lazy(() => import("./Pages/Signup/Signup"));
-const AllRoutes = lazy(() => import("./Routes/AllRoutes"));
+const NotFound = lazy(() => import("./Pages/NotFound"));
 const ElectronicBilling = lazy(
   () => import("./Pages/ElectronicBilling/ElectronicBilling"),
 );
@@ -95,7 +94,7 @@ function App() {
                 <Route path="security" element={<SecurityPage />} />
                 <Route path="terms" element={<TermsPage />} />
                 <Route path="thank-you" element={<ThankYouPage />} />
-                <Route path="*" element={<AuthProvider element={<div><AllRoutes /></div>} />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="*" element={<LocalizedRedirect />} />
             </Routes>

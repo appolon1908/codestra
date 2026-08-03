@@ -2,12 +2,6 @@ import Navbar from "../../Components/Layouts/Navbar";
 import image from "../../assets/Rectangle.png";
 import { GoArrowRight } from "react-icons/go";
 
-import companyOne from "../../assets/companies (1).png";
-import companyTwo from "../../assets/companies (2).png";
-import companyThree from "../../assets/companies (3).png";
-import companyFour from "../../assets/companies (4).png";
-import companyFive from "../../assets/companies (5).png";
-import companySix from "../../assets/Group 79.png";
 
 import productOne from "../../assets/product (3).png";
 import productTwo from "../../assets/product (2).png";
@@ -30,7 +24,6 @@ import { SiSimpleanalytics } from "react-icons/si";
 import { useEffect, useState } from "react";
 import Footer from "../../Components/Layouts/Footer";
 import { Products } from "./Products";
-import { Testimonies } from "./Products";
 import { useTranslation } from "react-i18next";
 import LocalizedLink from "../../i18n/LocalizedLink";
 
@@ -97,69 +90,28 @@ const Home = () => {
           data-aos="fade-up"
           data-aos-duration="700"
         >
-          <h2 className="lg:text-4xl text-3xl font-semibold">
-            {displayText} <span className="animate-blink">|</span>{" "}
-          </h2>
+          <h1 className="lg:text-4xl text-3xl font-semibold">
+            Custom AI, Software &amp; Automation Built for Real Operations
+          </h1>
+          <p className="sr-only" aria-live="polite">{t(typingKeys[currentTextIndex])}</p>
+          <p aria-hidden="true" className="text-lg text-neutral-300 min-h-7">
+            {displayText} <span className="animate-blink">|</span>
+          </p>
           <p className="lg:text-base text-base">{t("hero.body")}</p>
-          <LocalizedLink to={"/electronic-billing"}>
+          <LocalizedLink to={"/contact"}>
             <button className="py-2.5 px-5 mt-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white">
               {t("hero.cta")} <GoArrowRight className="text-xl" />
             </button>
           </LocalizedLink>
         </div>
         <div className="myDivImage lg:w-[80%] cursor-pointer w-[100%] mt-10 flex justify-center m-auto overflow-hidden">
-          <img src={image} alt="" />
+          <img src={image} alt="Codestra software platform preview" width="1200" height="650" fetchPriority="high" decoding="async" />
         </div>
 
         <div className="2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-3">
-          <div className="space-y-6 text-center lg:pt-[10rem] pt-[5rem]">
-            <h2 className="text-base">{t("hero.customers")}</h2>
-
-            <div>
-              <div
-                data-aos="fade-up"
-                data-aos-duration="700"
-                className="flex justify-center lg:gap-10 gap-4"
-              >
-                <img
-                  src={companyFour}
-                  alt=""
-                  className="lg:w-36 w-24 eachImage"
-                />
-                <img
-                  src={companyTwo}
-                  alt=""
-                  className="lg:w-36 w-24 eachImage"
-                />
-                <img
-                  src={companyThree}
-                  alt=""
-                  className="lg:w-36 w-24 eachImage"
-                />
-              </div>
-
-              <div
-                data-aos="fade-up"
-                data-aos-duration="500"
-                className="flex m-auto justify-center lg:gap-10 gap-4 pt-6"
-              >
-                <img
-                  src={companyOne}
-                  alt=""
-                  className="lg:w-36 w-24 eachImage"
-                />
-                <img
-                  src={companyFive}
-                  alt=""
-                  className="lg:w-36 w-24 eachImage"
-                />
-                <img
-                  src={companySix}
-                  alt=""
-                  className="lg:w-36 w-24 eachImage"
-                />
-              </div>
-            </div>
+          <div className="space-y-3 text-center lg:pt-[10rem] pt-[5rem]">
+            <h2 className="text-base">Built for teams that need dependable delivery</h2>
+            <p className="text-sm text-neutral-400">Customer logos and testimonials are shown only when documented permission and approved evidence are available.</p>
           </div>
 
           <div className="text-center lg:pt-[10rem] pt-[5rem]">
@@ -237,7 +189,7 @@ const Home = () => {
                 data-aos-duration="500"
                 className="lg:border-r border-neutral-800 lg:px-5 py-7"
               >
-                <h2 className="text-2xl ">{t("development.backendTitle")}</h2>
+                <h3 className="text-2xl ">{t("development.backendTitle")}</h3>
                 <p className="text-sm pt-3">{t("development.backendBody")}</p>
 
                 <div className="space-y-5 bg-neutral-90 border border-neutral-800 mt-8 text-[12px] lg:p-5 p-3 rounded-3xl">
@@ -261,8 +213,8 @@ const Home = () => {
                 data-aos="fade-up"
                 data-aos-duration="500"
               >
-                <h2 className="text-2xl">{t("development.backendTitle")}</h2>
-                <p className="text-sm  pt-3">{t("development.backendBody")}</p>
+                <h3 className="text-2xl">{t("development.frontendTitle", "Frontend frameworks and tools")}</h3>
+                <p className="text-sm  pt-3">{t("development.frontendBody", "Interfaces and products designed for people and operations.")}</p>
 
                 <div className="mt-8 grid lg:grid-cols-2 grid-cols-1 gap-5 text-sm">
                   {frontendTools.map((frontdata) => (
@@ -280,7 +232,7 @@ const Home = () => {
                         />
                       </p>
                       <div>
-                        <h2 className="text-base">{frontdata.name}</h2>
+                        <h4 className="text-base">{frontdata.name}</h4>
                         <p className="text-[13px] pt-2">
                           {frontdata.description}
                         </p>
@@ -331,10 +283,10 @@ const Home = () => {
                     data-aos-duration="700"
                     className="bg-neutral-900 eachImage lg:p-5 p-3 cursor-pointer rounded-xl"
                   >
-                    <h2 className="text-base flex items-center gap-2">
+                    <h3 className="text-base flex items-center gap-2">
                       <Icon className="text-xl" />
                       {tool.name}
-                    </h2>
+                    </h3>
                     <p className="pt-2">{tool.description}</p>
                   </div>
                 );
@@ -382,10 +334,8 @@ const Home = () => {
           </div>
 
           <div className="lg:pt-[10rem] pt-[5rem]">
-            <h2 className="text-center lg:text-3xl text-2xl pb-5">
-              {t("testimonials")}
-            </h2>
-            <Testimonies />
+            <h2 className="text-center lg:text-3xl text-2xl pb-5">{t("testimonials")}</h2>
+            <p className="text-center text-neutral-400">Approved customer stories will appear here after owner review.</p>
           </div>
         </div>
       </div>

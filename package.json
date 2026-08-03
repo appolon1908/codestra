@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run generate:sitemap && tsc -b && vite build",
+    "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/prerender-localized-routes.mjs",
     "generate:sitemap": "node scripts/generate-localized-sitemap.mjs",
     "sync:i18n-industries": "node scripts/sync-industry-source-catalog.mjs",
     "audit:i18n": "node scripts/audit-untranslated-ui.mjs",

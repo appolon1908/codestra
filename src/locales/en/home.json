@@ -21,6 +21,8 @@
     "body": "We provide comprehensive web development services using advanced backend and frontend frameworks to deliver scalable, secure, and high-performance web solutions.",
     "backendTitle": "Backend Development Frameworks:",
     "backendBody": "We build reliable and scalable solutions using modern frameworks, ensuring high performance and data security.",
+    "frontendTitle": "Frontend frameworks and tools",
+    "frontendBody": "Interfaces and products designed for people and operations.",
     "backendPairs": [
       {
         "name": "Node.js and Django",
@@ -84,16 +86,16 @@
         "description": "Manage content calendars and approval workflows."
       },
       {
-        "name": "Loomly",
-        "description": "Connect social media management and CRM workflows."
+        "name": "CRM workflows",
+        "description": "Connect campaign inquiries with approved follow-up workflows."
       },
       {
-        "name": "Loomly",
-        "description": "Coordinate content calendars and approvals."
+        "name": "Analytics",
+        "description": "Measure campaign activity with privacy-aware reporting."
       },
       {
-        "name": "Loomly",
-        "description": "Organize publishing and approval workflows."
+        "name": "Content operations",
+        "description": "Coordinate publishing, approvals, and reusable content systems."
       }
     ]
   },

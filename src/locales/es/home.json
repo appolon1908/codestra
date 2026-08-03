@@ -31,7 +31,7 @@
         "description": "Tecnologías flexibles para aplicaciones específicas y desarrollo rápido."
       },
       {
-        "name": "Bota de primavera y Express.js",
+        "name": "Spring Boot y Express.js",
         "description": "Java empresarial y Node.js simplificado para API y aplicaciones web."
       },
       {
@@ -45,7 +45,7 @@
     ],
     "frontendTools": [
       {
-        "name": "Siguiente.js",
+        "name": "Next.js",
         "description": "Framework basado en React con renderizado en servidor."
       },
       {

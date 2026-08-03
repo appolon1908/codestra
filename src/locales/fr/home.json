@@ -27,7 +27,7 @@
         "description": "Des technologies légères et efficaces pour des applications évolutives et sécurisées."
       },
       {
-        "name": "Flacon et rubis sur rails",
+        "name": "Flask et Ruby on Rails",
         "description": "Des technologies souples pour des applications ciblées et un développement rapide."
       },
       {
@@ -45,7 +45,7 @@
     ],
     "frontendTools": [
       {
-        "name": "Suivant",
+        "name": "Next.js",
         "description": "Framework fondé sur React avec rendu côté serveur."
       },
       {
@@ -57,7 +57,7 @@
         "description": "Framework React axé sur les sites de contenu."
       },
       {
-        "name": "Angulaire",
+        "name": "Angular",
         "description": "Framework applicatif complet."
       },
       {
