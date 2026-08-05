@@ -57,6 +57,7 @@ const IndustriesDirectory = lazy(() =>
 const IndustryPage = lazy(() =>
   import("./Pages/Industries/IndustryPlatform").then((module) => ({ default: module.IndustryPage })),
 );
+const PlatformHub = lazy(() => import("./Pages/Platform/PlatformHub"));
 
 AOS.init();
 function App() {
@@ -94,6 +95,15 @@ function App() {
                 <Route path="security" element={<SecurityPage />} />
                 <Route path="terms" element={<TermsPage />} />
                 <Route path="thank-you" element={<ThankYouPage />} />
+                <Route path="marketplace/*" element={<PlatformHub area="marketplace" />} />
+                <Route path="sales/*" element={<PlatformHub area="sales" />} />
+                <Route path="portal/*" element={<PlatformHub area="customer" />} />
+                <Route path="partners/*" element={<PlatformHub area="partner" />} />
+                <Route path="developers/*" element={<PlatformHub area="developer" />} />
+                <Route path="documentation/*" element={<PlatformHub area="documentation" />} />
+                <Route path="academy/*" element={<PlatformHub area="academy" />} />
+                <Route path="support/*" element={<PlatformHub area="support" />} />
+                <Route path="status" element={<PlatformHub area="status" />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="*" element={<LocalizedRedirect />} />
