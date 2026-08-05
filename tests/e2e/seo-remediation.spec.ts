@@ -47,6 +47,18 @@ test.describe("SEO remediation browser checks", () => {
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Healthcare" })).toHaveAttribute("href", "/en/industries/healthcare-ai");
   });
 
+  test("localized sales and portal utility routes are prerendered and accessible", async ({ page }) => {
+    for (const route of ["sales", "portal"]) {
+      const response = await page.goto(`/en/${route}/`);
+      expect(response?.status(), `${route} static response`).toBe(200);
+      await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,follow");
+      const results = await new AxeBuilder({ page }).analyze();
+      const serious = results.violations.filter((item) => item.impact === "serious" || item.impact === "critical");
+      expect(serious, `${route} accessibility violations`).toEqual([]);
+    }
+  });
+
   test("responsive layout has no serious accessibility violations", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [360, 390, 768, 1024, 1280, 1440]) {

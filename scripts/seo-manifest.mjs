@@ -23,7 +23,7 @@ export const coreRoutes = [
 
 export const industries = ["logistics-ai","legal-ai","healthcare-ai","senior-care-ai","real-estate-ai","financial-services-ai","ecommerce-ai","hospitality-ai","construction-ai","agriculture-ai","education-ai","dental-ai","veterinary-ai","automotive-ai","restaurant-ai","manufacturing-ai","recruitment-ai","nonprofit-ai","public-services-ai","energy-ai","telecom-it-ai","wellness-ai","security-services-ai","marketing-media-ai","gaming-entertainment-ai"];
 
-export const utilityRoutes = ["book-demo", "request-pricing", "pricing", "thank-you", "login", "signup"];
+export const utilityRoutes = ["book-demo", "request-pricing", "pricing", "thank-you", "login", "signup", "sales", "portal"];
 
 export function localizedPath(locale, path) { return `/${locale}${path ? `/${path}` : "/"}`; }
 export function industryEntry(slug, locale) {
