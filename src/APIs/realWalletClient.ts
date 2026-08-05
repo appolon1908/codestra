@@ -33,6 +33,15 @@ export const realWalletClient = {
   webhookSubscriptions: () => unwrap<{ results: Array<Record<string, unknown>> }>(base_url.get("/api/v1/webhook-subscriptions/")),
   createWebhookSubscription: (payload: { endpoint: string; description?: string }) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/webhook-subscriptions/", payload)),
   rotateWebhookSecret: (subscriptionId: string) => unwrap<Record<string, unknown>>(base_url.post(`/api/v1/webhook-subscriptions/${encodeURIComponent(subscriptionId)}/rotate-secret/`)),
+  withdrawalQuote: (payload: Record<string, unknown>) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/withdrawals/quote/", payload)),
+  withdrawalPreview: (payload: Record<string, unknown>) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/withdrawals/preview/", payload)),
+  createWithdrawal: (payload: Record<string, unknown>, idempotencyKey: string) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/withdrawals/", payload, { headers: { "Idempotency-Key": idempotencyKey } })),
+  transferPreview: (payload: Record<string, unknown>) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/transfers/preview/", payload)),
+  createTransfer: (payload: Record<string, unknown>, idempotencyKey: string) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/transfers/", payload, { headers: { "Idempotency-Key": idempotencyKey } })),
+  complianceProfile: () => unwrap<Record<string, unknown>>(base_url.get("/api/v1/compliance/profile/")),
+  beneficiaries: () => unwrap<Record<string, unknown>>(base_url.get("/api/v1/beneficiaries/")),
+  apiKeys: () => unwrap<Record<string, unknown>>(base_url.get("/api/v1/api-keys/")),
+  tradingOrders: (payload: Record<string, unknown>, idempotencyKey: string) => unwrap<Record<string, unknown>>(base_url.post("/api/v1/trading/orders/", payload, { headers: { "Idempotency-Key": idempotencyKey } })),
 };
 
 export const realWalletDisabledOperations = {
