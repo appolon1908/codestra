@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { captureAttribution } from "./attribution";
 import { trackEvent } from "./analytics";
 import { localeNames, supportedLocales } from "../../i18n/locale-types";
+import LocalizedLink from "../../i18n/LocalizedLink";
 
 const industryOptions = [
   ["logistics", "logistics-ai"], ["legal", "legal-ai"], ["healthcare", "healthcare-ai"],
@@ -33,7 +34,9 @@ export type LeadFormValues = {
   preferred_demo_date: string;
   preferred_demo_time: string;
   message: string;
-  consent: boolean;
+  transactional_sms_consent: boolean;
+  marketing_sms_consent: boolean;
+  email_marketing_consent: boolean;
   honeypot: string;
 };
 
@@ -84,7 +87,9 @@ export default function LeadForm({
       preferred_language: i18n.resolvedLanguage ?? "en",
       industry: industrySelected || safeSavedContext.industry || "",
       product_interest: solutionSelected || safeSavedContext.product_interest || "ai_receptionist",
-      consent: false,
+      transactional_sms_consent: false,
+      marketing_sms_consent: false,
+      email_marketing_consent: false,
       honeypot: "",
     },
   });
@@ -126,6 +131,15 @@ export default function LeadForm({
     const qualificationSummary = Object.entries(qualificationAnswers).filter(([, answer]) => answer.trim()).map(([question, answer]) => `${question}: ${answer.trim()}`).join("\n");
     const payload = {
       ...values,
+      consent_evidence: {
+        form_version: "codestra-lead-consent-2026.08",
+        captured_at: new Date().toISOString(),
+        source_url: window.location.href,
+        correlation_id: idempotencyKey,
+        transactional_sms: values.transactional_sms_consent,
+        marketing_sms: values.marketing_sms_consent,
+        email_marketing: values.email_marketing_consent,
+      },
       preferred_language: i18n.resolvedLanguage ?? "en",
       content_locale: i18n.resolvedLanguage ?? "en",
       country_code: (() => { try { return window.sessionStorage.getItem("codestra.country_code") ?? ""; } catch { return ""; } })(),
@@ -420,23 +434,23 @@ export default function LeadForm({
         <label htmlFor={`${formId}-website`}>{t("forms:honeypot")}</label>
         <input id={`${formId}-website`} type="text" tabIndex={-1} autoComplete="off" {...register("honeypot")} />
       </div>
-      <label className="ai-consent demo-form-full" htmlFor={`${formId}-consent`}>
-        <input
-          id={`${formId}-consent`}
-          type="checkbox"
-          aria-invalid={Boolean(errors.consent)}
-          aria-describedby={errors.consent ? `${formId}-consent-error` : undefined}
-          {...register("consent", { required: t("consent.required") })}
-        />
-        <span>
-          {t("consent.label")}
-        </span>
-      </label>
-      {errors.consent && (
-        <span id={`${formId}-consent-error`} className="ai-error demo-form-full" role="alert">
-          {errors.consent.message}
-        </span>
-      )}
+      <fieldset className="demo-form-full space-y-4 rounded-xl border border-neutral-700 p-4">
+        <legend className="px-2 font-semibold">Optional communications</legend>
+        <p className="text-sm text-neutral-300">You may submit this form without selecting any communications option.</p>
+        <label className="ai-consent" htmlFor={`${formId}-transactional-sms`}>
+          <input id={`${formId}-transactional-sms`} type="checkbox" {...register("transactional_sms_consent")} />
+          <span>By checking this optional box, I agree to receive recurring service-related text messages from Codestra at the telephone number provided. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not a condition of purchase.</span>
+        </label>
+        <label className="ai-consent" htmlFor={`${formId}-marketing-sms`}>
+          <input id={`${formId}-marketing-sms`} type="checkbox" {...register("marketing_sms_consent")} />
+          <span>By checking this optional box, I agree to receive recurring promotional and marketing text messages from Codestra. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not a condition of purchase.</span>
+        </label>
+        <label className="ai-consent" htmlFor={`${formId}-email-marketing`}>
+          <input id={`${formId}-email-marketing`} type="checkbox" {...register("email_marketing_consent")} />
+          <span>By checking this optional box, I agree to receive marketing emails from Codestra. I can unsubscribe at any time. This consent is not a condition of purchase.</span>
+        </label>
+        <p className="text-sm text-neutral-300">See our <LocalizedLink className="text-[#FFD700] underline" to="/privacy">Privacy Policy</LocalizedLink> and <LocalizedLink className="text-[#FFD700] underline" to="/terms">Terms</LocalizedLink>.</p>
+      </fieldset>
       {serverState.type === "error" && (
         <div className="ai-form-message ai-form-message--error demo-form-full" role="alert" aria-live="assertive">
           {serverState.message}

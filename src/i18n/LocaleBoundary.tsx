@@ -5,6 +5,7 @@ import { isSupportedLocale } from "./locale-types";
 import { resolveLocale, localizePath } from "./locale-resolver";
 import LocalizedSeo from "./LocalizedSeo";
 import CountryLanguageSuggestion from "./CountryLanguageSuggestion";
+import CookieConsent from "../Components/Consent/CookieConsent";
 
 export function LocaleBoundary() {
   const { locale } = useParams();
@@ -20,7 +21,7 @@ export function LocaleBoundary() {
       : location.pathname;
     return <Navigate replace to={`/en${pathname}${location.search}${location.hash}`} />;
   }
-  return <><LocalizedSeo /><CountryLanguageSuggestion /><Outlet /></>;
+  return <><LocalizedSeo /><CountryLanguageSuggestion /><Outlet /><CookieConsent /></>;
 }
 
 export function LocalizedRedirect() {

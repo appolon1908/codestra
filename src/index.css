@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.policy-page h1 { margin-top: 0.75rem; font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; line-height: 1.15; }
+.policy-page section { margin-top: 2rem; }
+.policy-page h2 { margin-bottom: 0.75rem; font-size: 1.35rem; font-weight: 600; color: white; }
+.policy-page p { margin-top: 0.75rem; color: #d4d4d4; }
+.policy-page a { color: #FFD700; text-decoration: underline; text-underline-offset: 0.2em; }
+.policy-page table { margin-top: 1.5rem; width: 100%; min-width: 42rem; border-collapse: collapse; font-size: 0.9rem; }
+.policy-page th, .policy-page td { border: 1px solid #333; padding: 0.75rem; text-align: left; vertical-align: top; }
+
+@media print {
+  .policy-page { max-width: none; padding: 0; color: #000; }
+  .policy-page *, .policy-page p, .policy-page a { color: #000 !important; background: transparent !important; }
+  header, footer, button { display: none !important; }
+}
+
 * {
   padding: 0;
   margin: 0;

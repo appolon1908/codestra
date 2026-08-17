@@ -2,6 +2,7 @@ import logo from "../../assets/logo.png";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "../../i18n/LanguageSelector";
 import LocalizedLink from "../../i18n/LocalizedLink";
+import { businessProfile, formatMainOffice } from "../../config/businessProfile";
 
 const serviceLinks = [
   "softwareDevelopment", "mobileDevelopment", "aiDevelopment", "softwareConsulting", "uiUx", "webDesign", "branding",
@@ -18,32 +19,19 @@ const Footer = () => {
       <h2 className="text-base text-white font-bold">{t("common:office")}</h2>
       <div className="text-xs">
         <div className="pb-3 pt-3 border-b border-neutral-800">
-          <a
-            className="pb-2 block hover:text-[#FFD700]"
-            href="tel:+18097347580"
-          >
-            809-734-7580
-          </a>
-          <p>
-            Codestra, Condominio Progreso Business Center, Av. Lope de Vega 13,
-            Santo Domingo 10130
-          </p>
+          <p className="font-semibold text-white">{businessProfile.affiliate.name}</p>
+          <p>Dominican Republic office</p>
         </div>
         <div className="pb-3 pt-3 border-b border-neutral-800">
-          <a
-            className="pb-2 block hover:text-[#FFD700]"
-            href="tel:+13465446979"
-          >
-            +1 346-544-6979
-          </a>
-          <p>20634 Longen Baugh RD Cypress TX, USA 77433</p>
+          <p className="font-semibold text-white">{businessProfile.legalOperator.name}</p>
+          <p>{formatMainOffice()}</p>
         </div>
         <div className="pb-3 pt-3">
           <a
             className="hover:text-[#FFD700] inline-flex min-h-6 items-center"
-            href="mailto:support@codestra.co"
+            href={`mailto:${businessProfile.supportEmail}`}
           >
-            support@codestra.co
+            {businessProfile.supportEmail}
           </a>
           <LocalizedLink to="/" className="block pt-4" aria-label={t("common:codestraHome")}>
             <img src={logo} alt="Codestra" className="w-24" />
@@ -98,6 +86,10 @@ const Footer = () => {
             {t("legal:privacy")}
           </LocalizedLink>
         </li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/cookies">Cookie Policy</LocalizedLink></li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/cookie-preferences">Cookie Preferences</LocalizedLink></li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/privacy-choices">Privacy Choices</LocalizedLink></li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/communications-preferences">Communications Preferences</LocalizedLink></li>
         <li>
           <LocalizedLink className="hover:text-[#FFD700]" to="/terms">
             {t("legal:terms")}
@@ -108,6 +100,9 @@ const Footer = () => {
             {t("legal:security")}
           </LocalizedLink>
         </li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/support">Support</LocalizedLink></li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/accessibility">Accessibility</LocalizedLink></li>
+        <li><LocalizedLink className="hover:text-[#FFD700]" to="/company-profile">Company profile</LocalizedLink></li>
         <li>
           <LocalizedLink
             className="hover:text-[#FFD700]"

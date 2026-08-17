@@ -57,6 +57,15 @@ const IndustriesDirectory = lazy(() =>
 const IndustryPage = lazy(() =>
   import("./Pages/Industries/IndustryPlatform").then((module) => ({ default: module.IndustryPage })),
 );
+const ServiceDetailPage = lazy(() => import("./Pages/Corporate/CorporatePages").then((module) => ({ default: module.ServiceDetailPage })));
+const HowItWorksPage = lazy(() => import("./Pages/Corporate/CorporatePages").then((module) => ({ default: module.HowItWorksPage })));
+const SupportPage = lazy(() => import("./Pages/Corporate/CorporatePages").then((module) => ({ default: module.SupportPage })));
+const AccessibilityPage = lazy(() => import("./Pages/Corporate/CorporatePages").then((module) => ({ default: module.AccessibilityPage })));
+const CorporateProfilePage = lazy(() => import("./Pages/Corporate/CorporatePages").then((module) => ({ default: module.CorporateProfilePage })));
+const CookiePolicyPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.CookiePolicyPage })));
+const CookiePreferencesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.CookiePreferencesPage })));
+const PrivacyChoicesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.PrivacyChoicesPage })));
+const CommunicationsPreferencesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.CommunicationsPreferencesPage })));
 
 AOS.init();
 function App() {
@@ -84,7 +93,19 @@ function App() {
                 <Route path="electronic-billing/form" element={<ElectronicBillingForm />} />
                 <Route path="hiring/positions" element={<HiringPosition />} />
                 <Route path="services" element={<Services />} />
+                <Route path="services/software-development" element={<ServiceDetailPage kind="software-development" />} />
+                <Route path="services/ai-automation" element={<ServiceDetailPage kind="ai-automation" />} />
+                <Route path="services/odoo-crm" element={<ServiceDetailPage kind="odoo-crm" />} />
+                <Route path="services/contact-center" element={<ServiceDetailPage kind="contact-center" />} />
+                <Route path="how-it-works" element={<HowItWorksPage />} />
+                <Route path="support" element={<SupportPage />} />
+                <Route path="accessibility" element={<AccessibilityPage />} />
+                <Route path="company-profile" element={<CorporateProfilePage />} />
                 <Route path="privacy" element={<Privacy />} />
+                <Route path="cookies" element={<CookiePolicyPage />} />
+                <Route path="cookie-preferences" element={<CookiePreferencesPage />} />
+                <Route path="privacy-choices" element={<PrivacyChoicesPage />} />
+                <Route path="communications-preferences" element={<CommunicationsPreferencesPage />} />
                 <Route path="ai-receptionist" element={<AIReceptionist />} />
                 <Route path="pricing" element={<AIReceptionist />} />
                 <Route path="book-demo" element={<BookDemoPage />} />

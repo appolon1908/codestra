@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import { localeFromPath, localizePath } from "./locale-resolver";
 import { supportedLocales } from "./locale-types";
+import { businessProfile } from "../config/businessProfile";
 
 const OG_LOCALE = { en: "en_US", es: "es_ES", fr: "fr_FR" } as const;
 
@@ -29,6 +30,13 @@ export default function LocalizedSeo() {
     meta('meta[property="og:description"]', {property:"og:description",content:description});
     meta('meta[property="og:url"]', {property:"og:url",content:canonicalUrl});
     meta('meta[property="og:locale"]', {property:"og:locale",content:OG_LOCALE[locale]});
+    meta('meta[property="og:type"]', {property:"og:type",content:"website"});
+    meta('meta[name="twitter:card"]', {name:"twitter:card",content:"summary_large_image"});
+    meta('meta[name="twitter:title"]', {name:"twitter:title",content:title});
+    meta('meta[name="twitter:description"]', {name:"twitter:description",content:description});
+    let structured = document.head.querySelector<HTMLScriptElement>('script[data-codestra-structured="organization"]');
+    if (!structured) { structured=document.createElement("script"); structured.type="application/ld+json"; structured.dataset.codestraStructured="organization"; document.head.appendChild(structured); }
+    structured.textContent=JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":`${businessProfile.websiteUrl}/#organization`,name:businessProfile.legalOperator.name,url:businessProfile.websiteUrl,email:businessProfile.supportEmail,address:{"@type":"PostalAddress",streetAddress:businessProfile.mainOffice.street,addressLocality:businessProfile.mainOffice.city,addressRegion:"TX",postalCode:businessProfile.mainOffice.postalCode,addressCountry:"US"}},{"@type":"WebSite","@id":`${businessProfile.websiteUrl}/#website`,url:businessProfile.websiteUrl,name:businessProfile.brand,publisher:{"@id":`${businessProfile.websiteUrl}/#organization`},inLanguage:businessProfile.language}]});
     // The prerendered document already contains canonical and hreflang links.
     // Replace the complete set on navigation so hydration never leaves duplicate
     // canonical or alternate entries in the document head.
