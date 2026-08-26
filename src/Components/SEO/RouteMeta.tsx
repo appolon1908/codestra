@@ -19,6 +19,10 @@ const routeMeta: Record<string, StaticMeta> = {
     title: 'AI, Automation and Software Development Services | Codestra',
     description: 'Explore Codestra services for AI development, workflow automation, web and mobile applications, APIs, cloud and data platforms.',
   },
+  '/industries': {
+    title: 'AI and Automation Solutions by Industry | Codestra',
+    description: 'Explore practical AI, automation and software solutions shaped around healthcare, finance, logistics, manufacturing and other industries.',
+  },
   '/case-studies': {
     title: 'Codestra Case Studies | AI, Automation and Digital Products',
     description: 'See how Codestra approaches secure software delivery, AI integration, automation and modern digital product development.',
