@@ -33,6 +33,8 @@ if (failures.length === 0) {
   const releaseWorkflow = read('.github/workflows/release-image.yml')
   const preflightWorkflow = read('.github/workflows/runtime-preflight.yml')
   const preflightScript = read('scripts/deploy/read-only-preflight.sh')
+  const activationScript = read('scripts/deploy/activate-release.sh')
+  const rollbackScript = read('scripts/deploy/rollback-release.sh')
   const productionCompose = read('deploy/compose.production.yaml')
   const manifest = JSON.parse(read('deploy/runtime-paths.production.json'))
 
@@ -50,6 +52,8 @@ if (failures.length === 0) {
     'rollback-release.sh',
     'sigstore/cosign-installer@v4.1.2',
     'cosign verify',
+    "grep -Fx 'PREFLIGHT_READINESS=PASS'",
+    'activation',
   ]
 
   for (const marker of requiredDeployMarkers) {
@@ -136,10 +140,64 @@ if (failures.length === 0) {
     )
   }
 
+  for (const marker of [
+    'PREFLIGHT_READINESS=PASS',
+    'PREFLIGHT_READINESS=FAIL',
+    'PREFLIGHT_STRICTNESS=',
+    'exit 10',
+    'ROLLBACK_IMAGE_NOT_CACHED',
+  ]) {
+    if (!preflightScript.includes(marker)) {
+      failures.push(
+        `scripts/deploy/read-only-preflight.sh: missing strict readiness marker: ${marker}`,
+      )
+    }
+  }
+
+  for (const marker of ['ps_rc=$?', 'running_rc=$?', 'expected_rc=$?', 'rollback 8']) {
+    if (!activationScript.includes(marker)) {
+      failures.push(
+        `scripts/deploy/activate-release.sh: missing rollback routing marker: ${marker}`,
+      )
+    }
+  }
+
+  for (const marker of [
+    'ROLLBACK_CONTAINMENT=',
+    'down --remove-orphans',
+    'stop "$service_name"',
+    'ROLLBACK_STATUS=FAILED',
+    'PREVIOUS_IMAGE_INSPECTION_FAILED',
+  ]) {
+    if (!rollbackScript.includes(marker)) {
+      failures.push(
+        `scripts/deploy/rollback-release.sh: missing containment marker: ${marker}`,
+      )
+    }
+  }
+
+  if (rollbackScript.includes('up -d --no-build --pull never --wait || true')) {
+    failures.push(
+      'scripts/deploy/rollback-release.sh: rollback restore failures must not be ignored',
+    )
+  }
+
   if (!preflightWorkflow.includes('READ_ONLY_PREFLIGHT')) {
     failures.push(
       '.github/workflows/runtime-preflight.yml: explicit read-only confirmation is missing',
     )
+  }
+
+  for (const marker of [
+    'evidence',
+    'PREFLIGHT_STRICTNESS=EVIDENCE',
+    '^PREFLIGHT_READINESS=(PASS|FAIL)$',
+  ]) {
+    if (!preflightWorkflow.includes(marker)) {
+      failures.push(
+        `.github/workflows/runtime-preflight.yml: missing evidence-mode marker: ${marker}`,
+      )
+    }
   }
 }
 
