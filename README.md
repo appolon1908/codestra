@@ -53,7 +53,7 @@ Pull requests and `main` run source checks, tests, build, deployment-policy vali
 
 Production is split into three manual workflows:
 
-1. **Release immutable image** builds from the exact current `main` SHA, scans it, creates an SBOM and provenance, and optionally publishes to GHCR. Its generated release tuple must be reviewed and committed under `deploy/releases/` before activation.
+1. **Release immutable image** builds from the exact current `main` SHA, scans it, creates an SBOM and BuildKit provenance, keyless-signs the exact digest with Cosign, and optionally publishes to GHCR. Its generated release tuple must be reviewed and committed under `deploy/releases/` before activation.
 2. **Verify production runtime paths** streams a read-only inventory script over SSH and uploads evidence.
 3. **Plan or activate verified production release** creates a plan by default and cannot activate while the checked-in runtime manifest is unverified.
 
