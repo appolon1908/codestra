@@ -5,9 +5,9 @@ import { clearAccessToken, hasUsableAccessToken } from '@/lib/auth'
 
 const primaryLinks = [
   { label: 'Services', to: '/services' },
+  { label: 'Industries', to: '/industries' },
   { label: 'Case studies', to: '/case-studies' },
   { label: 'About', to: '/about' },
-  { label: 'Contact', to: '/contact' },
 ]
 
 const Navbar = () => {
@@ -59,9 +59,11 @@ const Navbar = () => {
             ) : (
               <Link className="header-text-link desktop-only" to="/login">Client login</Link>
             )}
-            <Link className="button button--gold button--compact desktop-only" to="/contact/sales">
-              Talk to an expert <ArrowUpRight size={16} aria-hidden="true" />
+
+            <Link className="button button--primary button--compact desktop-only" to="/contact/sales">
+              Start a project <ArrowUpRight size={16} aria-hidden="true" />
             </Link>
+
             <button
               className="menu-toggle"
               type="button"
@@ -86,9 +88,15 @@ const Navbar = () => {
                 {link.label}
               </NavLink>
             ))}
+            <NavLink
+              to="/contact"
+              className={({ isActive }: { isActive: boolean }) => `mobile-nav__link${isActive ? ' mobile-nav__link--active' : ''}`}
+            >
+              Contact
+            </NavLink>
             {!isAuthenticated && <Link className="mobile-nav__link" to="/login">Client login</Link>}
-            <Link className="button button--gold mobile-nav__cta" to="/contact/sales">
-              Talk to an expert <ArrowUpRight size={17} aria-hidden="true" />
+            <Link className="button button--primary mobile-nav__cta" to="/contact/sales">
+              Start a project <ArrowUpRight size={17} aria-hidden="true" />
             </Link>
           </nav>
         </div>
