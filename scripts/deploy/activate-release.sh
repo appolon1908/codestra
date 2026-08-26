@@ -149,6 +149,7 @@ for attempt in 1 2 3 4 5 6; do
   sleep 5
 done
 
+set +e
 container_id="$(
   docker compose \
     --env-file "$release_dir/.env" \
@@ -156,10 +157,18 @@ container_id="$(
     --file "$release_dir/compose.yaml" \
     ps --quiet "$service_name"
 )"
-[[ -n "$container_id" ]] || rollback 7
+ps_rc=$?
+set -e
+[[ "$ps_rc" -eq 0 && -n "$container_id" ]] || rollback 7
 
+set +e
 running_image="$(docker inspect --format '{{.Image}}' "$container_id")"
+running_rc=$?
 expected_image="$(docker image inspect --format '{{.Id}}' "$image_ref")"
+expected_rc=$?
+set -e
+[[ "$running_rc" -eq 0 && "$expected_rc" -eq 0 ]] || rollback 8
+[[ -n "$running_image" && -n "$expected_image" ]] || rollback 8
 [[ "$running_image" == "$expected_image" ]] || rollback 8
 
 ln -sfn "$release_dir" "${current_symlink}.next"
