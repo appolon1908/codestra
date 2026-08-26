@@ -37,6 +37,9 @@ try {
 
 const expectedImageRef =
   `ghcr.io/${expectedRepository.toLowerCase()}@${expectedImageDigest}`
+const expectedSignatureIdentity =
+  `https://github.com/${expectedRepository}/.github/workflows/release-image.yml@refs/heads/main`
+const expectedSignatureIssuer = 'https://token.actions.githubusercontent.com'
 
 requireValue(manifest.schemaVersion === 1, 'schemaVersion must equal 1')
 requireValue(manifest.repository === expectedRepository, 'repository identity does not match')
@@ -51,6 +54,22 @@ requireValue(
 )
 requireValue(/^[a-f0-9]{64}$/.test(manifest.sbomSha256 ?? ''), 'sbomSha256 is invalid')
 requireValue(/^[a-f0-9]{64}$/.test(manifest.scanSha256 ?? ''), 'scanSha256 is invalid')
+requireValue(
+  /^[a-f0-9]{64}$/.test(manifest.cosignVerificationSha256 ?? ''),
+  'cosignVerificationSha256 is invalid',
+)
+requireValue(
+  manifest.signatureIdentity === expectedSignatureIdentity,
+  'signatureIdentity does not match the main release workflow',
+)
+requireValue(
+  manifest.signatureIssuer === expectedSignatureIssuer,
+  'signatureIssuer does not match GitHub Actions OIDC',
+)
+requireValue(
+  manifest.provenanceMode === 'buildkit-max',
+  'provenanceMode must equal buildkit-max',
+)
 requireValue(
   typeof manifest.workflowRunId === 'string' && /^[0-9]+$/.test(manifest.workflowRunId),
   'workflowRunId is invalid',
