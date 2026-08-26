@@ -1,0 +1,7 @@
+# Codestra corporate design-system ownership
+/src/styles/corporate-design-system.css @appolon1908-hue
+/src/Components/Layouts/ @appolon1908-hue
+/src/Components/components/Button.tsx @appolon1908-hue
+/src/Components/ui/button.tsx @appolon1908-hue
+/scripts/check-design-system.mjs @appolon1908-hue
+/docs/design-system.md @appolon1908-hue

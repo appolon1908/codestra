@@ -16,6 +16,7 @@ on:
   push:
     branches:
       - 'feat/website-modern-shell'
+      - 'feat/corporate-design-system'
       - 'feat/ai-seo-landing-pages'
       - 'feat/odoo-lead-integration'
 
@@ -28,13 +29,15 @@ concurrency:
 
 jobs:
   deterministic-quality:
-    name: Build, test, SEO and asset budgets
+    name: Build, test, design, SEO and asset budgets
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -50,6 +53,9 @@ jobs:
 
       - name: Unit tests
         run: npm test
+
+      - name: Enforce corporate design system
+        run: npm run test:design
 
       - name: Production build and static route generation
         run: npm run build
