@@ -134,14 +134,15 @@ jobs:
             -o ConnectTimeout=10
           )
           printf -v remote_command \
-            'bash -s -- %q %q %q %q %q %q %q' \
+            'bash -s -- %q %q %q %q %q %q %q %q' \
             "$RELEASE_ROOT" \
             "$RELEASES_DIR" \
             "$CURRENT_SYMLINK" \
             "$COMPOSE_PROJECT" \
             "$SERVICE_NAME" \
             "$LOOPBACK_PORT" \
-            "$REVERSE_PROXY"
+            "$REVERSE_PROXY" \
+            evidence
 
           ssh "${ssh_options[@]}" \
             "${DEPLOY_USER}@${DEPLOY_HOST}" \
@@ -150,6 +151,8 @@ jobs:
             | tee preflight-report.txt
 
           grep -Fx 'PREFLIGHT_MODE=READ_ONLY' preflight-report.txt
+          grep -Fx 'PREFLIGHT_STRICTNESS=EVIDENCE' preflight-report.txt
+          grep -E '^PREFLIGHT_READINESS=(PASS|FAIL)$' preflight-report.txt
           grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' preflight-report.txt
           sha256sum preflight-report.txt > preflight-report.sha256
 
