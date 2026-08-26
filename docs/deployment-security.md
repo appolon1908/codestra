@@ -15,7 +15,7 @@ The earlier workflow assumed `/srv/codestra`, uploaded directly to `compose.yaml
 The new workflow separates four concerns:
 
 1. normal source and container CI;
-2. immutable image publication with scan, SBOM, release tuple, and provenance;
+2. immutable image publication with scan, SBOM, BuildKit provenance, release tuple, and keyless signature;
 3. read-only runtime inspection;
 4. production activation only after a reviewed runtime manifest is enabled.
 
@@ -28,7 +28,7 @@ The new workflow separates four concerns:
 - production Compose accepts an immutable `@sha256:` image and contains no server-side build;
 - the read-only preflight script contains no write-capable commands;
 - the deployment workflow requires a full source SHA, image digest, runtime-manifest digest, protected environment, and explicit activation phrase;
-- the release workflow creates provenance and security evidence.
+- the release workflow creates BuildKit provenance, a keyless Cosign signature, and security evidence.
 
 The normal `verify` command includes this gate.
 
@@ -38,9 +38,9 @@ Run **Release immutable image** from `main` with a full 40-character `source_sha
 
 The workflow rejects a source unless it is the exact current `main` head. It builds and verifies the frontend, generates a CycloneDX SBOM, produces vulnerability evidence, enforces the HIGH/CRITICAL scan gate, and only publishes when `publish=true`.
 
-After publication it resolves the GHCR repository digest, writes `release-manifest.json`, and pushes a GitHub build-provenance attestation. A SHA tag may exist for navigation, but deployment accepts only the immutable digest.
+When publishing, BuildKit attaches maximum-mode provenance and an SBOM to the registry image. After the exact registry digest passes the vulnerability gate, Cosign signs that digest with the GitHub Actions OIDC identity of `.github/workflows/release-image.yml@refs/heads/main`. The workflow immediately verifies the signature, records the signer identity and issuer in `release-manifest.json`, and uploads the verification evidence. A SHA tag may exist for navigation, but deployment accepts only the immutable digest.
 
-The generated tuple must be independently reviewed and committed as `deploy/releases/<source-sha>.json`. Deployment verifies that committed file, its SHA-256, the source SHA, the repository, and the image digest all agree. This prevents an operator from supplying an unrelated image digest at activation time.
+The generated tuple must be independently reviewed and committed as `deploy/releases/<source-sha>.json`. Deployment verifies that committed file, its SHA-256, the source SHA, the repository, the image digest, the expected signer workflow, and the GitHub Actions OIDC issuer all agree. It then performs an online Cosign verification of the private GHCR image before any production environment job starts. This prevents an operator from supplying an unrelated image digest at activation time.
 
 Publishing an image does not connect to or change the production server.
 
@@ -159,7 +159,7 @@ Recommended branch controls for `main`:
 
 - exact-head CI pass;
 - container scan pass;
-- SBOM and provenance retained;
+- SBOM, BuildKit provenance, Cosign signature, and signature-verification evidence retained;
 - runtime preflight artifact reviewed;
 - SSH fingerprint independently verified;
 - release root and current symlink confirmed;
