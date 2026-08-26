@@ -48,6 +48,8 @@ if (failures.length === 0) {
     'ghcr.io/${GITHUB_REPOSITORY,,}@${IMAGE_DIGEST}',
     "steps.public_smoke.outcome == 'failure'",
     'rollback-release.sh',
+    'sigstore/cosign-installer@v4.1.2',
+    'cosign verify',
   ]
 
   for (const marker of requiredDeployMarkers) {
@@ -113,10 +115,19 @@ if (failures.length === 0) {
     }
   }
 
-  if (!releaseWorkflow.includes('actions/attest-build-provenance@v2')) {
-    failures.push(
-      '.github/workflows/release-image.yml: provenance attestation step is missing',
-    )
+  for (const marker of [
+    'sigstore/cosign-installer@v4.1.2',
+    'cosign sign --yes',
+    'cosign verify',
+    'provenance: mode=max',
+    'sbom: true',
+    'cosign-verification.json',
+  ]) {
+    if (!releaseWorkflow.includes(marker)) {
+      failures.push(
+        `.github/workflows/release-image.yml: missing signed-release marker: ${marker}`,
+      )
+    }
   }
 
   if (!releaseWorkflow.includes('sha256:')) {
