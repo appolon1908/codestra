@@ -112,13 +112,13 @@ Activate mode additionally requires:
 - a read-only preflight immediately before writes;
 - a GHCR pull token with package-read access only.
 
-The activation stages files in a versioned incoming directory, pulls the exact digest, validates Compose, starts the service with `--no-build`, checks the loopback health endpoint, verifies the running container image ID, and atomically updates the current symlink.
+The activation requires an existing, verified rollback baseline behind the current symlink. It stages checksum-bound files in a versioned incoming directory, pulls the exact digest, validates Compose, starts the service with `--no-build`, checks the loopback health endpoint, verifies the running container image ID, and atomically updates the current symlink. If the subsequent public HTTPS smoke test fails, the workflow invokes the installed rollback helper before failing the activation.
 
 No image pruning, volume deletion, database change, firewall change, DNS change, proxy reload, or unrelated service restart is performed.
 
 ## Rollback
 
-Before activation, the remote script records the current symlink target. If Compose activation, health verification, service discovery, or image verification fails, it starts the previous release definition and restores the prior symlink.
+Before activation, the remote script requires the current symlink to resolve to a complete prior release containing its Compose and environment definitions. If Compose activation, loopback health verification, service discovery, image verification, or the public HTTPS smoke test fails, the previous release is started and the prior symlink is restored.
 
 The scaffold intentionally performs no release cleanup. Retention and cleanup require a separate reviewed operation after successful production evidence exists.
 
@@ -162,7 +162,8 @@ Recommended branch controls for `main`:
 - SBOM and provenance retained;
 - runtime preflight artifact reviewed;
 - SSH fingerprint independently verified;
-- release root and symlink confirmed;
+- release root and current symlink confirmed;
+- current symlink resolves to a complete rollback baseline under the releases directory;
 - Compose project and service confirmed;
 - loopback port confirmed and not shared;
 - Caddy/Nginx upstream mapping confirmed;
