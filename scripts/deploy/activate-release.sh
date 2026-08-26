@@ -27,7 +27,7 @@ for value in "$release_root" "$releases_dir" "$current_symlink" "$staging_dir"; 
   [[ "$value" != *".."* && "$value" != *"//"* ]] || { echo "ERROR=UNSAFE_PATH"; exit 2; }
 done
 
-[[ "$release_root" =~ ^/[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+$ ]] \
+[[ "$release_root" =~ ^/(srv|opt|data|mnt/[A-Za-z0-9._-]+|var/(lib|www)|home/[A-Za-z0-9._-]+)/[A-Za-z0-9._/-]+$ ]] \
   || { echo "ERROR=RELEASE_ROOT_NOT_DEDICATED"; exit 2; }
 [[ "$releases_dir" == "$release_root"/* ]] || { echo "ERROR=RELEASES_DIR_OUTSIDE_ROOT"; exit 2; }
 [[ "$current_symlink" == "$release_root"/* ]] || { echo "ERROR=CURRENT_LINK_OUTSIDE_ROOT"; exit 2; }
@@ -45,24 +45,33 @@ done
 
 [[ -d "$release_root" && -d "$releases_dir" ]] \
   || { echo "ERROR=VERIFIED_RUNTIME_PATH_MISSING"; exit 3; }
-[[ -f "$staging_dir/compose.production.yaml" ]] \
-  || { echo "ERROR=STAGED_COMPOSE_MISSING"; exit 3; }
+for file in \
+  compose.production.yaml \
+  activate-release.sh \
+  rollback-release.sh \
+  staging-checksums.txt; do
+  [[ -f "$staging_dir/$file" ]] || { echo "ERROR=STAGED_FILE_MISSING:$file"; exit 3; }
+done
+(
+  cd "$staging_dir"
+  sha256sum --check --strict staging-checksums.txt
+) || { echo "ERROR=STAGED_CHECKSUM_MISMATCH"; exit 3; }
+
 command -v docker >/dev/null 2>&1 || { echo "ERROR=DOCKER_MISSING"; exit 3; }
 docker compose version >/dev/null 2>&1 || { echo "ERROR=DOCKER_COMPOSE_MISSING"; exit 3; }
 command -v flock >/dev/null 2>&1 || { echo "ERROR=FLOCK_MISSING"; exit 3; }
 command -v curl >/dev/null 2>&1 || { echo "ERROR=CURL_MISSING"; exit 3; }
 
+[[ -L "$current_symlink" ]] || { echo "ERROR=ROLLBACK_BASELINE_LINK_REQUIRED"; exit 3; }
+previous_target="$(readlink -f "$current_symlink" || true)"
+[[ -n "$previous_target" ]] || { echo "ERROR=ROLLBACK_BASELINE_UNRESOLVED"; exit 3; }
+[[ "$previous_target" == "$releases_dir"/* ]] \
+  || { echo "ERROR=CURRENT_TARGET_OUTSIDE_RELEASES_DIR"; exit 3; }
+[[ -f "$previous_target/compose.yaml" && -f "$previous_target/.env" ]] \
+  || { echo "ERROR=ROLLBACK_BASELINE_INCOMPLETE"; exit 3; }
+
 release_id="${release_sha}-$(date -u +%Y%m%dT%H%M%SZ)"
 release_dir="${releases_dir}/${release_id}"
-previous_target=""
-
-if [[ -L "$current_symlink" ]]; then
-  previous_target="$(readlink -f "$current_symlink" || true)"
-  if [[ -n "$previous_target" && "$previous_target" != "$releases_dir"/* ]]; then
-    echo "ERROR=CURRENT_TARGET_OUTSIDE_RELEASES_DIR"
-    exit 3
-  fi
-fi
 
 exec 9>"${release_root}/.deploy.lock"
 flock -n 9 || { echo "ERROR=DEPLOYMENT_ALREADY_RUNNING"; exit 4; }
@@ -83,6 +92,9 @@ unset ghcr_token
 
 install -d -m 0750 "$release_dir"
 install -m 0640 "$staging_dir/compose.production.yaml" "$release_dir/compose.yaml"
+install -m 0750 "$staging_dir/rollback-release.sh" "$release_dir/rollback-release.sh"
+printf '%s\n' "$previous_target" > "$release_dir/.previous-release"
+chmod 0600 "$release_dir/.previous-release"
 
 cat > "$release_dir/.env" <<EOF
 COMPOSE_PROJECT_NAME=${compose_project}
@@ -102,20 +114,19 @@ docker compose \
 rollback() {
   local exit_code="$1"
   echo "ACTIVATION_FAILED=$exit_code"
-
-  if [[ -n "$previous_target" && -f "$previous_target/compose.yaml" && -f "$previous_target/.env" ]]; then
-    echo "ROLLBACK_TARGET=$previous_target"
-    docker compose \
-      --env-file "$previous_target/.env" \
-      --project-name "$compose_project" \
-      --file "$previous_target/compose.yaml" \
-      up -d --no-build --pull never --wait || true
-    ln -sfn "$previous_target" "${current_symlink}.next"
-    mv -Tf "${current_symlink}.next" "$current_symlink"
+  if CODESTRA_DEPLOY_LOCK_HELD=1 bash "$release_dir/rollback-release.sh" \
+    "$release_root" \
+    "$releases_dir" \
+    "$current_symlink" \
+    "$compose_project" \
+    "$service_name" \
+    "$loopback_port" \
+    "$health_path" \
+    "$release_dir"; then
+    echo "ACTIVATION_ROLLBACK=PASS"
   else
-    echo "ROLLBACK_TARGET=UNAVAILABLE"
+    echo "ACTIVATION_ROLLBACK=FAILED"
   fi
-
   exit "$exit_code"
 }
 
@@ -159,4 +170,4 @@ echo "RELEASE_DIR=$release_dir"
 echo "SOURCE_SHA=$release_sha"
 echo "IMAGE_REF=$image_ref"
 echo "CONTAINER_ID=$container_id"
-echo "ROLLBACK_TARGET=${previous_target:-NONE}"
+echo "ROLLBACK_TARGET=$previous_target"
