@@ -48,6 +48,9 @@ jobs:
   gate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: read
     outputs:
       image_ref: ${{ steps.gate.outputs.image_ref }}
       release_root: ${{ steps.gate.outputs.release_root }}
@@ -142,6 +145,39 @@ jobs:
           echo "loopback_port=$(jq -r '.loopbackPort' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
           echo "health_path=$(jq -r '.healthPath' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
           echo "reverse_proxy=$(jq -r '.reverseProxy' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v4.1.2
+        with:
+          cosign-release: v3.0.6
+
+      - name: Log in to GHCR for signature verification
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify immutable image signature and signer workflow
+        env:
+          IMAGE_REF: ${{ steps.gate.outputs.image_ref }}
+          SIGNATURE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/release-image.yml@refs/heads/main
+          SIGNATURE_ISSUER: https://token.actions.githubusercontent.com
+        run: |
+          set -Eeuo pipefail
+          cosign verify \
+            --certificate-identity "$SIGNATURE_IDENTITY" \
+            --certificate-oidc-issuer "$SIGNATURE_ISSUER" \
+            "$IMAGE_REF" > deployment-signature-verification.json
+          test -s deployment-signature-verification.json
+
+      - name: Upload signature verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-signature-verification-${{ github.run_id }}
+          path: deployment-signature-verification.json
+          if-no-files-found: error
+          retention-days: 30
 
   plan:
     needs: gate
