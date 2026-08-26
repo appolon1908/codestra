@@ -13,11 +13,13 @@ const visualSourceFiles = new Set([tokenFile, legacyBridgeFile])
 const requiredFiles = [
   tokenFile,
   legacyBridgeFile,
+  'src/Components/Layouts/MarketingLayout.tsx',
   'src/Components/Layouts/Navbar.tsx',
   'src/Components/Layouts/Footer.tsx',
   'src/Components/components/Button.tsx',
   'src/Components/ui/button.tsx',
   'docs/design-system.md',
+  'docs/design-system-migration.md',
 ]
 
 const requiredTokens = [
@@ -65,6 +67,8 @@ const requiredSignatures = [
   ['src/main.tsx', "import './styles/corporate-design-system.css'"],
   ['src/main.tsx', "import './styles/legacy-marketing-normalization.css'"],
   ['src/App.tsx', 'className="marketing-route"'],
+  ['src/Components/Layouts/MarketingLayout.tsx', '<Navbar />'],
+  ['src/Components/Layouts/MarketingLayout.tsx', '<Footer />'],
   ['src/Components/Layouts/Navbar.tsx', 'button--primary'],
   ['src/Components/Layouts/Footer.tsx', 'button--primary'],
   ['src/Components/components/Button.tsx', 'button button--primary'],
@@ -93,9 +97,22 @@ if (!baseCommit) {
 }
 
 const addedLines = []
+const changedFiles = []
 
 if (baseCommit) {
-  const diff = runGit(['diff', '--unified=0', '--no-color', `${baseCommit}...HEAD`, '--', 'src'])
+  const diffRange = `${baseCommit}...HEAD`
+  const diff = runGit(['diff', '--unified=0', '--no-color', diffRange, '--', 'src'])
+  const nameStatus = runGit(['diff', '--name-status', '--no-color', diffRange, '--', 'src'])
+
+  for (const row of nameStatus.split('\n')) {
+    if (!row) continue
+    const [status, ...paths] = row.split('\t')
+    const path = paths.at(-1)
+    if (status && path) {
+      changedFiles.push({ status, path })
+    }
+  }
+
   let currentFile = ''
   let currentLine = 0
 
@@ -160,6 +177,38 @@ for (const addition of addedLines) {
 
   if (!visualSourceFiles.has(addition.file) && arbitraryGeometry.test(source)) {
     failures.push(`${location}: arbitrary radius or spacing bypasses the layout scale`)
+  }
+
+  if (
+    addition.file === 'src/App.tsx'
+    && source.includes('<Route')
+    && source.includes('path=')
+    && !source.includes('/auth/*')
+    && !source.includes('<MarketingRoute>')
+  ) {
+    failures.push(`${location}: public routes must remain inside the MarketingRoute design boundary`)
+  }
+}
+
+for (const { status, path } of changedFiles) {
+  if (path.endsWith('.css') && path !== 'src/index.css' && !path.startsWith('src/styles/')) {
+    failures.push(`${path}: new style systems must live under src/styles and use semantic tokens`)
+  }
+
+  if (!status.startsWith('A') || !path.startsWith('src/Pages/') || !path.endsWith('.tsx')) {
+    continue
+  }
+
+  const pageSource = readFileSync(resolve(repositoryRoot, path), 'utf8')
+  const usesMarketingLayout = pageSource.includes('MarketingLayout')
+  const usesSharedShell = pageSource.includes('Navbar') && pageSource.includes('Footer')
+
+  if (!usesMarketingLayout && !usesSharedShell) {
+    failures.push(`${path}: new public pages must use MarketingLayout or the shared Navbar and Footer`)
+  }
+
+  if (!usesMarketingLayout && !pageSource.includes('id="main-content"')) {
+    failures.push(`${path}: pages that compose the shell directly must expose id="main-content"`)
   }
 }
 
