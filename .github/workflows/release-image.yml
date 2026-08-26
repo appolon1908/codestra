@@ -46,7 +46,8 @@ jobs:
             echo "source_sha must be a full lowercase SHA." >&2
             exit 1
           }
-          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          git fetch --no-tags origin \
+            +refs/heads/main:refs/remotes/origin/main
           resolved="$(git rev-parse "${SOURCE_SHA}^{commit}")"
           [[ "$resolved" == "$SOURCE_SHA" ]] || exit 1
           git merge-base --is-ancestor "$SOURCE_SHA" origin/main
@@ -59,12 +60,11 @@ jobs:
   build:
     needs: source
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     permissions:
       contents: read
       packages: write
       id-token: write
-      attestations: write
     env:
       SOURCE_SHA: ${{ needs.source.outputs.source_sha }}
       VITE_API_ENDPOINT: ${{ vars.VITE_API_ENDPOINT }}
@@ -102,7 +102,18 @@ jobs:
           echo "name=$image_name" >> "$GITHUB_OUTPUT"
           echo "tag=$image_tag" >> "$GITHUB_OUTPUT"
 
-      - uses: docker/build-push-action@v6
+      - name: Log in to GHCR
+        if: ${{ inputs.publish }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: local_build
+        name: Build local verification image
+        if: ${{ inputs.publish == false }}
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false
@@ -112,10 +123,43 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - id: publish_build
+        name: Build and publish image with BuildKit provenance
+        if: ${{ inputs.publish }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.image.outputs.tag }}
+          build-args: VITE_API_ENDPOINT=${{ env.VITE_API_ENDPOINT }}
+          provenance: mode=max
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - id: scan_target
+        name: Resolve exact scan target
+        env:
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+          PUBLISHED_DIGEST: ${{ steps.publish_build.outputs.digest }}
+        run: |
+          set -Eeuo pipefail
+          if [[ "${{ inputs.publish }}" == "true" ]]; then
+            [[ "$PUBLISHED_DIGEST" =~ ^sha256:[a-f0-9]{64}$ ]] || {
+              echo "Build did not return an immutable digest." >&2
+              exit 1
+            }
+            image_ref="${IMAGE_NAME}@${PUBLISHED_DIGEST}"
+          else
+            image_ref="$IMAGE_TAG"
+          fi
+          echo "image_ref=$image_ref" >> "$GITHUB_OUTPUT"
+
       - name: Generate CycloneDX SBOM
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: ${{ steps.image.outputs.tag }}
+          image-ref: ${{ steps.scan_target.outputs.image_ref }}
           format: cyclonedx
           output: sbom.cdx.json
           exit-code: "0"
@@ -123,7 +167,7 @@ jobs:
       - name: Generate vulnerability evidence
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: ${{ steps.image.outputs.tag }}
+          image-ref: ${{ steps.scan_target.outputs.image_ref }}
           format: json
           output: release-scan.json
           severity: HIGH,CRITICAL
@@ -133,56 +177,53 @@ jobs:
       - name: Enforce vulnerability gate
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: ${{ steps.image.outputs.tag }}
+          image-ref: ${{ steps.scan_target.outputs.image_ref }}
           format: table
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
 
-      - name: Log in to GHCR
+      - name: Install Cosign
         if: ${{ inputs.publish }}
-        uses: docker/login-action@v3
+        uses: sigstore/cosign-installer@v4.1.2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          cosign-release: v3.0.6
 
-      - id: publish
-        name: Publish and resolve immutable digest
+      - name: Sign immutable image with GitHub OIDC
         if: ${{ inputs.publish }}
         env:
-          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+          IMAGE_REF: ${{ steps.scan_target.outputs.image_ref }}
+        run: cosign sign --yes "$IMAGE_REF"
+
+      - name: Verify image signature and workflow identity
+        if: ${{ inputs.publish }}
+        env:
+          IMAGE_REF: ${{ steps.scan_target.outputs.image_ref }}
+          SIGNATURE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/release-image.yml@refs/heads/main
+          SIGNATURE_ISSUER: https://token.actions.githubusercontent.com
         run: |
           set -Eeuo pipefail
-          docker push "$IMAGE_TAG"
-          image_ref="$(docker inspect --format '{{index .RepoDigests 0}}' "$IMAGE_TAG")"
-          [[ "$image_ref" =~ ^ghcr\.io/[a-z0-9_.-]+/[a-z0-9_.-]+@sha256:[a-f0-9]{64}$ ]] || {
-            echo "Registry did not return an immutable digest." >&2
-            exit 1
-          }
-          image_name="${image_ref%@*}"
-          image_digest="${image_ref#*@}"
-          echo "image_ref=$image_ref" >> "$GITHUB_OUTPUT"
-          echo "image_name=$image_name" >> "$GITHUB_OUTPUT"
-          echo "image_digest=$image_digest" >> "$GITHUB_OUTPUT"
+          cosign verify \
+            --certificate-identity "$SIGNATURE_IDENTITY" \
+            --certificate-oidc-issuer "$SIGNATURE_ISSUER" \
+            "$IMAGE_REF" > cosign-verification.json
+          test -s cosign-verification.json
 
       - name: Write signed release tuple
         if: ${{ inputs.publish }}
         env:
-          IMAGE_REF: ${{ steps.publish.outputs.image_ref }}
+          IMAGE_REF: ${{ steps.scan_target.outputs.image_ref }}
+          SIGNATURE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/release-image.yml@refs/heads/main
+          SIGNATURE_ISSUER: https://token.actions.githubusercontent.com
+          PROVENANCE_MODE: buildkit-max
         run: |
           set -Eeuo pipefail
           export SBOM_SHA256="$(sha256sum sbom.cdx.json | awk '{print $1}')"
           export SCAN_SHA256="$(sha256sum release-scan.json | awk '{print $1}')"
+          export COSIGN_VERIFICATION_SHA256="$(
+            sha256sum cosign-verification.json | awk '{print $1}'
+          )"
           node scripts/deploy/write-release-manifest.mjs
-
-      - name: Attest build provenance
-        if: ${{ inputs.publish }}
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-name: ${{ steps.publish.outputs.image_name }}
-          subject-digest: ${{ steps.publish.outputs.image_digest }}
-          push-to-registry: true
 
       - name: Upload release evidence
         if: always()
@@ -192,6 +233,7 @@ jobs:
           path: |
             sbom.cdx.json
             release-scan.json
+            cosign-verification.json
             release-manifest.json
           if-no-files-found: warn
           retention-days: 30
