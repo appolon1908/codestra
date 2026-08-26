@@ -1,45 +1,67 @@
+import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router'
-import logo from '../../assets/logo.png'
-
-const serviceLinks = ['Software Development', 'Mobile App Development', 'AI Development', 'Software Consulting', 'UI/UX Design', 'Web Design', 'Branding']
-const industryLinks = ['Finance', 'Healthcare', 'iGaming', 'Real Estate', 'Education', 'Web3 & Blockchain']
 
 const Footer = () => (
-  <footer className="flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-8 bg-[#08090A] border-t border-neutral-800 lg:py-20 pt-10 pb-10 lg:mt-[10rem] mt-[5rem] justify-between">
-    <div>
-      <h2 className="text-base text-white font-bold">Offices</h2>
-      <div className="text-xs">
-        <div className="pb-3 pt-3 border-b border-neutral-800">
-          <a className="pb-2 block hover:text-[#FFD700]" href="tel:+18097347580">809-734-7580</a>
-          <p>Codestra, Condominio Progreso Business Center, Av. Lope de Vega 13, Santo Domingo 10130</p>
-        </div>
-        <div className="pb-3 pt-3 border-b border-neutral-800">
-          <a className="pb-2 block hover:text-[#FFD700]" href="tel:+13465446979">+1 346-544-6979</a>
-          <p>20634 Longen Baugh RD Cypress TX, USA 77433</p>
-        </div>
-        <div className="pb-3 pt-3">
-          <a className="hover:text-[#FFD700]" href="mailto:support@codestra.co">support@codestra.co</a>
-          <Link to="/" className="block pt-4" aria-label="Codestra home"><img src={logo} alt="Codestra" className="w-24"/></Link>
-          <div className="pt-5"><p className="pb-3">Craftsmanship in Every Line of Code.</p><p>We turn ideas into reliable digital products.</p></div>
-        </div>
+  <footer className="site-footer">
+    <div className="site-footer__cta shell">
+      <div>
+        <p className="eyebrow">Build what comes next</p>
+        <h2>Turn one high-value workflow into a working AI system.</h2>
+      </div>
+      <Link className="button button--gold" to="/contact/sales">
+        Start a conversation <ArrowUpRight size={18} aria-hidden="true" />
+      </Link>
+    </div>
+
+    <div className="site-footer__grid shell">
+      <div className="site-footer__brand">
+        <Link className="brand brand--footer" to="/" aria-label="Codestra home">
+          <span className="brand__mark" aria-hidden="true">C</span>
+          <span className="brand__copy"><strong>Codestra</strong><small>Craftsmanship in every line of code.</small></span>
+        </Link>
+        <p>AI development, business automation and reliable software engineering for companies ready to modernize how work gets done.</p>
+        <a href="mailto:sales@codestra.co">sales@codestra.co</a>
+        <a href="mailto:support@codestra.co">support@codestra.co</a>
+      </div>
+
+      <div>
+        <h3>Services</h3>
+        <Link to="/services">AI development</Link>
+        <Link to="/services">Business automation</Link>
+        <Link to="/services">Custom software</Link>
+        <Link to="/services">API integrations</Link>
+        <Link to="/services">Odoo solutions</Link>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <Link to="/about">About</Link>
+        <Link to="/case-studies">Case studies</Link>
+        <Link to="/hiring/positions">Careers</Link>
+        <Link to="/contact">Contact</Link>
+        <Link to="/privacy">Privacy</Link>
+      </div>
+
+      <div className="site-footer__offices">
+        <h3>Offices</h3>
+        <address>
+          <strong>Santo Domingo</strong>
+          Condominio Progreso Business Center<br />
+          Av. Lope de Vega 13, Santo Domingo 10130<br />
+          <a href="tel:+18097347580">+1 809-734-7580</a>
+        </address>
+        <address>
+          <strong>Texas</strong>
+          20634 Longenbaugh Rd<br />
+          Cypress, TX 77433<br />
+          <a href="tel:+13465446979">+1 346-544-6979</a>
+        </address>
       </div>
     </div>
-    <div className="flex lg:flex-row flex-col lg:gap-28 gap-8 text-white">
-      <ul className="space-y-5 text-sm lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
-        <li className="text-base font-bold">Services</li>
-        {serviceLinks.map(item => <li key={item}><Link className="hover:text-[#FFD700]" to="/services">{item}</Link></li>)}
-      </ul>
-      <ul className="space-y-5 lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
-        <li className="text-base font-bold">Industries</li>
-        {industryLinks.map(item => <li key={item}><Link className="hover:text-[#FFD700]" to="/case-studies">{item}</Link></li>)}
-      </ul>
-      <ul className="space-y-5 lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
-        <li className="text-base font-bold">Company</li>
-        <li><Link className="hover:text-[#FFD700]" to="/about">About</Link></li>
-        <li><Link className="hover:text-[#FFD700]" to="/contact">Contact</Link></li>
-        <li><Link className="hover:text-[#FFD700]" to="/case-studies">Our Work</Link></li>
-        <li><Link className="hover:text-[#FFD700]" to="/privacy">Privacy Policy</Link></li>
-      </ul>
+
+    <div className="site-footer__bottom shell">
+      <p>© {new Date().getFullYear()} Codestra SRL. All rights reserved.</p>
+      <p>Dominican Republic · United States · Remote delivery</p>
     </div>
   </footer>
 )

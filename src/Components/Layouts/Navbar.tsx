@@ -1,179 +1,99 @@
-import { useState } from "react"
-import { Button1, Button2 } from "../components/Button"
-import { Link, useNavigate } from "react-router"
-import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth"
-import { RiMenu3Line } from "react-icons/ri";
-import { IoIosArrowUp, IoMdClose } from "react-icons/io";
-import logo from '../../assets/logo.png'
-// import useLogo from "../../hooks/queries/useLogo";
-import { IoIosArrowDown } from "react-icons/io";
-import { FaBrain } from "react-icons/fa";
-import { TbMessage2Filled } from "react-icons/tb";
-import { TbBrandCake } from "react-icons/tb";
-import { IoLogoBuffer } from "react-icons/io";
-import { IoLogoAppleAr } from "react-icons/io5";
-import { LiaReact } from "react-icons/lia";
-import { IoLogoPython } from "react-icons/io5";
-import { TbBrandSocketIo } from "react-icons/tb";
+import { useEffect, useState } from 'react'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router'
+import { clearAccessToken, hasUsableAccessToken } from '@/lib/auth'
 
-
-
-
-
+const primaryLinks = [
+  { label: 'Services', to: '/services' },
+  { label: 'Case studies', to: '/case-studies' },
+  { label: 'About', to: '/about' },
+  { label: 'Contact', to: '/contact' },
+]
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const toggleMenu = () => setIsOpen(!isOpen)
+  const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isAuthenticated = hasUsableAccessToken()
 
-    const navigate = useNavigate()
-    const isAuthenticated = hasUsableAccessToken()
-    const handleLogout = () =>{
-        clearAccessToken()
-        navigate('/', { replace: true })
-    }
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location.pathname])
 
-
-    const [showServices, setShowServices] = useState(false)
-    const [showServices2, setShowServices2] = useState(false)
-
-    // const {data, isLoading} = useLogo()
-
-    // const logoData = data
-
-    
+  const handleLogout = () => {
+    clearAccessToken()
+    navigate('/', { replace: true })
+  }
 
   return (
-    <div className="relative justify-center flex lg:pt-10 pt-3">
-        <div className="flex items-center justify-between text-xs fixed 2xl:w-[60%] xl:w-[80%] lg:w-[80%] w-[95%] rounded-lg z-50 p-2 px-5 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
-            
-            <div className="lg:w-32 w-20">
-                <img src={logo} alt="" />
-            </div>
+    <>
+      <a className="skip-link" href="#main-content">Skip to main content</a>
+      <header className="site-header">
+        <div className="site-header__inner">
+          <Link className="brand" to="/" aria-label="Codestra home">
+            <span className="brand__mark" aria-hidden="true">C</span>
+            <span className="brand__copy">
+              <strong>Codestra</strong>
+              <small>AI · Automation · Software</small>
+            </span>
+          </Link>
 
-            <ul className="lg:flex hidden items-center gap-7 ">
-                <Link to={'/'}>
-                    <li>Home</li>
-                </Link>
+          <nav className="desktop-nav" aria-label="Primary navigation">
+            {primaryLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }: { isActive: boolean }) => `nav-link${isActive ? ' nav-link--active' : ''}`}
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
 
-                <Link to={'/about'}>
-                    <li>About</li>
-                </Link>  
-
-                <div className="relative">
-                    <button type="button" aria-expanded={showServices} className="flex items-center gap-2" onClick={()=>setShowServices(!showServices)}>Services
-                        {showServices === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</button>
-                    {showServices && 
-                        <ul className="absolute bg-neutral-900 border border-neutral-800 top-10 p-3 rounded-lg w-[15rem] space-y-1">
-                            <Link to={'/services'}>
-                                <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><FaBrain />AI Automation</li>
-                            </Link>
-
-                            <Link to='/contact/sales'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbMessage2Filled />Consultation</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandCake />Brand Development</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoBuffer />Logo Development</li></Link>
-                            <Link to='/about'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoAppleAr />Codestra SRL</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><LiaReact />React JS</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoPython />Python</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li></Link>
-                        </ul>
-                    }
-                </div>
-
-                <Link to={'/case-studies'}>
-                    <li>Case Studies</li>
-                </Link>
-
-                <Link to={'/contact'}>
-                    <li>Contact us</li>
-                </Link>
-
-                <Link to={'/'}>
-                    <li>Join The Team</li>
-                </Link> 
-            </ul>
-            
-            {isAuthenticated ? 
-
-                <div className="flex items-center gap-3">
-                    <Link to={'/auth/dashboard'}>
-                        <Button1 text="Dashboard" />
-                    </Link> 
-
-                    <Button2 text="Log out" onClick={handleLogout}/>
-
-                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                        {!isOpen ? 
-                            <p><RiMenu3Line /></p> :
-                            <p><IoMdClose /></p> 
-                        }
-                    </div>
-                </div>
-                : 
-
-                <div className="flex items-center gap-3">
-                    <Link to={'/login'}>
-                        <Button1 text="Log in" />
-                    </Link>
-
-                    <Link to={'/signup'}>
-                        <Button2 text="Sign up" />
-                    </Link>
-                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                        {!isOpen ? 
-                            <p><RiMenu3Line /></p> :
-                            <p><IoMdClose /></p> 
-                        }
-                    </div>
-                </div>
-            }
-
+          <div className="site-header__actions">
+            {isAuthenticated ? (
+              <>
+                <Link className="header-text-link" to="/auth/dashboard">Dashboard</Link>
+                <button className="header-text-link" type="button" onClick={handleLogout}>Log out</button>
+              </>
+            ) : (
+              <Link className="header-text-link desktop-only" to="/login">Client login</Link>
+            )}
+            <Link className="button button--gold button--compact desktop-only" to="/contact/sales">
+              Talk to an expert <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
+            <button
+              className="menu-toggle"
+              type="button"
+              aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setIsOpen((value) => !value)}
+            >
+              {isOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            </button>
+          </div>
         </div>
-        
-        {isOpen && 
-            <ul className="lg:hidden fixed rounded-lg text-lg top-20 right-0 left-0 flex m-auto p-5 flex-col gap-12 h-[80vh] w-[90%] z-30 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
-                    <Link to={'/'}>
-                        <li>Home</li>
-                    </Link>
 
-                    <Link to={'/about'}>
-                        <li>About</li>
-                    </Link>
-
-
-                    {/* <Link to={'/services'}>
-                        <li>Services</li>
-                    </Link> */}
-
-                    <div className="relative">
-                    <button type="button" aria-expanded={showServices2} className="flex items-center gap-2" onClick={()=>setShowServices2(!showServices2)}>Services
-                        {showServices2 === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</button>
-                    {showServices2 && 
-                        <ul className="absolute bg-neutral-900 border backdrop-blur-3xl bg-opacity-100 text-sm border-neutral-800 top-10 p-5 rounded-lg w-full space-y-1">
-                            <Link to={'/services'}>
-                                <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><FaBrain />AI Automation</li>
-                            </Link>
-
-                            <Link to='/contact/sales'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Development</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Development</li></Link>
-                            <Link to='/about'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />Codestra SRL</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li></Link>
-                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li></Link>
-                        </ul>
-                    }
-                </div>
-
-                    <Link to={'/case-studies'}>
-                        <li>Case Studies</li>
-                    </Link>
-
-                    <Link to={'/contact'}>
-                        <li>Contact us</li>
-                    </Link>
-            </ul>
-        }
-    </div>
+        <div id="mobile-navigation" className={`mobile-nav${isOpen ? ' mobile-nav--open' : ''}`}>
+          <nav aria-label="Mobile navigation">
+            {primaryLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }: { isActive: boolean }) => `mobile-nav__link${isActive ? ' mobile-nav__link--active' : ''}`}
+              >
+                {link.label}
+              </NavLink>
+            ))}
+            {!isAuthenticated && <Link className="mobile-nav__link" to="/login">Client login</Link>}
+            <Link className="button button--gold mobile-nav__cta" to="/contact/sales">
+              Talk to an expert <ArrowUpRight size={17} aria-hidden="true" />
+            </Link>
+          </nav>
+        </div>
+      </header>
+    </>
   )
 }
 
