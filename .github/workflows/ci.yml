@@ -24,6 +24,8 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run test:design
+        env:
+          DESIGN_SYSTEM_BASE_SHA: ${{ github.event.before }}
       - run: npm run build
         env:
           VITE_API_ENDPOINT: https://api.example.com

@@ -27,6 +27,141 @@
   text-transform: uppercase !important;
 }
 
+/* Preserve intentional legacy heading sizes until each page is migrated. */
+.marketing-route :is(h1, h2, h3).text-xs {
+  --legacy-heading-size: 0.75rem;
+  --legacy-heading-line-height: 1rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-sm {
+  --legacy-heading-size: 0.875rem;
+  --legacy-heading-line-height: 1.25rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-base {
+  --legacy-heading-size: 1rem;
+  --legacy-heading-line-height: 1.5rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-lg {
+  --legacy-heading-size: 1.125rem;
+  --legacy-heading-line-height: 1.75rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-xl {
+  --legacy-heading-size: 1.25rem;
+  --legacy-heading-line-height: 1.75rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-2xl {
+  --legacy-heading-size: 1.5rem;
+  --legacy-heading-line-height: 2rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-3xl {
+  --legacy-heading-size: 1.875rem;
+  --legacy-heading-line-height: 2.25rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-4xl {
+  --legacy-heading-size: 2.25rem;
+  --legacy-heading-line-height: 2.5rem;
+}
+
+.marketing-route :is(h1, h2, h3).text-5xl {
+  --legacy-heading-size: 3rem;
+  --legacy-heading-line-height: 1;
+}
+
+.marketing-route :is(h1, h2, h3).text-6xl {
+  --legacy-heading-size: 3.75rem;
+  --legacy-heading-line-height: 1;
+}
+
+.marketing-route :is(h1, h2, h3).text-7xl {
+  --legacy-heading-size: 4.5rem;
+  --legacy-heading-line-height: 1;
+}
+
+.marketing-route :is(h1, h2, h3).text-8xl {
+  --legacy-heading-size: 6rem;
+  --legacy-heading-line-height: 1;
+}
+
+.marketing-route :is(h1, h2, h3).text-9xl {
+  --legacy-heading-size: 8rem;
+  --legacy-heading-line-height: 1;
+}
+
+.marketing-route :is(h1, h2, h3)[class*="text-"] {
+  font-size: var(--legacy-heading-size) !important;
+  line-height: var(--legacy-heading-line-height) !important;
+}
+
+@media (min-width: 640px) {
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-xs"] { --legacy-heading-size: 0.75rem; --legacy-heading-line-height: 1rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-sm"] { --legacy-heading-size: 0.875rem; --legacy-heading-line-height: 1.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-base"] { --legacy-heading-size: 1rem; --legacy-heading-line-height: 1.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-lg"] { --legacy-heading-size: 1.125rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-xl"] { --legacy-heading-size: 1.25rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-2xl"] { --legacy-heading-size: 1.5rem; --legacy-heading-line-height: 2rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-3xl"] { --legacy-heading-size: 1.875rem; --legacy-heading-line-height: 2.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-4xl"] { --legacy-heading-size: 2.25rem; --legacy-heading-line-height: 2.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-5xl"] { --legacy-heading-size: 3rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-6xl"] { --legacy-heading-size: 3.75rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-7xl"] { --legacy-heading-size: 4.5rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-8xl"] { --legacy-heading-size: 6rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="sm:text-9xl"] { --legacy-heading-size: 8rem; --legacy-heading-line-height: 1; }
+}
+
+@media (min-width: 768px) {
+  .marketing-route :is(h1, h2, h3)[class~="md:text-xs"] { --legacy-heading-size: 0.75rem; --legacy-heading-line-height: 1rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-sm"] { --legacy-heading-size: 0.875rem; --legacy-heading-line-height: 1.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-base"] { --legacy-heading-size: 1rem; --legacy-heading-line-height: 1.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-lg"] { --legacy-heading-size: 1.125rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-xl"] { --legacy-heading-size: 1.25rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-2xl"] { --legacy-heading-size: 1.5rem; --legacy-heading-line-height: 2rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-3xl"] { --legacy-heading-size: 1.875rem; --legacy-heading-line-height: 2.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-4xl"] { --legacy-heading-size: 2.25rem; --legacy-heading-line-height: 2.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-5xl"] { --legacy-heading-size: 3rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-6xl"] { --legacy-heading-size: 3.75rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-7xl"] { --legacy-heading-size: 4.5rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-8xl"] { --legacy-heading-size: 6rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="md:text-9xl"] { --legacy-heading-size: 8rem; --legacy-heading-line-height: 1; }
+}
+
+@media (min-width: 1024px) {
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-xs"] { --legacy-heading-size: 0.75rem; --legacy-heading-line-height: 1rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-sm"] { --legacy-heading-size: 0.875rem; --legacy-heading-line-height: 1.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-base"] { --legacy-heading-size: 1rem; --legacy-heading-line-height: 1.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-lg"] { --legacy-heading-size: 1.125rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-xl"] { --legacy-heading-size: 1.25rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-2xl"] { --legacy-heading-size: 1.5rem; --legacy-heading-line-height: 2rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-3xl"] { --legacy-heading-size: 1.875rem; --legacy-heading-line-height: 2.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-4xl"] { --legacy-heading-size: 2.25rem; --legacy-heading-line-height: 2.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-5xl"] { --legacy-heading-size: 3rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-6xl"] { --legacy-heading-size: 3.75rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-7xl"] { --legacy-heading-size: 4.5rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-8xl"] { --legacy-heading-size: 6rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="lg:text-9xl"] { --legacy-heading-size: 8rem; --legacy-heading-line-height: 1; }
+}
+
+@media (min-width: 1280px) {
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-xs"] { --legacy-heading-size: 0.75rem; --legacy-heading-line-height: 1rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-sm"] { --legacy-heading-size: 0.875rem; --legacy-heading-line-height: 1.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-base"] { --legacy-heading-size: 1rem; --legacy-heading-line-height: 1.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-lg"] { --legacy-heading-size: 1.125rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-xl"] { --legacy-heading-size: 1.25rem; --legacy-heading-line-height: 1.75rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-2xl"] { --legacy-heading-size: 1.5rem; --legacy-heading-line-height: 2rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-3xl"] { --legacy-heading-size: 1.875rem; --legacy-heading-line-height: 2.25rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-4xl"] { --legacy-heading-size: 2.25rem; --legacy-heading-line-height: 2.5rem; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-5xl"] { --legacy-heading-size: 3rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-6xl"] { --legacy-heading-size: 3.75rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-7xl"] { --legacy-heading-size: 4.5rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-8xl"] { --legacy-heading-size: 6rem; --legacy-heading-line-height: 1; }
+  .marketing-route :is(h1, h2, h3)[class~="xl:text-9xl"] { --legacy-heading-size: 8rem; --legacy-heading-line-height: 1; }
+}
+
 .marketing-route :where(
   [class*="bg-[#080808]"],
   [class*="bg-[#101011]"],

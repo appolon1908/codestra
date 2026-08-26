@@ -48,6 +48,18 @@ const runGit = (args) => {
   }
 }
 
+const commitExists = (ref) => {
+  try {
+    execFileSync('git', ['cat-file', '-e', `${ref}^{commit}`], {
+      cwd: repositoryRoot,
+      stdio: 'ignore',
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
 for (const file of requiredFiles) {
   if (!existsSync(resolve(repositoryRoot, file))) {
     failures.push(`${file}: required design-system file is missing`)
@@ -83,9 +95,14 @@ for (const [file, signature] of requiredSignatures) {
 }
 
 let baseCommit = ''
+const eventBefore = process.env.DESIGN_SYSTEM_BASE_SHA
 const baseBranch = process.env.GITHUB_BASE_REF
 
-if (baseBranch) {
+if (eventBefore && !/^0+$/.test(eventBefore) && commitExists(eventBefore)) {
+  baseCommit = eventBefore
+}
+
+if (!baseCommit && baseBranch) {
   baseCommit = runGit(['merge-base', 'HEAD', `origin/${baseBranch}`])
   if (!baseCommit) {
     baseCommit = runGit(['merge-base', 'HEAD', baseBranch])

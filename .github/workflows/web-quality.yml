@@ -56,6 +56,8 @@ jobs:
 
       - name: Enforce corporate design system
         run: npm run test:design
+        env:
+          DESIGN_SYSTEM_BASE_SHA: ${{ github.event.before }}
 
       - name: Production build and static route generation
         run: npm run build
