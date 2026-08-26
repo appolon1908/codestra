@@ -19,6 +19,8 @@ const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
 const Services = lazy(() => import('./Pages/Services/Services'))
 const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 const NotFound = lazy(() => import('./Pages/NotFound'))
+const LandingPage = lazy(() => import('./Pages/Landing/LandingPage'))
+const LandingIndexPage = lazy(() => import('./Pages/Landing/LandingIndexPage'))
 
 const App = () => (
   <QueryProvider>
@@ -38,6 +40,10 @@ const App = () => (
           <Route path="/electronic-billing/form" element={<ElectronicBillingForm />} />
           <Route path="/hiring/positions" element={<HiringPosition />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/ai-services" element={<LandingIndexPage kind="service" />} />
+          <Route path="/ai-services/:slug" element={<LandingPage kind="service" />} />
+          <Route path="/industries" element={<LandingIndexPage kind="industry" />} />
+          <Route path="/industries/:slug" element={<LandingPage kind="industry" />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/auth/*" element={<AuthProvider element={<AllRoutes />} />} />
           <Route path="*" element={<NotFound />} />

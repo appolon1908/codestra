@@ -18,21 +18,25 @@ const services = [
   {
     icon: Bot,
     title: 'AI systems that do useful work',
+    to: '/ai-services/ai-agent-development',
     description: 'Agents, copilots, retrieval systems and intelligent workflows designed around your data, approvals and operating rules.',
   },
   {
     icon: Workflow,
     title: 'Automation across the business',
+    to: '/ai-services/ai-workflow-automation',
     description: 'Connect sales, support, operations and finance so information moves once, decisions happen faster and handoffs stay visible.',
   },
   {
     icon: Braces,
     title: 'Software built around your advantage',
+    to: '/ai-services/custom-software-development',
     description: 'Modern web, mobile and API products engineered for the way your company actually competes—not a generic template.',
   },
   {
     icon: Network,
     title: 'Integration without the fragile glue',
+    to: '/ai-services/api-development-integration',
     description: 'Secure API gateways, CRM connections, event-driven services and middleware that keep core systems isolated and dependable.',
   },
 ]
@@ -45,8 +49,18 @@ const principles = [
 ]
 
 const industries = [
-  'Healthcare', 'Financial services', 'Logistics', 'Insurance', 'Real estate', 'Retail',
-  'Manufacturing', 'Education', 'Telecommunications', 'Professional services', 'Hospitality', 'Call centers',
+  { label: 'Healthcare', to: '/industries/healthcare' },
+  { label: 'Financial services', to: '/industries/financial-services' },
+  { label: 'Logistics', to: '/industries/logistics-transportation' },
+  { label: 'Insurance', to: '/industries/insurance' },
+  { label: 'Real estate', to: '/industries/real-estate' },
+  { label: 'Retail', to: '/industries/retail-ecommerce' },
+  { label: 'Manufacturing', to: '/industries/manufacturing' },
+  { label: 'Education', to: '/industries/education' },
+  { label: 'Telecommunications', to: '/industries/telecommunications' },
+  { label: 'Professional services', to: '/industries/professional-services' },
+  { label: 'Hospitality', to: '/industries/hospitality-travel' },
+  { label: 'Call centers', to: '/industries/call-centers-bpo' },
 ]
 
 const Home = () => (
@@ -64,7 +78,7 @@ const Home = () => (
             <Link className="button button--gold" to="/contact/sales">
               Plan your first workflow <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <Link className="button button--ghost" to="/services">Explore capabilities</Link>
+            <Link className="button button--ghost" to="/ai-services">Explore capabilities</Link>
           </div>
           <p className="hero__proof">Designed for Odoo, Kong, Caddy, n8n, modern APIs and the systems you already depend on.</p>
         </div>
@@ -96,12 +110,12 @@ const Home = () => (
           <p>Strategy matters, but execution has to survive real users, real data and real operational pressure. We design the complete path.</p>
         </div>
         <div className="service-grid">
-          {services.map(({ icon: Icon, title, description }, index) => (
+          {services.map(({ icon: Icon, title, description, to }, index) => (
             <article className="service-card" key={title}>
               <div className="service-card__top"><span>0{index + 1}</span><Icon aria-hidden="true" /></div>
               <h3>{title}</h3>
               <p>{description}</p>
-              <Link to="/services">See how it works <ArrowRight size={16} aria-hidden="true" /></Link>
+              <Link to={to}>See how it works <ArrowRight size={16} aria-hidden="true" /></Link>
             </article>
           ))}
         </div>
@@ -141,9 +155,9 @@ const Home = () => (
           <p>We adapt the architecture to your terminology, controls, integrations and service model instead of forcing the same workflow everywhere.</p>
         </div>
         <div className="industry-cloud">
-          {industries.map((industry) => <span key={industry}>{industry}</span>)}
+          {industries.map((industry) => <Link key={industry.to} to={industry.to}>{industry.label}</Link>)}
         </div>
-        <div className="section-action"><Link className="button button--ghost" to="/case-studies">Explore our work <ArrowRight size={17} aria-hidden="true" /></Link></div>
+        <div className="section-action"><Link className="button button--ghost" to="/industries">Explore all industries <ArrowRight size={17} aria-hidden="true" /></Link></div>
       </section>
 
       <section className="home-section shell final-cta" aria-labelledby="final-cta-title">
