@@ -1,0 +1,117 @@
+/*
+ * Temporary compatibility bridge for public pages created before the
+ * corporate design system. This file normalizes legacy utility classes at
+ * the marketing-route boundary. New code must use semantic tokens and shared
+ * components instead of adding to this bridge.
+ */
+
+.marketing-route :where(
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  [class*="rounded-[1."],
+  [class*="rounded-[2."],
+  [class*="rounded-[3."]
+) {
+  border-radius: var(--radius-sm) !important;
+}
+
+.marketing-route :where(a, button)[class~="rounded-full"] {
+  min-height: 50px !important;
+  border-radius: var(--radius-xs) !important;
+  padding-inline: 1.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 780 !important;
+  letter-spacing: 0.095em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+}
+
+.marketing-route :where(
+  [class*="bg-[#080808]"],
+  [class*="bg-[#101011]"],
+  [class~="bg-black"],
+  [class*="bg-neutral-950"]
+) {
+  background-color: var(--brand-canvas) !important;
+}
+
+.marketing-route :where(
+  [class*="bg-neutral-900"],
+  [class*="bg-neutral-800"]
+) {
+  background-color: var(--brand-surface-raised) !important;
+}
+
+.marketing-route [class*="bg-[#FFD700]"] {
+  background-color: var(--brand-accent) !important;
+}
+
+.marketing-route [class~="bg-white"] {
+  background-color: var(--brand-ink) !important;
+}
+
+.marketing-route :where(
+  [class*="border-neutral-"],
+  [class*="border-white/"]
+) {
+  border-color: var(--brand-line) !important;
+}
+
+.marketing-route [class*="border-[#FFD700]"] {
+  border-color: var(--brand-accent) !important;
+}
+
+.marketing-route :where(
+  [class~="text-white"],
+  [class*="text-neutral-100"],
+  [class*="text-neutral-200"]
+) {
+  color: var(--brand-ink) !important;
+}
+
+.marketing-route [class*="text-[#FFD700]"] {
+  color: var(--brand-accent) !important;
+}
+
+.marketing-route :where(
+  [class*="text-neutral-300"],
+  [class*="text-neutral-400"]
+) {
+  color: var(--brand-ink-soft) !important;
+}
+
+.marketing-route :where(
+  [class*="text-neutral-500"],
+  [class*="text-neutral-600"]
+) {
+  color: var(--brand-ink-muted) !important;
+}
+
+.marketing-route [class~="text-black"] {
+  color: var(--brand-canvas) !important;
+}
+
+.marketing-route :where(
+  [class*="shadow-xl"],
+  [class*="shadow-2xl"],
+  [class*="drop-shadow"]
+) {
+  box-shadow: var(--shadow-low) !important;
+}
+
+.marketing-route .mobile-nav__button {
+  width: 100%;
+  justify-content: flex-start;
+  border: 0 !important;
+  border-bottom: 1px solid var(--brand-line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--brand-ink-soft) !important;
+  padding: 1rem 0 !important;
+  text-align: left;
+}
+
+.marketing-route .mobile-nav__button:hover {
+  color: var(--brand-accent) !important;
+}

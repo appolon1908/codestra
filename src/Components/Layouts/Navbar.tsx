@@ -22,6 +22,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     clearAccessToken()
+    setIsOpen(false)
     navigate('/', { replace: true })
   }
 
@@ -77,29 +78,38 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div id="mobile-navigation" className={`mobile-nav${isOpen ? ' mobile-nav--open' : ''}`}>
-          <nav aria-label="Mobile navigation">
-            {primaryLinks.map((link) => (
+        {isOpen && (
+          <div id="mobile-navigation" className="mobile-nav mobile-nav--open">
+            <nav aria-label="Mobile navigation">
+              {primaryLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }: { isActive: boolean }) => `mobile-nav__link${isActive ? ' mobile-nav__link--active' : ''}`}
+                >
+                  {link.label}
+                </NavLink>
+              ))}
               <NavLink
-                key={link.to}
-                to={link.to}
+                to="/contact"
                 className={({ isActive }: { isActive: boolean }) => `mobile-nav__link${isActive ? ' mobile-nav__link--active' : ''}`}
               >
-                {link.label}
+                Contact
               </NavLink>
-            ))}
-            <NavLink
-              to="/contact"
-              className={({ isActive }: { isActive: boolean }) => `mobile-nav__link${isActive ? ' mobile-nav__link--active' : ''}`}
-            >
-              Contact
-            </NavLink>
-            {!isAuthenticated && <Link className="mobile-nav__link" to="/login">Client login</Link>}
-            <Link className="button button--primary mobile-nav__cta" to="/contact/sales">
-              Start a project <ArrowUpRight size={17} aria-hidden="true" />
-            </Link>
-          </nav>
-        </div>
+              {isAuthenticated ? (
+                <>
+                  <Link className="mobile-nav__link" to="/auth/dashboard">Dashboard</Link>
+                  <button className="mobile-nav__link mobile-nav__button" type="button" onClick={handleLogout}>Log out</button>
+                </>
+              ) : (
+                <Link className="mobile-nav__link" to="/login">Client login</Link>
+              )}
+              <Link className="button button--primary mobile-nav__cta" to="/contact/sales">
+                Start a project <ArrowUpRight size={17} aria-hidden="true" />
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
     </>
   )
