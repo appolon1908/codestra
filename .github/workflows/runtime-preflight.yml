@@ -1,0 +1,164 @@
+name: Verify production runtime paths
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_root:
+        description: Candidate absolute release root observed on the host
+        required: true
+        type: string
+      releases_dir:
+        description: Candidate versioned releases directory
+        required: true
+        type: string
+      current_symlink:
+        description: Candidate current-release symlink
+        required: true
+        type: string
+      compose_project:
+        description: Existing Docker Compose project name
+        required: true
+        default: codestra
+        type: string
+      service_name:
+        description: Existing web service name
+        required: true
+        default: web
+        type: string
+      loopback_port:
+        description: Existing host-loopback web port
+        required: true
+        type: string
+      reverse_proxy:
+        description: Reverse proxy to verify
+        required: true
+        default: caddy
+        type: choice
+        options:
+          - caddy
+          - nginx
+      confirmation:
+        description: Type READ_ONLY_PREFLIGHT
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codestra-production-read-only-preflight
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Verify fail-closed scaffold
+        run: node scripts/deploy/validate-runtime-manifest.mjs --mode scaffold
+
+      - name: Validate operator inputs
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+          RELEASE_ROOT: ${{ inputs.release_root }}
+          RELEASES_DIR: ${{ inputs.releases_dir }}
+          CURRENT_SYMLINK: ${{ inputs.current_symlink }}
+          COMPOSE_PROJECT: ${{ inputs.compose_project }}
+          SERVICE_NAME: ${{ inputs.service_name }}
+          LOOPBACK_PORT: ${{ inputs.loopback_port }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || {
+            echo "Preflight must be dispatched from main." >&2
+            exit 1
+          }
+          [[ "$CONFIRMATION" == "READ_ONLY_PREFLIGHT" ]] || exit 1
+          [[ "$DEPLOY_HOST" == "49.12.145.107" ]] || {
+            echo "DEPLOY_HOST does not match the verified DNS target." >&2
+            exit 1
+          }
+          [[ "$DEPLOY_USER" =~ ^[A-Za-z0-9_.-]+$ ]] || exit 1
+          safe_path='^/[A-Za-z0-9._/-]+$'
+          safe_name='^[A-Za-z0-9][A-Za-z0-9_.-]*$'
+          safe_port='^[0-9]{4,5}$'
+          [[ "$RELEASE_ROOT" =~ $safe_path ]] || exit 1
+          [[ "$RELEASES_DIR" =~ $safe_path ]] || exit 1
+          [[ "$CURRENT_SYMLINK" =~ $safe_path ]] || exit 1
+          [[ "$COMPOSE_PROJECT" =~ $safe_name ]] || exit 1
+          [[ "$SERVICE_NAME" =~ $safe_name ]] || exit 1
+          [[ "$LOOPBACK_PORT" =~ $safe_port ]] || exit 1
+
+      - name: Configure pinned SSH trust
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          set -Eeuo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -F "$DEPLOY_HOST" -f ~/.ssh/known_hosts >/dev/null
+
+      - name: Run remote read-only inventory
+        env:
+          RELEASE_ROOT: ${{ inputs.release_root }}
+          RELEASES_DIR: ${{ inputs.releases_dir }}
+          CURRENT_SYMLINK: ${{ inputs.current_symlink }}
+          COMPOSE_PROJECT: ${{ inputs.compose_project }}
+          SERVICE_NAME: ${{ inputs.service_name }}
+          LOOPBACK_PORT: ${{ inputs.loopback_port }}
+          REVERSE_PROXY: ${{ inputs.reverse_proxy }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+          printf -v remote_command \
+            'bash -s -- %q %q %q %q %q %q %q' \
+            "$RELEASE_ROOT" \
+            "$RELEASES_DIR" \
+            "$CURRENT_SYMLINK" \
+            "$COMPOSE_PROJECT" \
+            "$SERVICE_NAME" \
+            "$LOOPBACK_PORT" \
+            "$REVERSE_PROXY"
+
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$remote_command" \
+            < scripts/deploy/read-only-preflight.sh \
+            | tee preflight-report.txt
+
+          grep -Fx 'PREFLIGHT_MODE=READ_ONLY' preflight-report.txt
+          grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' preflight-report.txt
+          sha256sum preflight-report.txt > preflight-report.sha256
+
+      - name: Upload runtime evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-runtime-preflight-${{ github.run_id }}
+          path: |
+            preflight-report.txt
+            preflight-report.sha256
+          if-no-files-found: error
+          retention-days: 30
