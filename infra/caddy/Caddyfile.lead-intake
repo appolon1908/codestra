@@ -1,0 +1,60 @@
+# Reference production edge fragment. Merge into the authoritative Codestra
+# Caddy configuration; do not run a second public Caddy instance for this route.
+# The Kong private listener should not be reachable from the public internet.
+
+(codestra_security_headers) {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+        -Server
+    }
+}
+
+codestra.co, www.codestra.co {
+    import codestra_security_headers
+    encode zstd gzip
+
+    @lead_intake {
+        path /api/leads/v1/consultations
+        method POST OPTIONS
+    }
+
+    handle @lead_intake {
+        request_body {
+            max_size 128KB
+        }
+
+        reverse_proxy {$KONG_LEAD_UPSTREAM:https://kong.internal:8443} {
+            header_up Host api.codestra.co
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto https
+            header_up X-Codestra-Edge caddy
+
+            transport http {
+                tls_server_name {$KONG_TLS_SERVER_NAME:kong.internal}
+                tls_trusted_ca_certs /run/secrets/kong-ca.pem
+                tls_client_auth /run/secrets/caddy-kong-client.crt /run/secrets/caddy-kong-client.key
+                dial_timeout 5s
+                response_header_timeout 15s
+            }
+        }
+    }
+
+    # Existing website upstream. Replace only with the authoritative container
+    # or private address used by the current production deployment.
+    handle {
+        reverse_proxy {$CODESTRA_WEB_UPSTREAM:http://codestra-web:80}
+    }
+
+    log {
+        output file /var/log/caddy/codestra-access.json {
+            roll_size 50MiB
+            roll_keep 10
+            roll_keep_for 720h
+        }
+        format json
+    }
+}
