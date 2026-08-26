@@ -13,6 +13,7 @@ const requiredFiles = [
   'scripts/deploy/validate-release-manifest.mjs',
   'scripts/deploy/read-only-preflight.sh',
   'scripts/deploy/activate-release.sh',
+  'scripts/deploy/rollback-release.sh',
   'scripts/deploy/write-release-manifest.mjs',
   'deploy/releases/README.md',
   'docs/deployment-security.md',
@@ -45,6 +46,8 @@ if (failures.length === 0) {
     'environment: production',
     'cancel-in-progress: false',
     'ghcr.io/${GITHUB_REPOSITORY,,}@${IMAGE_DIGEST}',
+    "steps.public_smoke.outcome == 'failure'",
+    'rollback-release.sh',
   ]
 
   for (const marker of requiredDeployMarkers) {
