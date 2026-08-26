@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, type PropsWithChildren } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import AuthProvider from './Providers/AuthProvider'
 import QueryProvider from './Providers/QueryProvider'
@@ -21,28 +21,38 @@ const Industries = lazy(() => import('./Pages/Industries/Industries'))
 const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 const NotFound = lazy(() => import('./Pages/NotFound'))
 
+const MarketingRoute = ({ children }: PropsWithChildren) => (
+  <div className="marketing-route">{children}</div>
+)
+
 const App = () => (
   <QueryProvider>
     <BrowserRouter>
       <RouteMeta />
-      <Suspense fallback={<div className="route-loader" role="status" aria-label="Loading page"><span /></div>}>
+      <Suspense
+        fallback={(
+          <div className="route-loader route-loader--corporate" role="status" aria-label="Loading page">
+            <span />
+          </div>
+        )}
+      >
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/case-studies" element={<CaseStudies />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/contact/sales" element={<ContactSales />} />
-          <Route path="/contact/support" element={<ContactSupport />} />
-          <Route path="/electronic-billing" element={<ElectronicBilling />} />
-          <Route path="/electronic-billing/form" element={<ElectronicBillingForm />} />
-          <Route path="/hiring/positions" element={<HiringPosition />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/industries" element={<Industries />} />
-          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/" element={<MarketingRoute><Home /></MarketingRoute>} />
+          <Route path="/login" element={<MarketingRoute><Login /></MarketingRoute>} />
+          <Route path="/signup" element={<MarketingRoute><Signup /></MarketingRoute>} />
+          <Route path="/about" element={<MarketingRoute><AboutUs /></MarketingRoute>} />
+          <Route path="/case-studies" element={<MarketingRoute><CaseStudies /></MarketingRoute>} />
+          <Route path="/contact" element={<MarketingRoute><ContactUs /></MarketingRoute>} />
+          <Route path="/contact/sales" element={<MarketingRoute><ContactSales /></MarketingRoute>} />
+          <Route path="/contact/support" element={<MarketingRoute><ContactSupport /></MarketingRoute>} />
+          <Route path="/electronic-billing" element={<MarketingRoute><ElectronicBilling /></MarketingRoute>} />
+          <Route path="/electronic-billing/form" element={<MarketingRoute><ElectronicBillingForm /></MarketingRoute>} />
+          <Route path="/hiring/positions" element={<MarketingRoute><HiringPosition /></MarketingRoute>} />
+          <Route path="/services" element={<MarketingRoute><Services /></MarketingRoute>} />
+          <Route path="/industries" element={<MarketingRoute><Industries /></MarketingRoute>} />
+          <Route path="/privacy" element={<MarketingRoute><Privacy /></MarketingRoute>} />
           <Route path="/auth/*" element={<AuthProvider element={<AllRoutes />} />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<MarketingRoute><NotFound /></MarketingRoute>} />
         </Routes>
       </Suspense>
     </BrowserRouter>
