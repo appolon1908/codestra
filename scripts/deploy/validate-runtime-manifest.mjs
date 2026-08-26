@@ -29,6 +29,8 @@ const safePath = /^\/[a-zA-Z0-9._/-]+$/
 const safeHealthPath = /^\/[a-zA-Z0-9._~!$&()*+,;=:@%/-]*$/
 const sha256 = /^[a-f0-9]{64}$/
 const expectedHost = '49.12.145.107'
+const allowedReleaseRoot =
+  /^\/(?:srv|opt|data|mnt\/[a-zA-Z0-9._-]+|var\/(?:lib|www)|home\/[a-zA-Z0-9._-]+)\/[a-zA-Z0-9._/-]+$/
 const forbiddenExactPaths = new Set([
   '/', '/bin', '/boot', '/dev', '/etc', '/home', '/lib', '/lib64',
   '/opt', '/proc', '/root', '/run', '/sbin', '/sys', '/tmp', '/usr', '/var',
@@ -46,7 +48,11 @@ const validateAbsolutePath = (name, value, { allowEmpty }) => {
     `${name} must be a normalized absolute path`,
   )
   requireValue(
-    !String(value).includes('//') && !String(value).includes('/../') && !String(value).endsWith('/..'),
+    !String(value).includes('//')
+      && !String(value).includes('/../')
+      && !String(value).includes('/./')
+      && !String(value).endsWith('/..')
+      && !String(value).endsWith('/.'),
     `${name} must not contain traversal or duplicate separators`,
   )
   requireValue(!String(value).endsWith('/'), `${name} must not end with a slash`)
@@ -74,6 +80,13 @@ const allowEmptyPaths = mode === 'scaffold'
 validateAbsolutePath('releaseRoot', manifest.releaseRoot, { allowEmpty: allowEmptyPaths })
 validateAbsolutePath('releasesDir', manifest.releasesDir, { allowEmpty: allowEmptyPaths })
 validateAbsolutePath('currentSymlink', manifest.currentSymlink, { allowEmpty: allowEmptyPaths })
+
+if (manifest.releaseRoot) {
+  requireValue(
+    allowedReleaseRoot.test(manifest.releaseRoot),
+    'releaseRoot must use a dedicated application/data location',
+  )
+}
 
 if (manifest.releaseRoot && manifest.releasesDir) {
   requireValue(
