@@ -119,7 +119,6 @@ jobs:
             --source-sha "$SOURCE_SHA" \
             --image-digest "$IMAGE_DIGEST"
           node scripts/deploy/validate-runtime-manifest.mjs --mode scaffold
-
           if [[ "$MODE" == "activate" ]]; then
             [[ "$CONFIRMATION" == "DEPLOY_VERIFIED_RUNTIME" ]] || {
               echo "Activation confirmation is invalid." >&2
@@ -291,13 +290,30 @@ jobs:
             -o ConnectTimeout=10
           )
           printf -v create_command 'install -d -m 0750 %q' "$staging_dir"
+
+          compose_sha="$(sha256sum deploy/compose.production.yaml | awk '{print $1}')"
+          activate_sha="$(sha256sum scripts/deploy/activate-release.sh | awk '{print $1}')"
+          rollback_sha="$(sha256sum scripts/deploy/rollback-release.sh | awk '{print $1}')"
+          {
+            printf '%s  compose.production.yaml\n' "$compose_sha"
+            printf '%s  activate-release.sh\n' "$activate_sha"
+            printf '%s  rollback-release.sh\n' "$rollback_sha"
+          } > staging-checksums.txt
+
           ssh "${ssh_options[@]}" \
             "${DEPLOY_USER}@${DEPLOY_HOST}" \
             "$create_command"
           scp "${ssh_options[@]}" \
             deploy/compose.production.yaml \
             scripts/deploy/activate-release.sh \
+            scripts/deploy/rollback-release.sh \
+            staging-checksums.txt \
             "${DEPLOY_USER}@${DEPLOY_HOST}:${staging_dir}/"
+
+          printf -v verify_command 'cd %q && sha256sum --check --strict staging-checksums.txt' "$staging_dir"
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$verify_command"
 
       - name: Activate digest with automatic rollback
         env:
@@ -350,8 +366,19 @@ jobs:
             | tee activation-report.txt
 
           grep -Fx 'ACTIVATION_STATUS=PASS' activation-report.txt
+          release_dir="$(
+            awk -F= '$1 == "RELEASE_DIR" { print substr($0, index($0, "=") + 1) }' \
+              activation-report.txt
+          )"
+          [[ "$release_dir" == "$RELEASES_DIR/"* ]] || {
+            echo "Activation report returned an unsafe release path." >&2
+            exit 1
+          }
+          printf '%s\n' "$release_dir" > release-dir.txt
 
-      - name: Verify public HTTPS routes
+      - id: public_smoke
+        name: Verify public HTTPS routes
+        continue-on-error: true
         run: |
           set -Eeuo pipefail
           curl --fail --silent --show-error --location \
@@ -361,6 +388,59 @@ jobs:
             --retry 3 --retry-all-errors \
             https://www.codestra.co/en/ >/dev/null
 
+      - name: Roll back after public smoke failure
+        if: ${{ steps.public_smoke.outcome == 'failure' }}
+        continue-on-error: true
+        env:
+          RELEASE_ROOT: ${{ needs.gate.outputs.release_root }}
+          RELEASES_DIR: ${{ needs.gate.outputs.releases_dir }}
+          CURRENT_SYMLINK: ${{ needs.gate.outputs.current_symlink }}
+          COMPOSE_PROJECT: ${{ needs.gate.outputs.compose_project }}
+          SERVICE_NAME: ${{ needs.gate.outputs.service_name }}
+          LOOPBACK_PORT: ${{ needs.gate.outputs.loopback_port }}
+          HEALTH_PATH: ${{ needs.gate.outputs.health_path }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          release_dir="$(cat release-dir.txt)"
+          [[ "$release_dir" == "$RELEASES_DIR/"* ]] || exit 1
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+          printf -v rollback_command \
+            'bash %q %q %q %q %q %q %q %q %q' \
+            "${release_dir}/rollback-release.sh" \
+            "$RELEASE_ROOT" \
+            "$RELEASES_DIR" \
+            "$CURRENT_SYMLINK" \
+            "$COMPOSE_PROJECT" \
+            "$SERVICE_NAME" \
+            "$LOOPBACK_PORT" \
+            "$HEALTH_PATH" \
+            "$release_dir"
+
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$rollback_command" \
+            | tee public-smoke-rollback.txt
+
+          grep -Fx 'ROLLBACK_STATUS=PASS' public-smoke-rollback.txt
+
+      - name: Fail activation after public smoke rollback
+        if: ${{ steps.public_smoke.outcome == 'failure' }}
+        run: |
+          echo "Public HTTPS verification failed; rollback was requested." >&2
+          exit 1
+
       - name: Upload activation evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -369,5 +449,8 @@ jobs:
           path: |
             activation-preflight.txt
             activation-report.txt
+            staging-checksums.txt
+            release-dir.txt
+            public-smoke-rollback.txt
           if-no-files-found: warn
           retention-days: 30
