@@ -352,7 +352,8 @@ if [[ -z "$proxy_kind" ]]; then
 
       for nginx_candidate in "${nginx_candidates[@]}"; do
         [[ -f "$nginx_candidate" && -r "$nginx_candidate" ]] || continue
-        if grep -Eq 'server_name[[:space:]].*((www\.)?codestra\.co)([[:space:];]|$)' "$nginx_candidate"; then
+        nginx_candidate_routes="$(extract_nginx_routes "$nginx_candidate")"
+        if [[ -n "$nginx_candidate_routes" ]]; then
           proxy_kind="host"
           proxy_project="HOST"
           proxy_service="nginx"
