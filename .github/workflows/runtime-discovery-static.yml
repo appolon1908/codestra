@@ -7,6 +7,7 @@ on:
       - '.github/workflows/runtime-discovery-static.yml'
       - 'scripts/deploy/read-only-runtime-discovery.sh'
       - 'scripts/ci/check-runtime-discovery.mjs'
+      - 'scripts/ci/test-runtime-discovery-fixture.sh'
   push:
     branches:
       - main
@@ -15,6 +16,7 @@ on:
       - '.github/workflows/runtime-discovery-static.yml'
       - 'scripts/deploy/read-only-runtime-discovery.sh'
       - 'scripts/ci/check-runtime-discovery.mjs'
+      - 'scripts/ci/test-runtime-discovery-fixture.sh'
 
 permissions:
   contents: read
@@ -37,7 +39,12 @@ jobs:
           node-version: 22
 
       - name: Validate shell syntax
-        run: bash -n scripts/deploy/read-only-runtime-discovery.sh
+        run: |
+          bash -n scripts/deploy/read-only-runtime-discovery.sh
+          bash -n scripts/ci/test-runtime-discovery-fixture.sh
 
       - name: Enforce no-write discovery policy
         run: node scripts/ci/check-runtime-discovery.mjs
+
+      - name: Exercise mocked production topology
+        run: bash scripts/ci/test-runtime-discovery-fixture.sh
