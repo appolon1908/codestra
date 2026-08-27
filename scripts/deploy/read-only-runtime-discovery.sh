@@ -12,6 +12,7 @@ mark_fatal() {
 safe_line() {
   sed -E \
     -e 's/((authorization|password|passwd|secret|token|api[_-]?key|credential)[^[:space:]]*)[[:space:]]+[^[:space:]]+/\1 REDACTED/Ig' \
+    -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#g' \
     -e 's#([^|[:space:]]*(secret|token|password|credential|private)[^|[:space:]]*)#REDACTED_PATH#Ig'
 }
 
@@ -177,8 +178,40 @@ if [[ -n "$proxy_container" ]]; then
     if [[ -n "$caddy_source" ]]; then
       echo "CADDY_CONFIG_SOURCE=$caddy_source"
       if [[ -r "$caddy_source" ]]; then
+        echo "CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY"
         set +e
-        caddy_excerpt="$(grep -n -E -B 4 -A 24 '(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)|reverse_proxy[[:space:]]+frontend(:[0-9]+)?' "$caddy_source" 2>/dev/null | sed -n '1,220p')"
+        caddy_excerpt="$(
+          awk '
+            function delta(text, copy, opens, closes) {
+              copy = text
+              opens = gsub(/\{/, "{", copy)
+              copy = text
+              closes = gsub(/\}/, "}", copy)
+              return opens - closes
+            }
+            BEGIN { in_site = 0; depth = 0 }
+            {
+              line = $0
+              if (!in_site && line ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
+                in_site = 1
+                depth = delta(line)
+                print NR ":" line
+                if (depth <= 0) in_site = 0
+                next
+              }
+              if (in_site) {
+                if (line ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
+                  print NR ":" line
+                }
+                depth += delta(line)
+                if (depth <= 0) {
+                  in_site = 0
+                  depth = 0
+                }
+              }
+            }
+          ' "$caddy_source" 2>/dev/null | sed -n '1,120p'
+        )"
         excerpt_rc=$?
         set -e
         if [[ "$excerpt_rc" -eq 0 && -n "$caddy_excerpt" ]]; then
