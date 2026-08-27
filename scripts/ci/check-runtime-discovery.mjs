@@ -40,6 +40,9 @@ for (const marker of [
   'pgrep -x nginx',
   'extract_caddy_routes',
   'extract_nginx_routes',
+  'server_names[name_index] == "codestra.co"',
+  'server_names[name_index] == "www.codestra.co"',
+  'nginx_candidate_routes="$(extract_nginx_routes "$nginx_candidate")"',
   'FRONTEND_PROXY_LINK=HOST_LOOPBACK',
   'HOST_PROXY_LOOPBACK_ROUTE=PASS',
   'mark_fatal HOST_PROXY_LOOPBACK_BINDING_NOT_IDENTIFIED',
@@ -105,6 +108,7 @@ for (const forbidden of [
   'PUBLIC_PROBE=$url',
   '--show-error',
   'CODESTRA_DISCOVERY_CONFIG_ROOT',
+  'server_name[[:space:]].*((www\\.)?codestra\\.co)',
 ]) {
   if (script.includes(forbidden)) {
     failures.push(`${scriptPath}: contains unsafe evidence marker: ${forbidden}`)
