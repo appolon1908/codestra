@@ -16,6 +16,13 @@ safe_line() {
     -e 's#([^|[:space:]]*(secret|token|password|credential|private)[^|[:space:]]*)#REDACTED_PATH#Ig'
 }
 
+sanitize_effective_origin() {
+  sed -E \
+    -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#Ig' \
+    -e 's/[?#].*$//' \
+    -e 's#^([A-Za-z][A-Za-z0-9+.-]*://[^/[:space:]]+).*$#\1#'
+}
+
 echo "DISCOVERY_MODE=READ_ONLY"
 echo "DISCOVERY_UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "HOSTNAME=$(hostname)"
@@ -296,10 +303,32 @@ fi
 if command -v curl >/dev/null 2>&1; then
   for url in https://codestra.co/en/ https://www.codestra.co/en/; do
     set +e
-    result="$(curl --silent --show-error --location --max-time 15 --output /dev/null --write-out '%{http_code}|%{remote_ip}|%{url_effective}' "$url" 2>&1)"
+    probe_result="$(
+      curl --silent --location --max-time 15 \
+        --output /dev/null \
+        --write-out $'%{http_code}\n%{remote_ip}\n%{url_effective}' \
+        "$url" 2>/dev/null
+    )"
     curl_rc=$?
     set -e
-    echo "PUBLIC_PROBE=$url|RC=$curl_rc|RESULT=$result"
+
+    mapfile -t probe_fields <<< "$probe_result"
+    http_code="${probe_fields[0]:-000}"
+    remote_ip="${probe_fields[1]:-UNAVAILABLE}"
+    effective_url="${probe_fields[2]:-}"
+    if [[ -n "$effective_url" ]]; then
+      effective_origin="$(printf '%s' "$effective_url" | sanitize_effective_origin)"
+    else
+      effective_origin="UNAVAILABLE"
+    fi
+
+    printf 'PUBLIC_PROBE_REQUEST=%s|RC=%s|HTTP=%s|REMOTE_IP=%s|EFFECTIVE_ORIGIN=%s\n' \
+      "$url" \
+      "$curl_rc" \
+      "$http_code" \
+      "$remote_ip" \
+      "$effective_origin" \
+      | safe_line
   done
 else
   echo "CURL_COMMAND=UNAVAILABLE"
