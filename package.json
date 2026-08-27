@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
@@ -51,5 +54,8 @@
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
     "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "nanoid": "3.3.18"
   }
 }
