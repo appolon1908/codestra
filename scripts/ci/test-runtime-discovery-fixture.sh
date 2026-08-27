@@ -20,7 +20,7 @@ codestra.co, www.codestra.co {
     basic_auth {
         admin $2a$12$THIS_MUST_NEVER_APPEAR
     }
-    reverse_proxy https://operator:super-secret@frontend:8080
+    reverse_proxy HTTPS://operator:super-secret@frontend:8080
 }
 
 auth.codestra.co {
@@ -59,6 +59,7 @@ cat > "$mock_bin/docker" <<'MOCK'
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+mode="${MOCK_TOPOLOGY:-current}"
 command_name="${1:-}"
 shift || true
 
@@ -71,10 +72,17 @@ case "$command_name" in
     printf '2.32.4\n'
     ;;
   ps)
-    printf '%s\n' \
-      'unrelated-frontend-1' \
-      'codestra-prod-caddy-1' \
-      'codestra-prod-frontend-1'
+    if [[ "$mode" == "future" ]]; then
+      printf '%s\n' \
+        'unrelated-frontend-1' \
+        'codestra-caddy-1' \
+        'codestra-web-1'
+    else
+      printf '%s\n' \
+        'unrelated-frontend-1' \
+        'codestra-prod-caddy-1' \
+        'codestra-prod-frontend-1'
+    fi
     ;;
   inspect)
     container="${1:?container required}"
@@ -90,23 +98,44 @@ case "$command_name" in
     image_id='sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     networks=$'other_default\n'
 
-    if [[ "$container" == 'codestra-prod-frontend-1' ]]; then
-      project='codestra-prod'
-      service='frontend'
-      working_dir="$MOCK_ROOT/site"
-      config_files="$MOCK_ROOT/site/compose.production.yaml"
-      image='codestra-frontend:server-c-web-integration-20260816'
-      image_id='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
-      networks=$'codestra-prod_default\ncodestra-edge\n'
-    elif [[ "$container" == 'codestra-prod-caddy-1' ]]; then
-      project='codestra-prod'
-      service='caddy'
-      working_dir="$MOCK_ROOT/site"
-      config_files="$MOCK_ROOT/site/compose.production.yaml"
-      image='caddy:2.10'
-      image_id='sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
-      networks=$'codestra-edge\ncodestra-prod_default\n'
-    fi
+    case "$container" in
+      codestra-prod-frontend-1)
+        project='codestra-prod'
+        service='frontend'
+        working_dir="$MOCK_ROOT/site"
+        config_files="$MOCK_ROOT/site/compose.production.yaml"
+        image='codestra-frontend:server-c-web-integration-20260816'
+        image_id='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+        networks=$'codestra-prod_default\ncodestra-edge\n'
+        ;;
+      codestra-prod-caddy-1)
+        project='codestra-prod'
+        service='caddy'
+        working_dir="$MOCK_ROOT/site"
+        config_files="$MOCK_ROOT/site/compose.production.yaml"
+        image='caddy:2.10'
+        image_id='sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
+        networks=$'codestra-edge\ncodestra-prod_default\n'
+        ;;
+      codestra-web-1)
+        project='codestra'
+        service='web'
+        working_dir="$MOCK_ROOT/site"
+        config_files="$MOCK_ROOT/site/compose.production.yaml"
+        image='ghcr.io/appolon1908-hue/codestra@sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+        image_id='sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+        networks=$'codestra_default\nedge\n'
+        ;;
+      codestra-caddy-1)
+        project='codestra'
+        service='caddy'
+        working_dir="$MOCK_ROOT/site"
+        config_files="$MOCK_ROOT/site/compose.production.yaml"
+        image='caddy:2.10'
+        image_id='sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        networks=$'edge\ncodestra_default\n'
+        ;;
+    esac
 
     if [[ "$format" == *'project={{index .Config.Labels'* ]]; then
       printf 'project=%s|service=%s|working_dir=%s|config_files=%s|image=%s|image_id=%s|state=running|health=healthy|restarts=0|ports={"8080/tcp":null}|networks=fixture\n' \
@@ -114,7 +143,7 @@ case "$command_name" in
     elif [[ "$format" == *'FRONTEND_NETWORK='* || "$format" == *'PROXY_NETWORK='* ]]; then
       while IFS= read -r network; do
         [[ -n "$network" ]] || continue
-        if [[ "$container" == 'codestra-prod-frontend-1' ]]; then
+        if [[ "$service" == 'frontend' || "$service" == 'web' ]]; then
           printf 'FRONTEND_NETWORK=%s|ALIASES=["frontend"]|IP=172.30.0.10\n' "$network"
         else
           printf 'PROXY_NETWORK=%s|ALIASES=["caddy"]|IP=172.30.0.2\n' "$network"
@@ -125,7 +154,7 @@ case "$command_name" in
     elif [[ "$format" == *'com.docker.compose.service'* ]]; then
       printf '%s\n' "$service"
     elif [[ "$format" == *'/etc/caddy/Caddyfile'* ]]; then
-      if [[ "$container" == 'codestra-prod-caddy-1' ]]; then
+      if [[ "$service" == 'caddy' ]]; then
         printf '%s/site/Caddyfile\n' "$MOCK_ROOT"
       fi
     else
@@ -140,25 +169,52 @@ MOCK
 
 chmod 0755 "$mock_bin/hostname" "$mock_bin/ip" "$mock_bin/ss" "$mock_bin/curl" "$mock_bin/docker"
 
-report="$fixture_root/runtime-discovery.txt"
-PATH="$mock_bin:$PATH" MOCK_ROOT="$fixture_root" \
-  bash "$repository_root/scripts/deploy/read-only-runtime-discovery.sh" > "$report"
+run_case() {
+  local mode="$1"
+  local expected_frontend="$2"
+  local expected_project="$3"
+  local expected_service="$4"
+  local expected_proxy="$5"
+  local expected_networks="$6"
+  local report="$fixture_root/runtime-discovery-${mode}.txt"
 
-grep -Fx 'DISCOVERY_MODE=READ_ONLY' "$report"
-grep -Fx 'FRONTEND_CONTAINER=codestra-prod-frontend-1' "$report"
-grep -Fx 'FRONTEND_PROJECT=codestra-prod' "$report"
-grep -Fx 'PROXY_CONTAINER=codestra-prod-caddy-1' "$report"
-grep -Fx 'PROXY_PROJECT=codestra-prod' "$report"
-grep -Fx 'FRONTEND_PROXY_SHARED_NETWORKS=codestra-prod_default,codestra-edge' "$report"
-grep -F 'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY' "$report"
-grep -F 'reverse_proxy https://REDACTED@frontend:8080' "$report"
-grep -Fx 'DISCOVERY_STATUS=PASS' "$report"
-grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
+  PATH="$mock_bin:$PATH" MOCK_ROOT="$fixture_root" MOCK_TOPOLOGY="$mode" \
+    bash "$repository_root/scripts/deploy/read-only-runtime-discovery.sh" > "$report"
 
-if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|unrelated-frontend-1\|project=' "$report"; then
-  echo 'Fixture report exposed excluded or sensitive evidence.' >&2
-  cat "$report" >&2
-  exit 1
-fi
+  grep -Fx 'DISCOVERY_MODE=READ_ONLY' "$report"
+  grep -Fx "FRONTEND_CONTAINER=$expected_frontend" "$report"
+  grep -Fx "FRONTEND_PROJECT=$expected_project" "$report"
+  grep -Fx "FRONTEND_SERVICE=$expected_service" "$report"
+  grep -Fx "PROXY_CONTAINER=$expected_proxy" "$report"
+  grep -Fx "PROXY_PROJECT=$expected_project" "$report"
+  grep -Fx "FRONTEND_PROXY_SHARED_NETWORKS=$expected_networks" "$report"
+  grep -F 'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY' "$report"
+  grep -F 'reverse_proxy HTTPS://REDACTED@frontend:8080' "$report"
+  grep -Fx 'DISCOVERY_FATAL_FAILURE_COUNT=0' "$report"
+  grep -Fx 'DISCOVERY_STATUS=PASS' "$report"
+  grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
 
-printf 'Runtime discovery fixture passed.\n'
+  if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|unrelated-frontend-1\|project=' "$report"; then
+    echo "Fixture $mode exposed excluded or sensitive evidence." >&2
+    cat "$report" >&2
+    exit 1
+  fi
+}
+
+run_case \
+  current \
+  codestra-prod-frontend-1 \
+  codestra-prod \
+  frontend \
+  codestra-prod-caddy-1 \
+  codestra-prod_default,codestra-edge
+
+run_case \
+  future \
+  codestra-web-1 \
+  codestra \
+  web \
+  codestra-caddy-1 \
+  codestra_default,edge
+
+printf 'Runtime discovery fixtures passed.\n'
