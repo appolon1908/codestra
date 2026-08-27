@@ -72,17 +72,29 @@ case "$command_name" in
     printf '2.32.4\n'
     ;;
   ps)
-    if [[ "$mode" == "future" ]]; then
-      printf '%s\n' \
-        'unrelated-frontend-1' \
-        'codestra-caddy-1' \
-        'codestra-web-1'
-    else
-      printf '%s\n' \
-        'unrelated-frontend-1' \
-        'codestra-prod-caddy-1' \
-        'codestra-prod-frontend-1'
-    fi
+    case "$mode" in
+      future)
+        printf '%s\n' \
+          'codestra-web-stale' \
+          'codestra-caddy-stale' \
+          'codestra-caddy-1' \
+          'codestra-web-1'
+        ;;
+      override)
+        printf '%s\n' \
+          'codestra-prod-web-stale' \
+          'codestra-prod-caddy-stale' \
+          'codestra-prod-caddy-1' \
+          'codestra-prod-web-1'
+        ;;
+      *)
+        printf '%s\n' \
+          'codestra-prod-frontend-stale' \
+          'codestra-prod-caddy-stale' \
+          'codestra-prod-caddy-1' \
+          'codestra-prod-frontend-1'
+        ;;
+    esac
     ;;
   inspect)
     container="${1:?container required}"
@@ -108,6 +120,15 @@ case "$command_name" in
         image_id='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
         networks=$'codestra-prod_default\ncodestra-edge\n'
         ;;
+      codestra-prod-web-1)
+        project='codestra-prod'
+        service='web'
+        working_dir="$MOCK_ROOT/site"
+        config_files="$MOCK_ROOT/site/compose.production.yaml"
+        image='ghcr.io/appolon1908-hue/codestra@sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+        image_id='sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+        networks=$'codestra-prod_default\nedge\n'
+        ;;
       codestra-prod-caddy-1)
         project='codestra-prod'
         service='caddy'
@@ -115,7 +136,11 @@ case "$command_name" in
         config_files="$MOCK_ROOT/site/compose.production.yaml"
         image='caddy:2.10'
         image_id='sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
-        networks=$'codestra-edge\ncodestra-prod_default\n'
+        if [[ "$mode" == 'override' ]]; then
+          networks=$'edge\ncodestra-prod_default\n'
+        else
+          networks=$'codestra-edge\ncodestra-prod_default\n'
+        fi
         ;;
       codestra-web-1)
         project='codestra'
@@ -194,8 +219,8 @@ run_case() {
   grep -Fx 'DISCOVERY_STATUS=PASS' "$report"
   grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
 
-  if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|unrelated-frontend-1\|project=' "$report"; then
-    echo "Fixture $mode exposed excluded or sensitive evidence." >&2
+  if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|FRONTEND_CONTAINER=.*stale|PROXY_CONTAINER=.*stale' "$report"; then
+    echo "Fixture $mode exposed excluded evidence or selected a stale name-only container." >&2
     cat "$report" >&2
     exit 1
   fi
@@ -208,6 +233,14 @@ run_case \
   frontend \
   codestra-prod-caddy-1 \
   codestra-prod_default,codestra-edge
+
+run_case \
+  override \
+  codestra-prod-web-1 \
+  codestra-prod \
+  web \
+  codestra-prod-caddy-1 \
+  codestra-prod_default,edge
 
 run_case \
   future \
