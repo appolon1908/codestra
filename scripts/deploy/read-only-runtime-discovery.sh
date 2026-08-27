@@ -30,13 +30,13 @@ mark_fatal() {
 safe_line() {
   sed -E \
     -e 's/((authorization|password|passwd|secret|token|api[_-]?key|credential)[^[:space:]]*)[[:space:]]+[^[:space:]]+/\1 REDACTED/Ig' \
-    -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#Ig' \
+    -e 's#([A-Za-z][A-Za-z0-9+.-]*://)[^/@[:space:]]+@#\1REDACTED@#g' \
     -e 's#([^|[:space:]]*(secret|token|password|credential|private)[^|[:space:]]*)#REDACTED_PATH#Ig'
 }
 
 sanitize_effective_origin() {
   sed -E \
-    -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#Ig' \
+    -e 's#([A-Za-z][A-Za-z0-9+.-]*://)[^/@[:space:]]+@#\1REDACTED@#g' \
     -e 's/[?#].*$//' \
     -e 's#^([A-Za-z][A-Za-z0-9+.-]*://[^/[:space:]]+).*$#\1#'
 }
@@ -44,32 +44,86 @@ sanitize_effective_origin() {
 extract_caddy_routes() {
   local source="${1:?Caddy source is required}"
   awk '
-    function delta(text, copy, opens, closes) {
-      copy = text
-      opens = gsub(/\{/, "{", copy)
-      copy = text
-      closes = gsub(/\}/, "}", copy)
-      return opens - closes
+    function strip_comments(text, output, i, ch, in_quote, escaped) {
+      output = ""
+      in_quote = 0
+      escaped = 0
+      for (i = 1; i <= length(text); i++) {
+        ch = substr(text, i, 1)
+        if (escaped) {
+          output = output ch
+          escaped = 0
+          continue
+        }
+        if (in_quote && ch == "\\") {
+          output = output ch
+          escaped = 1
+          continue
+        }
+        if (ch == "\"") {
+          in_quote = !in_quote
+          output = output ch
+          continue
+        }
+        if (!in_quote && ch == "#") break
+        output = output ch
+      }
+      return output
+    }
+    function structural_line(text, output, i, ch, in_quote, escaped) {
+      output = ""
+      in_quote = 0
+      escaped = 0
+      for (i = 1; i <= length(text); i++) {
+        ch = substr(text, i, 1)
+        if (escaped) {
+          output = output " "
+          escaped = 0
+          continue
+        }
+        if (in_quote && ch == "\\") {
+          output = output " "
+          escaped = 1
+          continue
+        }
+        if (ch == "\"") {
+          in_quote = !in_quote
+          output = output " "
+          continue
+        }
+        if (!in_quote && ch == "#") break
+        if (in_quote) output = output " "
+        else output = output ch
+      }
+      return output
+    }
+    function token_delta(text, count, tokens, i, total) {
+      total = 0
+      count = split(text, tokens, /[[:space:]]+/)
+      for (i = 1; i <= count; i++) {
+        if (tokens[i] == "{") total++
+        else if (tokens[i] == "}") total--
+      }
+      return total
     }
     BEGIN { in_site = 0; depth = 0 }
     {
-      syntax = $0
-      sub(/^[[:space:]]*#.*/, "", syntax)
-      sub(/[[:space:]]+#.*$/, "", syntax)
-      if (syntax ~ /^[[:space:]]*$/) next
+      syntax = strip_comments($0)
+      structure = structural_line($0)
+      if (structure ~ /^[[:space:]]*$/) next
 
-      if (!in_site && syntax ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
+      if (!in_site && structure ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
         in_site = 1
-        depth = delta(syntax)
+        depth = token_delta(structure)
         print NR ":" syntax
         if (depth <= 0) in_site = 0
         next
       }
       if (in_site) {
-        if (syntax ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
+        if (structure ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
           print NR ":" syntax
         }
-        depth += delta(syntax)
+        depth += token_delta(structure)
         if (depth <= 0) {
           in_site = 0
           depth = 0
@@ -82,12 +136,67 @@ extract_caddy_routes() {
 extract_nginx_routes() {
   local source="${1:?Nginx source is required}"
   awk '
-    function delta(text, copy, opens, closes) {
-      copy = text
-      opens = gsub(/\{/, "{", copy)
-      copy = text
-      closes = gsub(/\}/, "}", copy)
-      return opens - closes
+    function strip_comments(text, output, i, ch, in_quote, escaped) {
+      output = ""
+      in_quote = 0
+      escaped = 0
+      for (i = 1; i <= length(text); i++) {
+        ch = substr(text, i, 1)
+        if (escaped) {
+          output = output ch
+          escaped = 0
+          continue
+        }
+        if (in_quote && ch == "\\") {
+          output = output ch
+          escaped = 1
+          continue
+        }
+        if (ch == "\"") {
+          in_quote = !in_quote
+          output = output ch
+          continue
+        }
+        if (!in_quote && ch == "#") break
+        output = output ch
+      }
+      return output
+    }
+    function structural_line(text, output, i, ch, in_quote, escaped) {
+      output = ""
+      in_quote = 0
+      escaped = 0
+      for (i = 1; i <= length(text); i++) {
+        ch = substr(text, i, 1)
+        if (escaped) {
+          output = output " "
+          escaped = 0
+          continue
+        }
+        if (in_quote && ch == "\\") {
+          output = output " "
+          escaped = 1
+          continue
+        }
+        if (ch == "\"") {
+          in_quote = !in_quote
+          output = output " "
+          continue
+        }
+        if (!in_quote && ch == "#") break
+        if (in_quote) output = output " "
+        else output = output ch
+      }
+      return output
+    }
+    function token_delta(text, count, tokens, i, total) {
+      total = 0
+      count = split(text, tokens, /[[:space:]]+/)
+      for (i = 1; i <= count; i++) {
+        if (tokens[i] == "{") total++
+        else if (tokens[i] == "}") total--
+      }
+      return total
     }
     function flush_block() {
       if (target_site) printf "%s", evidence
@@ -101,22 +210,21 @@ extract_nginx_routes() {
       target_site = 0
     }
     {
-      syntax = $0
-      sub(/^[[:space:]]*#.*/, "", syntax)
-      sub(/[[:space:]]+#.*$/, "", syntax)
-      if (syntax ~ /^[[:space:]]*$/) next
+      syntax = strip_comments($0)
+      structure = structural_line($0)
+      if (structure ~ /^[[:space:]]*$/) next
 
-      if (!in_server && syntax ~ /^[[:space:]]*server[[:space:]]*\{/) {
+      if (!in_server && structure ~ /^[[:space:]]*server[[:space:]]*\{/) {
         in_server = 1
-        depth = delta(syntax)
+        depth = token_delta(structure)
         evidence = NR ":" syntax "\n"
         target_site = 0
         next
       }
 
       if (in_server) {
-        if (syntax ~ /^[[:space:]]*server_name[[:space:]]+/) {
-          names = syntax
+        if (structure ~ /^[[:space:]]*server_name[[:space:]]+/) {
+          names = structure
           sub(/^[[:space:]]*server_name[[:space:]]+/, "", names)
           sub(/;[[:space:]]*$/, "", names)
           name_count = split(names, server_names, /[[:space:]]+/)
@@ -126,10 +234,10 @@ extract_nginx_routes() {
             }
           }
         }
-        if (syntax ~ /^[[:space:]]*(server_name|proxy_pass)[[:space:]]+/) {
+        if (structure ~ /^[[:space:]]*(server_name|proxy_pass)[[:space:]]+/) {
           evidence = evidence NR ":" syntax "\n"
         }
-        depth += delta(syntax)
+        depth += token_delta(structure)
         if (depth <= 0) {
           flush_block()
           in_server = 0
@@ -509,6 +617,8 @@ if command -v curl >/dev/null 2>&1; then
     set +e
     probe_result="$(
       curl --silent --location --max-time 15 \
+        --proto '=https' \
+        --proto-redir '=https' \
         --output /dev/null \
         --write-out $'%{http_code}\n%{remote_ip}\n%{url_effective}' \
         "$url" 2>/dev/null
