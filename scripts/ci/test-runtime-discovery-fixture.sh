@@ -16,15 +16,16 @@ touch "$site_root/compose.production.yaml" "$prior_release/compose.yaml" "$prior
 ln -s "$prior_release" "$site_root/current"
 
 cat > "$site_root/Caddyfile" <<'CADDY'
-codestra.co, www.codestra.co {
+# codestra.co { COMMENTED_SITE_SHOULD_NOT_APPEAR
+auth.codestra.co {
+    reverse_proxy HTTPS://comment-user:comment-secret@keycloak:8080
+}
+
+codestra.co, www.codestra.co { # production site
     basic_auth {
         admin $2a$12$THIS_MUST_NEVER_APPEAR
     }
     reverse_proxy HTTPS://operator:super-secret@frontend:8080
-}
-
-auth.codestra.co {
-    reverse_proxy keycloak:8080
 }
 CADDY
 
@@ -94,6 +95,11 @@ case "$command_name" in
           'codestra-caddy-1' \
           'codestra-web-1'
         ;;
+      mixed)
+        printf '%s\n' \
+          'codestra-prod-frontend-1' \
+          'codestra-caddy-1'
+        ;;
       *)
         printf '%s\n' \
           'codestra-prod-frontend-stale' \
@@ -127,7 +133,11 @@ case "$command_name" in
         config_files="$MOCK_ROOT/site/compose.production.yaml"
         image='codestra-frontend:server-c-web-integration-20260816'
         image_id='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
-        networks=$'codestra-prod_default\ncodestra-edge\n'
+        if [[ "$mode" == 'mixed' ]]; then
+          networks=$'codestra-prod_default\nedge\n'
+        else
+          networks=$'codestra-prod_default\ncodestra-edge\n'
+        fi
         ;;
       codestra-prod-web-1)
         project='codestra-prod'
@@ -225,6 +235,17 @@ MOCK
 
 chmod 0755 "$mock_bin/hostname" "$mock_bin/ip" "$mock_bin/ss" "$mock_bin/curl" "$mock_bin/docker"
 
+assert_scoped_caddy_output() {
+  local report="$1"
+  grep -F 'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY' "$report"
+  grep -F 'reverse_proxy HTTPS://REDACTED@frontend:8080' "$report"
+  if grep -Eq 'COMMENTED_SITE_SHOULD_NOT_APPEAR|THIS_MUST_NEVER_APPEAR|super-secret|comment-secret|comment-user|basic_auth|auth\.codestra\.co|keycloak:8080' "$report"; then
+    echo 'Fixture exposed excluded or sensitive Caddy evidence.' >&2
+    cat "$report" >&2
+    exit 1
+  fi
+}
+
 run_case() {
   local mode="$1"
   local expected_frontend="$2"
@@ -244,8 +265,7 @@ run_case() {
   grep -Fx "PROXY_CONTAINER=$expected_proxy" "$report"
   grep -Fx "PROXY_PROJECT=$expected_project" "$report"
   grep -Fx "FRONTEND_PROXY_SHARED_NETWORKS=$expected_networks" "$report"
-  grep -F 'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY' "$report"
-  grep -F 'reverse_proxy HTTPS://REDACTED@frontend:8080' "$report"
+  assert_scoped_caddy_output "$report"
   grep -Fx 'DISCOVERY_FATAL_FAILURE_COUNT=0' "$report"
   grep -Fx 'DISCOVERY_STATUS=PASS' "$report"
   grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
@@ -255,11 +275,36 @@ run_case() {
     grep -F 'CANDIDATE_SKIPPED_NOT_RUNNING=codestra-prod-caddy-stopped|PROJECT=codestra-prod|SERVICE=caddy|STATE=exited' "$report"
   fi
 
-  if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|FRONTEND_CONTAINER=.*(stale|stopped)|PROXY_CONTAINER=.*(stale|stopped)' "$report"; then
-    echo "Fixture $mode exposed excluded evidence or selected an invalid container." >&2
+  if grep -Eq 'FRONTEND_CONTAINER=.*(stale|stopped)|PROXY_CONTAINER=.*(stale|stopped)' "$report"; then
+    echo "Fixture $mode selected an invalid container." >&2
     cat "$report" >&2
     exit 1
   fi
+}
+
+run_mixed_project_failure() {
+  local report="$fixture_root/runtime-discovery-mixed.txt"
+  set +e
+  PATH="$mock_bin:$PATH" MOCK_ROOT="$fixture_root" MOCK_TOPOLOGY='mixed' \
+    bash "$repository_root/scripts/deploy/read-only-runtime-discovery.sh" > "$report"
+  local rc=$?
+  set -e
+
+  [[ "$rc" -eq 10 ]] || {
+    echo "Mixed-project fixture returned unexpected code: $rc" >&2
+    cat "$report" >&2
+    exit 1
+  }
+
+  grep -Fx 'FRONTEND_PROJECT=codestra-prod' "$report"
+  grep -Fx 'PROXY_PROJECT=codestra' "$report"
+  grep -Fx 'FRONTEND_PROXY_PROJECT_MISMATCH=FRONTEND:codestra-prod|PROXY:codestra' "$report"
+  grep -Fx 'DISCOVERY_FAILURE=FRONTEND_PROXY_PROJECT_MISMATCH' "$report"
+  grep -Fx 'FRONTEND_PROXY_SHARED_NETWORKS=edge' "$report"
+  assert_scoped_caddy_output "$report"
+  grep -Fx 'DISCOVERY_FATAL_FAILURE_COUNT=1' "$report"
+  grep -Fx 'DISCOVERY_STATUS=FAIL' "$report"
+  grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
 }
 
 run_case \
@@ -293,5 +338,7 @@ run_case \
   web \
   codestra-caddy-1 \
   codestra_default,edge
+
+run_mixed_project_failure
 
 printf 'Runtime discovery fixtures passed.\n'
