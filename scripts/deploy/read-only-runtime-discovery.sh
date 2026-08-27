@@ -72,7 +72,9 @@ if [[ "$fatal_failures" -eq 0 ]]; then
 fi
 
 frontend_container=""
+frontend_project=""
 proxy_container=""
+proxy_project=""
 site_working_dir=""
 site_config_files=""
 frontend_networks=""
@@ -101,41 +103,69 @@ if [[ -n "$containers" ]]; then
       printf 'CONTAINER=%s|%s\n' "$container" "$summary" | safe_line
     fi
 
-    if [[ -z "$frontend_container" && ( "$service" == "frontend" || "$container" == codestra-prod-frontend-* ) ]]; then
-      frontend_container="$container"
-      site_working_dir="$(sed -n 's/.*|working_dir=\([^|]*\).*/\1/p' <<< "$summary")"
-      site_config_files="$(sed -n 's/.*|config_files=\([^|]*\).*/\1/p' <<< "$summary")"
-      frontend_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}} {{end}}' 2>/dev/null || true)"
-      echo "FRONTEND_CONTAINER=$frontend_container"
-      echo "FRONTEND_PROJECT=$project"
-      echo "FRONTEND_SERVICE=$service"
-      echo "FRONTEND_WORKING_DIR=$site_working_dir"
-      echo "FRONTEND_CONFIG_FILES=$site_config_files"
-      echo "FRONTEND_NETWORKS=$(xargs <<< "$frontend_networks" || true)"
-      docker inspect "$container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}FRONTEND_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
+    select_frontend=0
+    if [[ "$container" == codestra-prod-frontend-* ]]; then
+      select_frontend=1
+    elif [[ -z "$frontend_container" && "$project" == "codestra-prod" && "$service" == "frontend" ]]; then
+      select_frontend=1
     fi
 
-    if [[ -z "$proxy_container" && ( "$service" == "caddy" || "$service" == "nginx" || "$container" == codestra-prod-caddy-* ) ]]; then
+    if [[ "$select_frontend" -eq 1 ]]; then
+      frontend_container="$container"
+      frontend_project="$project"
+      site_working_dir="$(sed -n 's/.*|working_dir=\([^|]*\).*/\1/p' <<< "$summary")"
+      site_config_files="$(sed -n 's/.*|config_files=\([^|]*\).*/\1/p' <<< "$summary")"
+      frontend_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{println}}{{end}}' 2>/dev/null || true)"
+    fi
+
+    select_proxy=0
+    if [[ "$container" == codestra-prod-caddy-* || "$container" == codestra-prod-nginx-* ]]; then
+      select_proxy=1
+    elif [[ -z "$proxy_container" && "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) ]]; then
+      select_proxy=1
+    fi
+
+    if [[ "$select_proxy" -eq 1 ]]; then
       proxy_container="$container"
-      proxy_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}} {{end}}' 2>/dev/null || true)"
-      echo "PROXY_CONTAINER=$proxy_container"
-      echo "PROXY_PROJECT=$project"
-      echo "PROXY_SERVICE=$service"
-      echo "PROXY_NETWORKS=$(xargs <<< "$proxy_networks" || true)"
-      docker inspect "$container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}PROXY_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
+      proxy_project="$project"
+      proxy_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{println}}{{end}}' 2>/dev/null || true)"
     fi
   done <<< "$containers"
 fi
 
+if [[ -n "$frontend_container" ]]; then
+  echo "FRONTEND_CONTAINER=$frontend_container"
+  echo "FRONTEND_PROJECT=$frontend_project"
+  echo "FRONTEND_SERVICE=$(docker inspect "$frontend_container" --format '{{index .Config.Labels "com.docker.compose.service"}}' 2>/dev/null || true)"
+  echo "FRONTEND_WORKING_DIR=$site_working_dir"
+  echo "FRONTEND_CONFIG_FILES=$site_config_files"
+  echo "FRONTEND_NETWORKS=$(sed '/^$/d' <<< "$frontend_networks" | paste -sd, -)"
+  docker inspect "$frontend_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}FRONTEND_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
+else
+  echo "FRONTEND_CONTAINER=NOT_IDENTIFIED"
+fi
+
+if [[ -n "$proxy_container" ]]; then
+  echo "PROXY_CONTAINER=$proxy_container"
+  echo "PROXY_PROJECT=$proxy_project"
+  echo "PROXY_SERVICE=$(docker inspect "$proxy_container" --format '{{index .Config.Labels "com.docker.compose.service"}}' 2>/dev/null || true)"
+  echo "PROXY_NETWORKS=$(sed '/^$/d' <<< "$proxy_networks" | paste -sd, -)"
+  docker inspect "$proxy_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}PROXY_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
+else
+  echo "PROXY_CONTAINER=NOT_IDENTIFIED"
+fi
+
 if [[ -n "$frontend_container" && -n "$proxy_container" ]]; then
   shared_networks=""
-  for network in $frontend_networks; do
-    if grep -Eq "(^|[[:space:]])${network}([[:space:]]|$)" <<< "$proxy_networks"; then
-      shared_networks+="${network} "
+  while IFS= read -r network; do
+    [[ -n "$network" ]] || continue
+    if grep -Fxq "$network" <<< "$proxy_networks"; then
+      shared_networks+="${network}"$'\n'
     fi
-  done
+  done <<< "$frontend_networks"
+
   if [[ -n "$shared_networks" ]]; then
-    echo "FRONTEND_PROXY_SHARED_NETWORKS=$(xargs <<< "$shared_networks")"
+    echo "FRONTEND_PROXY_SHARED_NETWORKS=$(sed '/^$/d' <<< "$shared_networks" | paste -sd, -)"
   else
     echo "FRONTEND_PROXY_SHARED_NETWORKS=NONE"
   fi
