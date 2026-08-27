@@ -115,8 +115,16 @@ extract_nginx_routes() {
       }
 
       if (in_server) {
-        if (syntax ~ /^[[:space:]]*server_name[[:space:]]+.*((www\.)?codestra\.co)([[:space:];]|$)/) {
-          target_site = 1
+        if (syntax ~ /^[[:space:]]*server_name[[:space:]]+/) {
+          names = syntax
+          sub(/^[[:space:]]*server_name[[:space:]]+/, "", names)
+          sub(/;[[:space:]]*$/, "", names)
+          name_count = split(names, server_names, /[[:space:]]+/)
+          for (name_index = 1; name_index <= name_count; name_index++) {
+            if (server_names[name_index] == "codestra.co" || server_names[name_index] == "www.codestra.co") {
+              target_site = 1
+            }
+          }
         }
         if (syntax ~ /^[[:space:]]*(server_name|proxy_pass)[[:space:]]+/) {
           evidence = evidence NR ":" syntax "\n"
