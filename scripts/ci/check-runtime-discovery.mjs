@@ -13,6 +13,8 @@ const requireText = (source, marker, location) => {
 }
 
 for (const marker of [
+  '--test-config-root',
+  'TEST_CONFIG_ROOT_REQUIRES_CI',
   'DISCOVERY_MODE=READ_ONLY',
   'PREFLIGHT_REMOTE_WRITE_COUNT=0',
   'DISCOVERY_STATUS=PASS',
@@ -30,14 +32,28 @@ for (const marker of [
   '"$project" == "codestra" && "$service" == "frontend"',
   '"$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" )',
   '"$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" )',
+  'FRONTEND_BINDING=',
+  'FRONTEND_LOOPBACK_PORTS=',
+  'PROXY_KIND=CONTAINER',
+  'PROXY_KIND=HOST',
+  'pgrep -x caddy',
+  'pgrep -x nginx',
+  'extract_caddy_routes',
+  'extract_nginx_routes',
+  'FRONTEND_PROXY_LINK=HOST_LOOPBACK',
+  'HOST_PROXY_LOOPBACK_ROUTE=PASS',
+  'mark_fatal HOST_PROXY_LOOPBACK_BINDING_NOT_IDENTIFIED',
+  'mark_fatal HOST_PROXY_LOOPBACK_ROUTE_NOT_VERIFIED',
   'FRONTEND_PROXY_PROJECT_MISMATCH=',
   'mark_fatal FRONTEND_PROXY_PROJECT_MISMATCH',
   'FRONTEND_PROXY_SHARED_NETWORKS',
   'mark_fatal FRONTEND_CONTAINER_NOT_IDENTIFIED',
-  'mark_fatal PROXY_CONTAINER_NOT_IDENTIFIED',
   'mark_fatal SHARED_DOCKER_NETWORK_NOT_IDENTIFIED',
-  'CADDY_CONFIG_SOURCE',
+  'PROXY_ROUTE_CONFIG_SOURCE=',
+  'mark_fatal PROXY_NOT_IDENTIFIED',
+  'mark_fatal PROXY_ROUTE_NOT_IDENTIFIED',
   'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY',
+  'NGINX_ROUTE_SCOPE=SERVER_NAME_PROXY_PASS_ONLY',
   'syntax = $0',
   'sub(/^[[:space:]]*#.*/, "", syntax)',
   'sub(/[[:space:]]+#.*$/, "", syntax)',
@@ -66,6 +82,7 @@ const forbiddenRemotePatterns = [
   [/\bdocker\s+(?:pull|login|logout|restart|start|stop|kill|rm|rmi|network\s+(?:create|rm)|volume\s+(?:create|rm))\b/, 'state-changing docker command'],
   [/\bdocker\s+compose\s+(?:up|down|start|stop|restart|pull|build|create|rm)\b/, 'state-changing docker compose command'],
   [/\bcaddy\s+(?:reload|start|stop)\b/, 'state-changing caddy command'],
+  [/\bnginx\s+-s\b/, 'state-changing nginx command'],
 ]
 
 for (const [pattern, label] of forbiddenRemotePatterns) {
@@ -87,6 +104,7 @@ for (const forbidden of [
   'RESULT=$result',
   'PUBLIC_PROBE=$url',
   '--show-error',
+  'CODESTRA_DISCOVERY_CONFIG_ROOT',
 ]) {
   if (script.includes(forbidden)) {
     failures.push(`${scriptPath}: contains unsafe evidence marker: ${forbidden}`)
