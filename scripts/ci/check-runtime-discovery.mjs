@@ -24,6 +24,9 @@ for (const marker of [
   'com.docker.compose.project.config_files',
   'FRONTEND_PROXY_SHARED_NETWORKS',
   'CADDY_CONFIG_SOURCE',
+  'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY',
+  'safe_line',
+  "s#(https?://)[^/@[:space:]]+@#\\1REDACTED@#g",
   'PUBLIC_PROBE=',
 ]) {
   requireText(script, marker, scriptPath)
@@ -41,6 +44,18 @@ const forbiddenRemotePatterns = [
 for (const [pattern, label] of forbiddenRemotePatterns) {
   if (pattern.test(script)) {
     failures.push(`${scriptPath}: contains forbidden ${label}`)
+  }
+}
+
+for (const forbidden of [
+  '-B 4 -A 24',
+  'basicauth',
+  'basic_auth',
+  '.Config.Env',
+  'docker inspect --format {{json .Config}}',
+]) {
+  if (script.includes(forbidden)) {
+    failures.push(`${scriptPath}: contains unsafe evidence marker: ${forbidden}`)
   }
 }
 
