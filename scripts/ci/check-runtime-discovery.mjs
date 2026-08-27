@@ -22,6 +22,8 @@ for (const marker of [
   'docker inspect',
   'com.docker.compose.project.working_dir',
   'com.docker.compose.project.config_files',
+  'state="$(sed -n',
+  'CANDIDATE_SKIPPED_NOT_RUNNING=',
   '"$project" == "codestra-prod" && "$service" == "frontend"',
   '"$project" == "codestra-prod" && "$service" == "web"',
   '"$project" == "codestra" && "$service" == "web"',
@@ -39,6 +41,13 @@ for (const marker of [
   'PUBLIC_PROBE=',
 ]) {
   requireText(script, marker, scriptPath)
+}
+
+const runningStateGuards = script.match(/&& "\$state" == "running"/g) ?? []
+if (runningStateGuards.length < 6) {
+  failures.push(
+    `${scriptPath}: every frontend and proxy candidate must require state=running; found ${runningStateGuards.length} guard(s)`,
+  )
 }
 
 const forbiddenRemotePatterns = [
