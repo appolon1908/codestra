@@ -34,6 +34,13 @@ Manifests:
   Platform:  linux/arm64
 EOF
     ;;
+  no_platform)
+    cat <<EOF
+Name:      ${reference}
+MediaType: application/vnd.oci.image.manifest.v1+json
+Digest:    sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+EOF
+    ;;
   not_found)
     printf 'manifest unknown: not found\n' >&2
     exit 1
@@ -105,6 +112,23 @@ grep -Fx \
 grep -Fx \
   'supported_platforms=linux/amd64,linux/arm64' \
   "$fixture_root/success/output.txt"
+
+run_case \
+  no_platform \
+  ghcr.io/appolon1908-hue/codestra:single-platform \
+  PASS \
+  PASS \
+  0
+
+grep -Fx \
+  'resolved_digest=sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' \
+  "$fixture_root/no_platform/output.txt"
+grep -Fx \
+  'manifest_media_type=application/vnd.oci.image.manifest.v1+json' \
+  "$fixture_root/no_platform/output.txt"
+grep -Fx \
+  'supported_platforms=UNAVAILABLE' \
+  "$fixture_root/no_platform/output.txt"
 
 run_case \
   not_found \
