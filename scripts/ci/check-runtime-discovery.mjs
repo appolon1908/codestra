@@ -41,9 +41,13 @@ for (const marker of [
   'syntax = $0',
   'sub(/^[[:space:]]*#.*/, "", syntax)',
   'sub(/[[:space:]]+#.*$/, "", syntax)',
+  'sanitize_effective_origin',
+  'mapfile -t probe_fields',
+  'PUBLIC_PROBE_REQUEST=',
+  'EFFECTIVE_ORIGIN=',
+  '2>/dev/null',
   'safe_line',
   "s#(https?://)[^/@[:space:]]+@#\\1REDACTED@#Ig",
-  'PUBLIC_PROBE=',
 ]) {
   requireText(script, marker, scriptPath)
 }
@@ -80,6 +84,9 @@ for (const forbidden of [
   '"$container" == codestra-web-*',
   '"$container" == codestra-prod-caddy-*',
   '"$container" == codestra-caddy-*',
+  'RESULT=$result',
+  'PUBLIC_PROBE=$url',
+  '--show-error',
 ]) {
   if (script.includes(forbidden)) {
     failures.push(`${scriptPath}: contains unsafe evidence marker: ${forbidden}`)
