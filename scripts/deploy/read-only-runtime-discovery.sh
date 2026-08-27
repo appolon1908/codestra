@@ -12,7 +12,7 @@ mark_fatal() {
 safe_line() {
   sed -E \
     -e 's/((authorization|password|passwd|secret|token|api[_-]?key|credential)[^[:space:]]*)[[:space:]]+[^[:space:]]+/\1 REDACTED/Ig' \
-    -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#g' \
+    -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#Ig' \
     -e 's#([^|[:space:]]*(secret|token|password|credential|private)[^|[:space:]]*)#REDACTED_PATH#Ig'
 }
 
@@ -55,6 +55,7 @@ else
     echo "DOCKER_COMPOSE=$compose_version"
   else
     echo "DOCKER_COMPOSE=UNAVAILABLE"
+    mark_fatal DOCKER_COMPOSE_UNAVAILABLE
   fi
 fi
 
@@ -68,13 +69,16 @@ if [[ "$fatal_failures" -eq 0 ]]; then
     mark_fatal CONTAINER_INVENTORY_FAILED
   elif [[ -z "$containers" ]]; then
     echo "CONTAINER_INVENTORY=EMPTY"
+    mark_fatal CONTAINER_INVENTORY_EMPTY
   fi
 fi
 
 frontend_container=""
 frontend_project=""
+frontend_priority=0
 proxy_container=""
 proxy_project=""
+proxy_priority=0
 site_working_dir=""
 site_config_files=""
 frontend_networks=""
@@ -103,14 +107,15 @@ if [[ -n "$containers" ]]; then
       printf 'CONTAINER=%s|%s\n' "$container" "$summary" | safe_line
     fi
 
-    select_frontend=0
-    if [[ "$container" == codestra-prod-frontend-* ]]; then
-      select_frontend=1
-    elif [[ -z "$frontend_container" && "$project" == "codestra-prod" && "$service" == "frontend" ]]; then
-      select_frontend=1
+    candidate_frontend_priority=0
+    if [[ "$container" == codestra-prod-frontend-* || ( "$project" == "codestra-prod" && "$service" == "frontend" ) ]]; then
+      candidate_frontend_priority=30
+    elif [[ "$container" == codestra-web-* || ( "$project" == "codestra" && "$service" == "web" ) ]]; then
+      candidate_frontend_priority=20
     fi
 
-    if [[ "$select_frontend" -eq 1 ]]; then
+    if [[ "$candidate_frontend_priority" -gt "$frontend_priority" ]]; then
+      frontend_priority="$candidate_frontend_priority"
       frontend_container="$container"
       frontend_project="$project"
       site_working_dir="$(sed -n 's/.*|working_dir=\([^|]*\).*/\1/p' <<< "$summary")"
@@ -118,14 +123,15 @@ if [[ -n "$containers" ]]; then
       frontend_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{println}}{{end}}' 2>/dev/null || true)"
     fi
 
-    select_proxy=0
-    if [[ "$container" == codestra-prod-caddy-* || "$container" == codestra-prod-nginx-* ]]; then
-      select_proxy=1
-    elif [[ -z "$proxy_container" && "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) ]]; then
-      select_proxy=1
+    candidate_proxy_priority=0
+    if [[ "$container" == codestra-prod-caddy-* || "$container" == codestra-prod-nginx-* || ( "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) ) ]]; then
+      candidate_proxy_priority=30
+    elif [[ "$container" == codestra-caddy-* || "$container" == codestra-nginx-* || ( "$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" ) ) ]]; then
+      candidate_proxy_priority=20
     fi
 
-    if [[ "$select_proxy" -eq 1 ]]; then
+    if [[ "$candidate_proxy_priority" -gt "$proxy_priority" ]]; then
+      proxy_priority="$candidate_proxy_priority"
       proxy_container="$container"
       proxy_project="$project"
       proxy_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{println}}{{end}}' 2>/dev/null || true)"
@@ -143,6 +149,7 @@ if [[ -n "$frontend_container" ]]; then
   docker inspect "$frontend_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}FRONTEND_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
 else
   echo "FRONTEND_CONTAINER=NOT_IDENTIFIED"
+  mark_fatal FRONTEND_CONTAINER_NOT_IDENTIFIED
 fi
 
 if [[ -n "$proxy_container" ]]; then
@@ -153,6 +160,7 @@ if [[ -n "$proxy_container" ]]; then
   docker inspect "$proxy_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}PROXY_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
 else
   echo "PROXY_CONTAINER=NOT_IDENTIFIED"
+  mark_fatal PROXY_CONTAINER_NOT_IDENTIFIED
 fi
 
 if [[ -n "$frontend_container" && -n "$proxy_container" ]]; then
@@ -168,6 +176,7 @@ if [[ -n "$frontend_container" && -n "$proxy_container" ]]; then
     echo "FRONTEND_PROXY_SHARED_NETWORKS=$(sed '/^$/d' <<< "$shared_networks" | paste -sd, -)"
   else
     echo "FRONTEND_PROXY_SHARED_NETWORKS=NONE"
+    mark_fatal SHARED_DOCKER_NETWORK_NOT_IDENTIFIED
   fi
 else
   echo "SITE_CONTAINER_PAIR=INCOMPLETE"
