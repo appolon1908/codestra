@@ -51,8 +51,14 @@ fi
 resolved_digest="$(awk '/^Digest:[[:space:]]*/ {print $2; exit}' "$inspect_stdout")"
 manifest_media_type="$(awk '/^MediaType:[[:space:]]*/ {print $2; exit}' "$inspect_stdout")"
 supported_platforms="$(
-  awk '/^[[:space:]]*Platform:[[:space:]]*/ {print $2}' "$inspect_stdout" |
-    grep -E '^[A-Za-z0-9_.+-]+/[A-Za-z0-9_.+-]+([/][A-Za-z0-9_.+-]+)?$' |
+  awk '
+    /^[[:space:]]*Platform:[[:space:]]*/ {
+      platform = $2
+      if (platform ~ /^[A-Za-z0-9_.+-]+\/[A-Za-z0-9_.+-]+(\/[A-Za-z0-9_.+-]+)?$/) {
+        print platform
+      }
+    }
+  ' "$inspect_stdout" |
     sort -u |
     paste -sd, -
 )"
