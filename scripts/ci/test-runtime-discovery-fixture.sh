@@ -17,15 +17,20 @@ ln -s "$prior_release" "$site_root/current"
 
 cat > "$site_root/Caddyfile" <<'CADDY'
 # codestra.co { COMMENTED_SITE_SHOULD_NOT_APPEAR
-auth.codestra.co {
-    reverse_proxy HTTPS://comment-user:comment-secret@keycloak:8080
-}
-
 codestra.co, www.codestra.co { # production site
     basic_auth {
         admin $2a$12$THIS_MUST_NEVER_APPEAR
     }
+    header X-Literal "{"
     reverse_proxy HTTPS://operator:super-secret@frontend:8080
+}
+
+auth.codestra.co {
+    reverse_proxy HTTPS://comment-user:comment-secret@keycloak:8080
+}
+
+after.example {
+    reverse_proxy HTTPS://after-user:after-secret@after-backend:8080
 }
 CADDY
 
@@ -52,7 +57,27 @@ MOCK
 
 cat > "$mock_bin/curl" <<'MOCK'
 #!/usr/bin/env bash
-printf '200\n49.12.145.107\nHTTPS://probe-user:probe-secret@codestra.co/en/?token=probe-token#probe-fragment'
+set -Eeuo pipefail
+proto=''
+proto_redir=''
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --proto)
+      proto="${2:-}"
+      shift 2
+      ;;
+    --proto-redir)
+      proto_redir="${2:-}"
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+[[ "$proto" == '=https' ]] || exit 91
+[[ "$proto_redir" == '=https' ]] || exit 92
+printf '200\n49.12.145.107\nFTPS://probe-user:probe-secret@codestra.co/private/?token=probe-token#probe-fragment'
 MOCK
 
 cat > "$mock_bin/docker" <<'MOCK'
@@ -238,7 +263,7 @@ assert_scoped_caddy_output() {
   local report="$1"
   grep -F 'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY' "$report"
   grep -F 'reverse_proxy HTTPS://REDACTED@frontend:8080' "$report"
-  if grep -Eq 'COMMENTED_SITE_SHOULD_NOT_APPEAR|THIS_MUST_NEVER_APPEAR|super-secret|comment-secret|comment-user|basic_auth|auth\.codestra\.co|keycloak:8080' "$report"; then
+  if grep -Eq 'COMMENTED_SITE_SHOULD_NOT_APPEAR|THIS_MUST_NEVER_APPEAR|super-secret|comment-secret|comment-user|after-secret|after-user|basic_auth|auth\.codestra\.co|keycloak:8080|after-backend:8080|header X-Literal' "$report"; then
     echo 'Fixture exposed excluded or sensitive Caddy evidence.' >&2
     cat "$report" >&2
     exit 1
@@ -247,8 +272,8 @@ assert_scoped_caddy_output() {
 
 assert_public_probe_redaction() {
   local report="$1"
-  grep -Fx 'PUBLIC_PROBE_REQUEST=https://codestra.co/en/|RC=0|HTTP=200|REMOTE_IP=49.12.145.107|EFFECTIVE_ORIGIN=HTTPS://REDACTED@codestra.co' "$report"
-  grep -Fx 'PUBLIC_PROBE_REQUEST=https://www.codestra.co/en/|RC=0|HTTP=200|REMOTE_IP=49.12.145.107|EFFECTIVE_ORIGIN=HTTPS://REDACTED@codestra.co' "$report"
+  grep -Fx 'PUBLIC_PROBE_REQUEST=https://codestra.co/en/|RC=0|HTTP=200|REMOTE_IP=49.12.145.107|EFFECTIVE_ORIGIN=FTPS://REDACTED@codestra.co' "$report"
+  grep -Fx 'PUBLIC_PROBE_REQUEST=https://www.codestra.co/en/|RC=0|HTTP=200|REMOTE_IP=49.12.145.107|EFFECTIVE_ORIGIN=FTPS://REDACTED@codestra.co' "$report"
   if grep -Eq 'probe-user|probe-secret|probe-token|probe-fragment|\?token=|#probe-' "$report"; then
     echo 'Fixture exposed sensitive public redirect evidence.' >&2
     cat "$report" >&2
