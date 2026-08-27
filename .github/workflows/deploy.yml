@@ -262,7 +262,7 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh-keygen -F "$DEPLOY_HOST" -f ~/.ssh/known_hosts >/dev/null
 
-      - name: Repeat read-only runtime preflight
+      - name: Repeat strict read-only runtime preflight
         env:
           RELEASE_ROOT: ${{ needs.gate.outputs.release_root }}
           RELEASES_DIR: ${{ needs.gate.outputs.releases_dir }}
@@ -287,14 +287,15 @@ jobs:
             -o ConnectTimeout=10
           )
           printf -v remote_command \
-            'bash -s -- %q %q %q %q %q %q %q' \
+            'bash -s -- %q %q %q %q %q %q %q %q' \
             "$RELEASE_ROOT" \
             "$RELEASES_DIR" \
             "$CURRENT_SYMLINK" \
             "$COMPOSE_PROJECT" \
             "$SERVICE_NAME" \
             "$LOOPBACK_PORT" \
-            "$REVERSE_PROXY"
+            "$REVERSE_PROXY" \
+            "activation"
 
           ssh "${ssh_options[@]}" \
             "${DEPLOY_USER}@${DEPLOY_HOST}" \
@@ -302,6 +303,7 @@ jobs:
             < scripts/deploy/read-only-preflight.sh \
             | tee activation-preflight.txt
 
+          grep -Fx 'PREFLIGHT_READINESS=PASS' activation-preflight.txt
           grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' activation-preflight.txt
 
       - name: Stage versioned activation files
