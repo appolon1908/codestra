@@ -102,19 +102,24 @@ if [[ -n "$containers" ]]; then
 
     project="$(sed -n 's/^project=\([^|]*\).*/\1/p' <<< "$summary")"
     service="$(sed -n 's/.*|service=\([^|]*\).*/\1/p' <<< "$summary")"
+    state="$(sed -n 's/.*|state=\([^|]*\).*/\1/p' <<< "$summary")"
 
     if [[ "$container" == codestra-* || "$project" == codestra* ]]; then
       printf 'CONTAINER=%s|%s\n' "$container" "$summary" | safe_line
     fi
 
+    if [[ ( "$project" == "codestra-prod" || "$project" == "codestra" ) && "$state" != "running" ]]; then
+      echo "CANDIDATE_SKIPPED_NOT_RUNNING=$container|PROJECT=$project|SERVICE=$service|STATE=$state"
+    fi
+
     candidate_frontend_priority=0
-    if [[ "$project" == "codestra-prod" && "$service" == "frontend" ]]; then
+    if [[ "$project" == "codestra-prod" && "$service" == "frontend" && "$state" == "running" ]]; then
       candidate_frontend_priority=40
-    elif [[ "$project" == "codestra-prod" && "$service" == "web" ]]; then
+    elif [[ "$project" == "codestra-prod" && "$service" == "web" && "$state" == "running" ]]; then
       candidate_frontend_priority=35
-    elif [[ "$project" == "codestra" && "$service" == "web" ]]; then
+    elif [[ "$project" == "codestra" && "$service" == "web" && "$state" == "running" ]]; then
       candidate_frontend_priority=30
-    elif [[ "$project" == "codestra" && "$service" == "frontend" ]]; then
+    elif [[ "$project" == "codestra" && "$service" == "frontend" && "$state" == "running" ]]; then
       candidate_frontend_priority=25
     fi
 
@@ -128,9 +133,9 @@ if [[ -n "$containers" ]]; then
     fi
 
     candidate_proxy_priority=0
-    if [[ "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) ]]; then
+    if [[ "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) && "$state" == "running" ]]; then
       candidate_proxy_priority=40
-    elif [[ "$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" ) ]]; then
+    elif [[ "$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" ) && "$state" == "running" ]]; then
       candidate_proxy_priority=30
     fi
 
