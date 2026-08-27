@@ -108,10 +108,14 @@ if [[ -n "$containers" ]]; then
     fi
 
     candidate_frontend_priority=0
-    if [[ "$container" == codestra-prod-frontend-* || ( "$project" == "codestra-prod" && "$service" == "frontend" ) ]]; then
+    if [[ "$project" == "codestra-prod" && "$service" == "frontend" ]]; then
+      candidate_frontend_priority=40
+    elif [[ "$project" == "codestra-prod" && "$service" == "web" ]]; then
+      candidate_frontend_priority=35
+    elif [[ "$project" == "codestra" && "$service" == "web" ]]; then
       candidate_frontend_priority=30
-    elif [[ "$container" == codestra-web-* || ( "$project" == "codestra" && "$service" == "web" ) ]]; then
-      candidate_frontend_priority=20
+    elif [[ "$project" == "codestra" && "$service" == "frontend" ]]; then
+      candidate_frontend_priority=25
     fi
 
     if [[ "$candidate_frontend_priority" -gt "$frontend_priority" ]]; then
@@ -124,10 +128,10 @@ if [[ -n "$containers" ]]; then
     fi
 
     candidate_proxy_priority=0
-    if [[ "$container" == codestra-prod-caddy-* || "$container" == codestra-prod-nginx-* || ( "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) ) ]]; then
+    if [[ "$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" ) ]]; then
+      candidate_proxy_priority=40
+    elif [[ "$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" ) ]]; then
       candidate_proxy_priority=30
-    elif [[ "$container" == codestra-caddy-* || "$container" == codestra-nginx-* || ( "$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" ) ) ]]; then
-      candidate_proxy_priority=20
     fi
 
     if [[ "$candidate_proxy_priority" -gt "$proxy_priority" ]]; then
