@@ -22,10 +22,12 @@ for (const marker of [
   'docker inspect',
   'com.docker.compose.project.working_dir',
   'com.docker.compose.project.config_files',
-  'codestra-prod-frontend-*',
-  'codestra-web-*',
-  '"$service" == "frontend"',
-  '"$service" == "web"',
+  '"$project" == "codestra-prod" && "$service" == "frontend"',
+  '"$project" == "codestra-prod" && "$service" == "web"',
+  '"$project" == "codestra" && "$service" == "web"',
+  '"$project" == "codestra" && "$service" == "frontend"',
+  '"$project" == "codestra-prod" && ( "$service" == "caddy" || "$service" == "nginx" )',
+  '"$project" == "codestra" && ( "$service" == "caddy" || "$service" == "nginx" )',
   'FRONTEND_PROXY_SHARED_NETWORKS',
   'mark_fatal FRONTEND_CONTAINER_NOT_IDENTIFIED',
   'mark_fatal PROXY_CONTAINER_NOT_IDENTIFIED',
@@ -60,6 +62,10 @@ for (const forbidden of [
   'basic_auth',
   '.Config.Env',
   'docker inspect --format {{json .Config}}',
+  '"$container" == codestra-prod-frontend-*',
+  '"$container" == codestra-web-*',
+  '"$container" == codestra-prod-caddy-*',
+  '"$container" == codestra-caddy-*',
 ]) {
   if (script.includes(forbidden)) {
     failures.push(`${scriptPath}: contains unsafe evidence marker: ${forbidden}`)
