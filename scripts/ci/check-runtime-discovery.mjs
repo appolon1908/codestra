@@ -40,6 +40,9 @@ for (const marker of [
   'pgrep -x nginx',
   'extract_caddy_routes',
   'extract_nginx_routes',
+  'strip_comments',
+  'structural_line',
+  'token_delta',
   'server_names[name_index] == "codestra.co"',
   'server_names[name_index] == "www.codestra.co"',
   'nginx_candidate_routes="$(extract_nginx_routes "$nginx_candidate")"',
@@ -57,16 +60,15 @@ for (const marker of [
   'mark_fatal PROXY_ROUTE_NOT_IDENTIFIED',
   'CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY',
   'NGINX_ROUTE_SCOPE=SERVER_NAME_PROXY_PASS_ONLY',
-  'syntax = $0',
-  'sub(/^[[:space:]]*#.*/, "", syntax)',
-  'sub(/[[:space:]]+#.*$/, "", syntax)',
   'sanitize_effective_origin',
   'mapfile -t probe_fields',
+  "--proto '=https'",
+  "--proto-redir '=https'",
   'PUBLIC_PROBE_REQUEST=',
   'EFFECTIVE_ORIGIN=',
   '2>/dev/null',
   'safe_line',
-  "s#(https?://)[^/@[:space:]]+@#\\1REDACTED@#Ig",
+  "s#([A-Za-z][A-Za-z0-9+.-]*://)[^/@[:space:]]+@#\\1REDACTED@#g",
 ]) {
   requireText(script, marker, scriptPath)
 }
@@ -75,6 +77,13 @@ const runningStateGuards = script.match(/&& "\$state" == "running"/g) ?? []
 if (runningStateGuards.length < 6) {
   failures.push(
     `${scriptPath}: every frontend and proxy candidate must require state=running; found ${runningStateGuards.length} guard(s)`,
+  )
+}
+
+const tokenDeltaCalls = script.match(/token_delta\(structure\)/g) ?? []
+if (tokenDeltaCalls.length < 4) {
+  failures.push(
+    `${scriptPath}: Caddy and Nginx block depth must use token_delta(structure); found ${tokenDeltaCalls.length} call(s)`,
   )
 }
 
@@ -109,6 +118,9 @@ for (const forbidden of [
   '--show-error',
   'CODESTRA_DISCOVERY_CONFIG_ROOT',
   'server_name[[:space:]].*((www\\.)?codestra\\.co)',
+  "s#(https?://)[^/@[:space:]]+@#\\1REDACTED@#Ig",
+  'gsub(/\\{/',
+  'gsub(/\\}/',
 ]) {
   if (script.includes(forbidden)) {
     failures.push(`${scriptPath}: contains unsafe evidence marker: ${forbidden}`)
