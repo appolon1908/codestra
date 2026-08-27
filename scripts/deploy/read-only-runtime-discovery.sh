@@ -3,6 +3,24 @@ set -Eeuo pipefail
 IFS=$'\n\t'
 umask 077
 
+config_root="/etc"
+if [[ "${1:-}" == "--test-config-root" ]]; then
+  [[ "${CI:-}" == "true" ]] || {
+    echo "ERROR=TEST_CONFIG_ROOT_REQUIRES_CI"
+    exit 2
+  }
+  config_root="${2:?test config root is required}"
+  [[ "$config_root" == /tmp/* && "$config_root" != *".."* && "$config_root" != *"//"* ]] || {
+    echo "ERROR=UNSAFE_TEST_CONFIG_ROOT"
+    exit 2
+  }
+  shift 2
+fi
+[[ "$#" -eq 0 ]] || {
+  echo "ERROR=UNEXPECTED_ARGUMENTS"
+  exit 2
+}
+
 fatal_failures=0
 mark_fatal() {
   fatal_failures=$((fatal_failures + 1))
@@ -21,6 +39,100 @@ sanitize_effective_origin() {
     -e 's#(https?://)[^/@[:space:]]+@#\1REDACTED@#Ig' \
     -e 's/[?#].*$//' \
     -e 's#^([A-Za-z][A-Za-z0-9+.-]*://[^/[:space:]]+).*$#\1#'
+}
+
+extract_caddy_routes() {
+  local source="${1:?Caddy source is required}"
+  awk '
+    function delta(text, copy, opens, closes) {
+      copy = text
+      opens = gsub(/\{/, "{", copy)
+      copy = text
+      closes = gsub(/\}/, "}", copy)
+      return opens - closes
+    }
+    BEGIN { in_site = 0; depth = 0 }
+    {
+      syntax = $0
+      sub(/^[[:space:]]*#.*/, "", syntax)
+      sub(/[[:space:]]+#.*$/, "", syntax)
+      if (syntax ~ /^[[:space:]]*$/) next
+
+      if (!in_site && syntax ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
+        in_site = 1
+        depth = delta(syntax)
+        print NR ":" syntax
+        if (depth <= 0) in_site = 0
+        next
+      }
+      if (in_site) {
+        if (syntax ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
+          print NR ":" syntax
+        }
+        depth += delta(syntax)
+        if (depth <= 0) {
+          in_site = 0
+          depth = 0
+        }
+      }
+    }
+  ' "$source" 2>/dev/null | sed -n '1,120p'
+}
+
+extract_nginx_routes() {
+  local source="${1:?Nginx source is required}"
+  awk '
+    function delta(text, copy, opens, closes) {
+      copy = text
+      opens = gsub(/\{/, "{", copy)
+      copy = text
+      closes = gsub(/\}/, "}", copy)
+      return opens - closes
+    }
+    function flush_block() {
+      if (target_site) printf "%s", evidence
+      evidence = ""
+      target_site = 0
+    }
+    BEGIN {
+      in_server = 0
+      depth = 0
+      evidence = ""
+      target_site = 0
+    }
+    {
+      syntax = $0
+      sub(/^[[:space:]]*#.*/, "", syntax)
+      sub(/[[:space:]]+#.*$/, "", syntax)
+      if (syntax ~ /^[[:space:]]*$/) next
+
+      if (!in_server && syntax ~ /^[[:space:]]*server[[:space:]]*\{/) {
+        in_server = 1
+        depth = delta(syntax)
+        evidence = NR ":" syntax "\n"
+        target_site = 0
+        next
+      }
+
+      if (in_server) {
+        if (syntax ~ /^[[:space:]]*server_name[[:space:]]+.*((www\.)?codestra\.co)([[:space:];]|$)/) {
+          target_site = 1
+        }
+        if (syntax ~ /^[[:space:]]*(server_name|proxy_pass)[[:space:]]+/) {
+          evidence = evidence NR ":" syntax "\n"
+        }
+        depth += delta(syntax)
+        if (depth <= 0) {
+          flush_block()
+          in_server = 0
+          depth = 0
+        }
+      }
+    }
+    END {
+      if (in_server) flush_block()
+    }
+  ' "$source" 2>/dev/null | sed -n '1,160p'
 }
 
 echo "DISCOVERY_MODE=READ_ONLY"
@@ -83,13 +195,20 @@ fi
 frontend_container=""
 frontend_project=""
 frontend_priority=0
-proxy_container=""
-proxy_project=""
-proxy_priority=0
+frontend_networks=""
+frontend_bindings=""
+frontend_loopback_ports=""
 site_working_dir=""
 site_config_files=""
-frontend_networks=""
+
+proxy_kind=""
+proxy_container=""
+proxy_project=""
+proxy_service=""
+proxy_priority=0
 proxy_networks=""
+proxy_config_source=""
+proxy_routes=""
 
 if [[ -n "$containers" ]]; then
   while IFS= read -r container; do
@@ -148,8 +267,10 @@ if [[ -n "$containers" ]]; then
 
     if [[ "$candidate_proxy_priority" -gt "$proxy_priority" ]]; then
       proxy_priority="$candidate_proxy_priority"
+      proxy_kind="container"
       proxy_container="$container"
       proxy_project="$project"
+      proxy_service="$service"
       proxy_networks="$(docker inspect "$container" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{println}}{{end}}' 2>/dev/null || true)"
     fi
   done <<< "$containers"
@@ -163,28 +284,104 @@ if [[ -n "$frontend_container" ]]; then
   echo "FRONTEND_CONFIG_FILES=$site_config_files"
   echo "FRONTEND_NETWORKS=$(sed '/^$/d' <<< "$frontend_networks" | paste -sd, -)"
   docker inspect "$frontend_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}FRONTEND_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
+
+  frontend_bindings="$(
+    docker inspect "$frontend_container" --format \
+      '{{range $port, $bindings := .NetworkSettings.Ports}}{{range $bindings}}FRONTEND_BINDING=CONTAINER_PORT={{$port}}|HOST_IP={{.HostIp}}|HOST_PORT={{.HostPort}}{{println}}{{end}}{{end}}' \
+      2>/dev/null || true
+  )"
+  if [[ -n "$frontend_bindings" ]]; then
+    printf '%s\n' "$frontend_bindings"
+    while IFS= read -r binding; do
+      [[ -n "$binding" ]] || continue
+      host_ip="$(sed -n 's/.*|HOST_IP=\([^|]*\).*/\1/p' <<< "$binding")"
+      host_port="$(sed -n 's/.*|HOST_PORT=\([^|]*\).*/\1/p' <<< "$binding")"
+      if [[ ( "$host_ip" == "127.0.0.1" || "$host_ip" == "::1" ) && -n "$host_port" ]]; then
+        if ! grep -Fxq "$host_port" <<< "$frontend_loopback_ports"; then
+          frontend_loopback_ports+="${host_port}"$'\n'
+        fi
+      fi
+    done <<< "$frontend_bindings"
+  else
+    echo "FRONTEND_BINDINGS=NONE"
+  fi
+
+  if [[ -n "$frontend_loopback_ports" ]]; then
+    echo "FRONTEND_LOOPBACK_PORTS=$(sed '/^$/d' <<< "$frontend_loopback_ports" | paste -sd, -)"
+  else
+    echo "FRONTEND_LOOPBACK_PORTS=NONE"
+  fi
 else
   echo "FRONTEND_CONTAINER=NOT_IDENTIFIED"
   mark_fatal FRONTEND_CONTAINER_NOT_IDENTIFIED
 fi
 
-if [[ -n "$proxy_container" ]]; then
-  echo "PROXY_CONTAINER=$proxy_container"
-  echo "PROXY_PROJECT=$proxy_project"
-  echo "PROXY_SERVICE=$(docker inspect "$proxy_container" --format '{{index .Config.Labels "com.docker.compose.service"}}' 2>/dev/null || true)"
-  echo "PROXY_NETWORKS=$(sed '/^$/d' <<< "$proxy_networks" | paste -sd, -)"
-  docker inspect "$proxy_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}PROXY_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
-else
-  echo "PROXY_CONTAINER=NOT_IDENTIFIED"
-  mark_fatal PROXY_CONTAINER_NOT_IDENTIFIED
+if [[ -z "$proxy_kind" ]]; then
+  if command -v pgrep >/dev/null 2>&1; then
+    if pgrep -x caddy >/dev/null 2>&1; then
+      caddy_candidate="$config_root/caddy/Caddyfile"
+      if [[ -r "$caddy_candidate" ]]; then
+        proxy_kind="host"
+        proxy_project="HOST"
+        proxy_service="caddy"
+        proxy_config_source="$caddy_candidate"
+      else
+        echo "HOST_CADDY_CONFIG=UNREADABLE_OR_MISSING"
+      fi
+    fi
+
+    if [[ -z "$proxy_kind" ]] && pgrep -x nginx >/dev/null 2>&1; then
+      shopt -s nullglob
+      nginx_candidates=(
+        "$config_root/nginx/sites-enabled/codestra.co"
+        "$config_root/nginx/sites-enabled/codestra"
+        "$config_root/nginx/conf.d/codestra.conf"
+        "$config_root/nginx/sites-enabled/"*
+        "$config_root/nginx/conf.d/"*.conf
+        "$config_root/nginx/nginx.conf"
+      )
+      shopt -u nullglob
+
+      for nginx_candidate in "${nginx_candidates[@]}"; do
+        [[ -f "$nginx_candidate" && -r "$nginx_candidate" ]] || continue
+        if grep -Eq 'server_name[[:space:]].*((www\.)?codestra\.co)([[:space:];]|$)' "$nginx_candidate"; then
+          proxy_kind="host"
+          proxy_project="HOST"
+          proxy_service="nginx"
+          proxy_config_source="$nginx_candidate"
+          break
+        fi
+      done
+      [[ -n "$proxy_config_source" ]] || echo "HOST_NGINX_CONFIG=NOT_IDENTIFIED"
+    fi
+  else
+    echo "PGREP_COMMAND=UNAVAILABLE"
+  fi
 fi
 
-if [[ -n "$frontend_container" && -n "$proxy_container" && "$frontend_project" != "$proxy_project" ]]; then
+if [[ "$proxy_kind" == "container" ]]; then
+  echo "PROXY_KIND=CONTAINER"
+  echo "PROXY_CONTAINER=$proxy_container"
+  echo "PROXY_PROJECT=$proxy_project"
+  echo "PROXY_SERVICE=$proxy_service"
+  echo "PROXY_NETWORKS=$(sed '/^$/d' <<< "$proxy_networks" | paste -sd, -)"
+  docker inspect "$proxy_container" --format '{{range $name, $cfg := .NetworkSettings.Networks}}PROXY_NETWORK={{$name}}|ALIASES={{json $cfg.Aliases}}|IP={{$cfg.IPAddress}}{{println}}{{end}}' 2>/dev/null || true
+elif [[ "$proxy_kind" == "host" ]]; then
+  echo "PROXY_KIND=HOST"
+  echo "PROXY_PROJECT=HOST"
+  echo "PROXY_SERVICE=$proxy_service"
+  printf 'PROXY_CONFIG_SOURCE=%s\n' "$proxy_config_source" | safe_line
+else
+  echo "PROXY_KIND=NOT_IDENTIFIED"
+  mark_fatal PROXY_NOT_IDENTIFIED
+fi
+
+if [[ "$proxy_kind" == "container" && -n "$frontend_container" && "$frontend_project" != "$proxy_project" ]]; then
   echo "FRONTEND_PROXY_PROJECT_MISMATCH=FRONTEND:$frontend_project|PROXY:$proxy_project"
   mark_fatal FRONTEND_PROXY_PROJECT_MISMATCH
 fi
 
-if [[ -n "$frontend_container" && -n "$proxy_container" ]]; then
+if [[ "$proxy_kind" == "container" && -n "$frontend_container" ]]; then
   shared_networks=""
   while IFS= read -r network; do
     [[ -n "$network" ]] || continue
@@ -199,8 +396,13 @@ if [[ -n "$frontend_container" && -n "$proxy_container" ]]; then
     echo "FRONTEND_PROXY_SHARED_NETWORKS=NONE"
     mark_fatal SHARED_DOCKER_NETWORK_NOT_IDENTIFIED
   fi
+elif [[ "$proxy_kind" == "host" && -n "$frontend_container" ]]; then
+  echo "FRONTEND_PROXY_LINK=HOST_LOOPBACK"
+  if [[ -z "$frontend_loopback_ports" ]]; then
+    mark_fatal HOST_PROXY_LOOPBACK_BINDING_NOT_IDENTIFIED
+  fi
 else
-  echo "SITE_CONTAINER_PAIR=INCOMPLETE"
+  echo "SITE_FRONTEND_PROXY_LINK=INCOMPLETE"
 fi
 
 for candidate_path in "$site_working_dir" "$site_config_files"; do
@@ -231,66 +433,59 @@ if [[ -n "$site_working_dir" && "$site_working_dir" == /* ]]; then
   done
 fi
 
-if [[ -n "$proxy_container" ]]; then
-  proxy_service="$(docker inspect "$proxy_container" --format '{{index .Config.Labels "com.docker.compose.service"}}' 2>/dev/null || true)"
-  if [[ "$proxy_service" == "caddy" || "$proxy_container" == *caddy* ]]; then
-    caddy_source="$(docker inspect "$proxy_container" --format '{{range .Mounts}}{{if eq .Destination "/etc/caddy/Caddyfile"}}{{.Source}}{{end}}{{end}}' 2>/dev/null || true)"
-    if [[ -n "$caddy_source" ]]; then
-      echo "CADDY_CONFIG_SOURCE=$caddy_source"
-      if [[ -r "$caddy_source" ]]; then
-        echo "CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY"
-        set +e
-        caddy_excerpt="$(
-          awk '
-            function delta(text, copy, opens, closes) {
-              copy = text
-              opens = gsub(/\{/, "{", copy)
-              copy = text
-              closes = gsub(/\}/, "}", copy)
-              return opens - closes
-            }
-            BEGIN { in_site = 0; depth = 0 }
-            {
-              syntax = $0
-              sub(/^[[:space:]]*#.*/, "", syntax)
-              sub(/[[:space:]]+#.*$/, "", syntax)
-              if (syntax ~ /^[[:space:]]*$/) next
-
-              if (!in_site && syntax ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
-                in_site = 1
-                depth = delta(syntax)
-                print NR ":" syntax
-                if (depth <= 0) in_site = 0
-                next
-              }
-              if (in_site) {
-                if (syntax ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
-                  print NR ":" syntax
-                }
-                depth += delta(syntax)
-                if (depth <= 0) {
-                  in_site = 0
-                  depth = 0
-                }
-              }
-            }
-          ' "$caddy_source" 2>/dev/null | sed -n '1,120p'
-        )"
-        excerpt_rc=$?
-        set -e
-        if [[ "$excerpt_rc" -eq 0 && -n "$caddy_excerpt" ]]; then
-          while IFS= read -r line; do
-            printf 'CADDY_ROUTE=%s\n' "$line" | safe_line
-          done <<< "$caddy_excerpt"
-        else
-          echo "CADDY_ROUTE=NOT_IDENTIFIED"
-        fi
-      else
-        echo "CADDY_CONFIG_SOURCE=NOT_READABLE"
-      fi
-    else
-      echo "CADDY_CONFIG_SOURCE=NOT_MOUNTED_AT_EXPECTED_PATH"
+if [[ "$proxy_kind" == "container" ]]; then
+  if [[ "$proxy_service" == "caddy" ]]; then
+    proxy_config_source="$(docker inspect "$proxy_container" --format '{{range .Mounts}}{{if eq .Destination "/etc/caddy/Caddyfile"}}{{.Source}}{{end}}{{end}}' 2>/dev/null || true)"
+  elif [[ "$proxy_service" == "nginx" ]]; then
+    proxy_config_source="$(docker inspect "$proxy_container" --format '{{range .Mounts}}{{if eq .Destination "/etc/nginx/nginx.conf"}}{{.Source}}{{end}}{{end}}' 2>/dev/null || true)"
+    if [[ -z "$proxy_config_source" ]]; then
+      proxy_config_source="$(docker inspect "$proxy_container" --format '{{range .Mounts}}{{if eq .Destination "/etc/nginx/conf.d/default.conf"}}{{.Source}}{{end}}{{end}}' 2>/dev/null || true)"
     fi
+  fi
+fi
+
+if [[ -n "$proxy_config_source" && -r "$proxy_config_source" ]]; then
+  printf 'PROXY_ROUTE_CONFIG_SOURCE=%s\n' "$proxy_config_source" | safe_line
+  if [[ "$proxy_service" == "caddy" ]]; then
+    echo "CADDY_ROUTE_SCOPE=SITE_DECLARATIONS_REVERSE_PROXY_REDIRECT_ONLY"
+    proxy_routes="$(extract_caddy_routes "$proxy_config_source")"
+    route_prefix="CADDY_ROUTE"
+  else
+    echo "NGINX_ROUTE_SCOPE=SERVER_NAME_PROXY_PASS_ONLY"
+    proxy_routes="$(extract_nginx_routes "$proxy_config_source")"
+    route_prefix="NGINX_ROUTE"
+  fi
+
+  if [[ -n "$proxy_routes" ]]; then
+    while IFS= read -r line; do
+      printf '%s=%s\n' "$route_prefix" "$line" | safe_line
+    done <<< "$proxy_routes"
+  else
+    echo "PROXY_ROUTE=NOT_IDENTIFIED"
+    mark_fatal PROXY_ROUTE_NOT_IDENTIFIED
+  fi
+else
+  echo "PROXY_ROUTE_CONFIG=UNREADABLE_OR_MISSING"
+  mark_fatal PROXY_ROUTE_CONFIG_UNREADABLE
+fi
+
+if [[ "$proxy_kind" == "host" && -n "$frontend_loopback_ports" && -n "$proxy_routes" ]]; then
+  host_route_verified=0
+  verified_host_port=""
+  while IFS= read -r host_port; do
+    [[ -n "$host_port" ]] || continue
+    if grep -Eiq "(reverse_proxy|proxy_pass)[[:space:]]+(https?://)?(127\\.0\\.0\\.1|localhost|\\[::1\\]):${host_port}([/;[:space:]]|$)" <<< "$proxy_routes"; then
+      host_route_verified=1
+      verified_host_port="$host_port"
+      break
+    fi
+  done <<< "$frontend_loopback_ports"
+
+  if [[ "$host_route_verified" -eq 1 ]]; then
+    echo "HOST_PROXY_LOOPBACK_ROUTE=PASS|PORT=$verified_host_port"
+  else
+    echo "HOST_PROXY_LOOPBACK_ROUTE=FAIL"
+    mark_fatal HOST_PROXY_LOOPBACK_ROUTE_NOT_VERIFIED
   fi
 fi
 
