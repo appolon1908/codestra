@@ -87,6 +87,13 @@ case "$command_name" in
           'codestra-prod-caddy-1' \
           'codestra-prod-web-1'
         ;;
+      stopped)
+        printf '%s\n' \
+          'codestra-prod-frontend-stopped' \
+          'codestra-prod-caddy-stopped' \
+          'codestra-caddy-1' \
+          'codestra-web-1'
+        ;;
       *)
         printf '%s\n' \
           'codestra-prod-frontend-stale' \
@@ -108,6 +115,8 @@ case "$command_name" in
     config_files='/tmp/unrelated/compose.yaml'
     image='unrelated:latest'
     image_id='sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    state='running'
+    health='healthy'
     networks=$'other_default\n'
 
     case "$container" in
@@ -142,6 +151,28 @@ case "$command_name" in
           networks=$'codestra-edge\ncodestra-prod_default\n'
         fi
         ;;
+      codestra-prod-frontend-stopped)
+        project='codestra-prod'
+        service='frontend'
+        working_dir='/tmp/stopped-codestra-prod'
+        config_files='/tmp/stopped-codestra-prod/compose.yaml'
+        image='codestra-frontend:stopped'
+        image_id='sha256:1111111111111111111111111111111111111111111111111111111111111111'
+        state='exited'
+        health='none'
+        networks=$'codestra-prod_default\ncodestra-edge\n'
+        ;;
+      codestra-prod-caddy-stopped)
+        project='codestra-prod'
+        service='caddy'
+        working_dir='/tmp/stopped-codestra-prod'
+        config_files='/tmp/stopped-codestra-prod/compose.yaml'
+        image='caddy:stopped'
+        image_id='sha256:2222222222222222222222222222222222222222222222222222222222222222'
+        state='exited'
+        health='none'
+        networks=$'codestra-edge\ncodestra-prod_default\n'
+        ;;
       codestra-web-1)
         project='codestra'
         service='web'
@@ -163,8 +194,8 @@ case "$command_name" in
     esac
 
     if [[ "$format" == *'project={{index .Config.Labels'* ]]; then
-      printf 'project=%s|service=%s|working_dir=%s|config_files=%s|image=%s|image_id=%s|state=running|health=healthy|restarts=0|ports={"8080/tcp":null}|networks=fixture\n' \
-        "$project" "$service" "$working_dir" "$config_files" "$image" "$image_id"
+      printf 'project=%s|service=%s|working_dir=%s|config_files=%s|image=%s|image_id=%s|state=%s|health=%s|restarts=0|ports={"8080/tcp":null}|networks=fixture\n' \
+        "$project" "$service" "$working_dir" "$config_files" "$image" "$image_id" "$state" "$health"
     elif [[ "$format" == *'FRONTEND_NETWORK='* || "$format" == *'PROXY_NETWORK='* ]]; then
       while IFS= read -r network; do
         [[ -n "$network" ]] || continue
@@ -219,8 +250,13 @@ run_case() {
   grep -Fx 'DISCOVERY_STATUS=PASS' "$report"
   grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
 
-  if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|FRONTEND_CONTAINER=.*stale|PROXY_CONTAINER=.*stale' "$report"; then
-    echo "Fixture $mode exposed excluded evidence or selected a stale name-only container." >&2
+  if [[ "$mode" == 'stopped' ]]; then
+    grep -F 'CANDIDATE_SKIPPED_NOT_RUNNING=codestra-prod-frontend-stopped|PROJECT=codestra-prod|SERVICE=frontend|STATE=exited' "$report"
+    grep -F 'CANDIDATE_SKIPPED_NOT_RUNNING=codestra-prod-caddy-stopped|PROJECT=codestra-prod|SERVICE=caddy|STATE=exited' "$report"
+  fi
+
+  if grep -Eq 'THIS_MUST_NEVER_APPEAR|super-secret|basic_auth|auth\.codestra\.co|keycloak:8080|FRONTEND_CONTAINER=.*(stale|stopped)|PROXY_CONTAINER=.*(stale|stopped)' "$report"; then
+    echo "Fixture $mode exposed excluded evidence or selected an invalid container." >&2
     cat "$report" >&2
     exit 1
   fi
@@ -244,6 +280,14 @@ run_case \
 
 run_case \
   future \
+  codestra-web-1 \
+  codestra \
+  web \
+  codestra-caddy-1 \
+  codestra_default,edge
+
+run_case \
+  stopped \
   codestra-web-1 \
   codestra \
   web \
