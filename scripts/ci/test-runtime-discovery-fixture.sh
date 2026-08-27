@@ -52,8 +52,7 @@ MOCK
 
 cat > "$mock_bin/curl" <<'MOCK'
 #!/usr/bin/env bash
-url="${!#}"
-printf '200|49.12.145.107|%s' "$url"
+printf '200\n49.12.145.107\nHTTPS://probe-user:probe-secret@codestra.co/en/?token=probe-token#probe-fragment'
 MOCK
 
 cat > "$mock_bin/docker" <<'MOCK'
@@ -246,6 +245,17 @@ assert_scoped_caddy_output() {
   fi
 }
 
+assert_public_probe_redaction() {
+  local report="$1"
+  grep -Fx 'PUBLIC_PROBE_REQUEST=https://codestra.co/en/|RC=0|HTTP=200|REMOTE_IP=49.12.145.107|EFFECTIVE_ORIGIN=HTTPS://REDACTED@codestra.co' "$report"
+  grep -Fx 'PUBLIC_PROBE_REQUEST=https://www.codestra.co/en/|RC=0|HTTP=200|REMOTE_IP=49.12.145.107|EFFECTIVE_ORIGIN=HTTPS://REDACTED@codestra.co' "$report"
+  if grep -Eq 'probe-user|probe-secret|probe-token|probe-fragment|\?token=|#probe-' "$report"; then
+    echo 'Fixture exposed sensitive public redirect evidence.' >&2
+    cat "$report" >&2
+    exit 1
+  fi
+}
+
 run_case() {
   local mode="$1"
   local expected_frontend="$2"
@@ -266,6 +276,7 @@ run_case() {
   grep -Fx "PROXY_PROJECT=$expected_project" "$report"
   grep -Fx "FRONTEND_PROXY_SHARED_NETWORKS=$expected_networks" "$report"
   assert_scoped_caddy_output "$report"
+  assert_public_probe_redaction "$report"
   grep -Fx 'DISCOVERY_FATAL_FAILURE_COUNT=0' "$report"
   grep -Fx 'DISCOVERY_STATUS=PASS' "$report"
   grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
@@ -302,6 +313,7 @@ run_mixed_project_failure() {
   grep -Fx 'DISCOVERY_FAILURE=FRONTEND_PROXY_PROJECT_MISMATCH' "$report"
   grep -Fx 'FRONTEND_PROXY_SHARED_NETWORKS=edge' "$report"
   assert_scoped_caddy_output "$report"
+  assert_public_probe_redaction "$report"
   grep -Fx 'DISCOVERY_FATAL_FAILURE_COUNT=1' "$report"
   grep -Fx 'DISCOVERY_STATUS=FAIL' "$report"
   grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' "$report"
