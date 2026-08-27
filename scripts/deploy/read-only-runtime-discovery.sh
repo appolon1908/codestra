@@ -172,6 +172,11 @@ else
   mark_fatal PROXY_CONTAINER_NOT_IDENTIFIED
 fi
 
+if [[ -n "$frontend_container" && -n "$proxy_container" && "$frontend_project" != "$proxy_project" ]]; then
+  echo "FRONTEND_PROXY_PROJECT_MISMATCH=FRONTEND:$frontend_project|PROXY:$proxy_project"
+  mark_fatal FRONTEND_PROXY_PROJECT_MISMATCH
+fi
+
 if [[ -n "$frontend_container" && -n "$proxy_container" ]]; then
   shared_networks=""
   while IFS= read -r network; do
@@ -239,19 +244,23 @@ if [[ -n "$proxy_container" ]]; then
             }
             BEGIN { in_site = 0; depth = 0 }
             {
-              line = $0
-              if (!in_site && line ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
+              syntax = $0
+              sub(/^[[:space:]]*#.*/, "", syntax)
+              sub(/[[:space:]]+#.*$/, "", syntax)
+              if (syntax ~ /^[[:space:]]*$/) next
+
+              if (!in_site && syntax ~ /(^|[[:space:],])((www\.)?codestra\.co)([[:space:],{]|$)/) {
                 in_site = 1
-                depth = delta(line)
-                print NR ":" line
+                depth = delta(syntax)
+                print NR ":" syntax
                 if (depth <= 0) in_site = 0
                 next
               }
               if (in_site) {
-                if (line ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
-                  print NR ":" line
+                if (syntax ~ /^[[:space:]]*(reverse_proxy|redir)[[:space:]]+/) {
+                  print NR ":" syntax
                 }
-                depth += delta(line)
+                depth += delta(syntax)
                 if (depth <= 0) {
                   in_site = 0
                   depth = 0
