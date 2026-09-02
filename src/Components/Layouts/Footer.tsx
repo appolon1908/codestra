@@ -1,47 +1,70 @@
-import { Link } from 'react-router'
-import logo from '../../assets/logo.png'
+import { Link } from "react-router";
+import { SITE } from "@/config/site";
 
-const serviceLinks = ['Software Development', 'Mobile App Development', 'AI Development', 'Software Consulting', 'UI/UX Design', 'Web Design', 'Branding']
-const industryLinks = ['Finance', 'Healthcare', 'iGaming', 'Real Estate', 'Education', 'Web3 & Blockchain']
+const year = new Date().getFullYear();
 
 const Footer = () => (
-  <footer className="flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-8 bg-[#08090A] border-t border-neutral-800 lg:py-20 pt-10 pb-10 lg:mt-[10rem] mt-[5rem] justify-between">
-    <div>
-      <h2 className="text-base text-white font-bold">Offices</h2>
-      <div className="text-xs">
-        <div className="pb-3 pt-3 border-b border-neutral-800">
-          <a className="pb-2 block hover:text-[#FFD700]" href="tel:+18097347580">809-734-7580</a>
-          <p>Codestra, Condominio Progreso Business Center, Av. Lope de Vega 13, Santo Domingo 10130</p>
-        </div>
-        <div className="pb-3 pt-3 border-b border-neutral-800">
-          <a className="pb-2 block hover:text-[#FFD700]" href="tel:+13465446979">+1 346-544-6979</a>
-          <p>20634 Longen Baugh RD Cypress TX, USA 77433</p>
-        </div>
-        <div className="pb-3 pt-3">
-          <a className="hover:text-[#FFD700]" href="mailto:support@codestra.co">support@codestra.co</a>
-          <Link to="/" className="block pt-4" aria-label="Codestra home"><img src={logo} alt="Codestra" className="w-24"/></Link>
-          <div className="pt-5"><p className="pb-3">Craftsmanship in Every Line of Code.</p><p>We turn ideas into reliable digital products.</p></div>
+  <footer className="hz-site-footer">
+    <div className="hz-container">
+      <div className="hz-site-footer__grid">
+        <section className="hz-site-footer__intro" aria-labelledby="footer-brand">
+          <p className="hz-eyebrow">Codestra product network</p>
+          <h2 id="footer-brand" className="hz-site-footer__title">
+            One operating standard across every Codestra product.
+          </h2>
+          <p>
+            Software, communications, automation, customer operations and digital products built on a shared,
+            accessible experience system.
+          </p>
+          <div className="hz-domain-list" aria-label="Codestra platform domains">
+            <a className="hz-domain-chip" href={SITE.domains.public}>codestra.co</a>
+            <a className="hz-domain-chip" href={SITE.domains.identity}>auth.codestra.co</a>
+            <a className="hz-domain-chip" href={SITE.domains.api}>api.codestra.co</a>
+            <a className="hz-domain-chip" href={SITE.domains.social}>social.codestra.co</a>
+          </div>
+        </section>
+
+        <nav aria-label="Footer services">
+          <h3 className="hz-site-footer__heading">Services</h3>
+          <ul className="hz-site-footer__links">
+            <li><Link className="hz-site-footer__link" to="/services">Software development</Link></li>
+            <li><Link className="hz-site-footer__link" to="/services">AI and automation</Link></li>
+            <li><Link className="hz-site-footer__link" to="/services">Product design</Link></li>
+            <li><Link className="hz-site-footer__link" to="/contact/sales">Consultation</Link></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Codestra products">
+          <h3 className="hz-site-footer__heading">Products</h3>
+          <ul className="hz-site-footer__links">
+            {SITE.productNetwork.map((product) => (
+              <li key={product.href}>
+                <a className="hz-site-footer__link" href={product.href}>{product.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="Footer company links">
+          <h3 className="hz-site-footer__heading">Company</h3>
+          <ul className="hz-site-footer__links">
+            <li><Link className="hz-site-footer__link" to="/about">About Codestra</Link></li>
+            <li><Link className="hz-site-footer__link" to="/case-studies">Case studies</Link></li>
+            <li><Link className="hz-site-footer__link" to="/hiring/positions">Careers</Link></li>
+            <li><Link className="hz-site-footer__link" to="/contact">Contact</Link></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div className="hz-site-footer__bottom">
+        <p>© {year} {SITE.legalName}. All rights reserved.</p>
+        <div className="hz-footer-legal">
+          <Link className="hz-site-footer__link" to="/privacy">Privacy</Link>
+          <a className="hz-site-footer__link" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>
         </div>
       </div>
     </div>
-    <div className="flex lg:flex-row flex-col lg:gap-28 gap-8 text-white">
-      <ul className="space-y-5 text-sm lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
-        <li className="text-base font-bold">Services</li>
-        {serviceLinks.map(item => <li key={item}><Link className="hover:text-[#FFD700]" to="/services">{item}</Link></li>)}
-      </ul>
-      <ul className="space-y-5 lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
-        <li className="text-base font-bold">Industries</li>
-        {industryLinks.map(item => <li key={item}><Link className="hover:text-[#FFD700]" to="/case-studies">{item}</Link></li>)}
-      </ul>
-      <ul className="space-y-5 lg:border-none border-t lg:pt-0 pt-5 border-neutral-800">
-        <li className="text-base font-bold">Company</li>
-        <li><Link className="hover:text-[#FFD700]" to="/about">About</Link></li>
-        <li><Link className="hover:text-[#FFD700]" to="/contact">Contact</Link></li>
-        <li><Link className="hover:text-[#FFD700]" to="/case-studies">Our Work</Link></li>
-        <li><Link className="hover:text-[#FFD700]" to="/privacy">Privacy Policy</Link></li>
-      </ul>
-    </div>
   </footer>
-)
+);
 
-export default Footer
+export default Footer;
