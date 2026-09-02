@@ -1,7 +1,10 @@
 const ACCESS_TOKEN_KEY = "accessToken";
+const AUTH_EVENT = "codestra:auth-change";
 
-type JwtPayload = {
+export type JwtPayload = {
   exp?: number;
+  sub?: string;
+  iss?: string;
 };
 
 const decodePayload = (token: string): JwtPayload | null => {
@@ -10,20 +13,32 @@ const decodePayload = (token: string): JwtPayload | null => {
 
   try {
     const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
-    return JSON.parse(atob(normalized)) as JwtPayload;
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    return JSON.parse(atob(padded)) as JwtPayload;
   } catch {
     return null;
   }
 };
 
-export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
+const publishAuthChange = () => {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_EVENT));
+  }
+};
+
+export const getAccessToken = () =>
+  typeof window === "undefined" ? null : window.localStorage.getItem(ACCESS_TOKEN_KEY);
 
 export const setAccessToken = (token: string) => {
-  localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  publishAuthChange();
 };
 
 export const clearAccessToken = () => {
-  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem(ACCESS_TOKEN_KEY);
+    publishAuthChange();
+  }
 };
 
 export const hasUsableAccessToken = () => {
@@ -31,8 +46,56 @@ export const hasUsableAccessToken = () => {
   if (!token) return false;
 
   const payload = decodePayload(token);
-  if (!payload) return false;
+  if (!payload) {
+    clearAccessToken();
+    return false;
+  }
   if (typeof payload.exp !== "number") return true;
+  if (payload.exp * 1000 > Date.now()) return true;
 
-  return payload.exp * 1000 > Date.now();
+  clearAccessToken();
+  return false;
 };
+
+export const subscribeToAuthChanges = (listener: () => void) => {
+  if (typeof window === "undefined") return () => undefined;
+  window.addEventListener(AUTH_EVENT, listener);
+  window.addEventListener("storage", listener);
+  return () => {
+    window.removeEventListener(AUTH_EVENT, listener);
+    window.removeEventListener("storage", listener);
+  };
+};
+
+/**
+ * Attempts the configured API logout operation before clearing the legacy
+ * browser token. The path remains configurable until the Codestra backend
+ * publishes its canonical logout contract.
+ */
+export const logoutSession = async () => {
+  const endpoint = import.meta.env.VITE_AUTH_LOGOUT_ENDPOINT as string | undefined;
+  const apiOrigin = import.meta.env.VITE_API_ENDPOINT as string | undefined;
+  const token = getAccessToken();
+
+  try {
+    if (endpoint && apiOrigin) {
+      const target = new URL(endpoint, apiOrigin.endsWith("/") ? apiOrigin : `${apiOrigin}/`);
+      await fetch(target, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        credentials: "include",
+      });
+    }
+  } catch {
+    // Local logout must still complete when the revocation endpoint is unavailable.
+  } finally {
+    clearAccessToken();
+  }
+};
+
+export const authContract = Object.freeze({
+  mode: "legacy-api-session",
+  migrationTarget: "oidc-pkce",
+  issuer: "https://auth.codestra.co/realms/codestra",
+  durableIdentity: "issuer+subject",
+});
