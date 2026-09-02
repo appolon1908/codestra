@@ -1,38 +1,54 @@
-import { lazy, Suspense } from 'react'
-import AuthProvider from './Providers/AuthProvider'
-import QueryProvider from './Providers/QueryProvider'
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import AuthProvider from "./Providers/AuthProvider";
+import { SessionProvider } from "./Providers/SessionProvider";
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+const Home = lazy(() => import("./Pages/Home/Home"));
+const Login = lazy(() => import("./Pages/Login/Login"));
+const Signup = lazy(() => import("./Pages/Signup/Signup"));
+const AboutUs = lazy(() => import("./Pages/About/AboutUs"));
+const CaseStudies = lazy(() => import("./Pages/CaseStudies/CaseStudies"));
+const ContactUs = lazy(() => import("./Pages/Contact/ContactUs"));
+const ContactSales = lazy(() => import("./Pages/Contact/ContactSales"));
+const ContactSupport = lazy(() => import("./Pages/Contact/ContactSupport"));
+const ElectronicBilling = lazy(() => import("./Pages/ElectronicBilling/ElectronicBilling"));
+const ElectronicBillingForm = lazy(() => import("./Pages/BillingForm/ElectronicBillingForm"));
+const HiringPosition = lazy(() => import("./Pages/Hiring/HiringPosition"));
+const Services = lazy(() => import("./Pages/Services/Services"));
+const Privacy = lazy(() => import("./Pages/Privacy/Privacy"));
+const HomeDash = lazy(() => import("./Pages/Dashboard/HomeDash"));
+const SignedOut = lazy(() => import("./Pages/SignedOut"));
+const NotFound = lazy(() => import("./Pages/NotFound"));
 
-const AboutUs = lazy(() => import('./Pages/About/AboutUs'))
-const ContactSales = lazy(() => import('./Pages/Contact/ContactSales'))
-const ContactSupport = lazy(() => import('./Pages/Contact/ContactSupport'))
-const ContactUs = lazy(() => import('./Pages/Contact/ContactUs'))
-const Home = lazy(() => import('./Pages/Home/Home'))
-const Login = lazy(() => import('./Pages/Login/Login'))
-const Signup = lazy(() => import('./Pages/Signup/Signup'))
-const AllRoutes = lazy(() => import('./Routes/AllRoutes'))
-const ElectronicBilling = lazy(() => import('./Pages/ElectronicBilling/ElectronicBilling'))
-const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicBillingForm'))
-const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
-const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
-const Services = lazy(() => import('./Pages/Services/Services'))
-const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
+const queryClient = new QueryClient();
 
-AOS.init();
+const RouteLoading = () => (
+  <main className="orbit-state-page" id="main-content" aria-live="polite">
+    <div className="orbit-loading-indicator" aria-hidden="true" />
+    <p>Loading page.</p>
+  </main>
+);
+
 function App() {
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function" || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      AOS.init({ once: true, duration: 600 });
+    }
+  }, []);
 
   return (
-    <>
-    <QueryProvider> 
-          <BrowserRouter>
-            <Suspense fallback={<div className="min-h-screen bg-[#080808]" aria-label="Loading" />}>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <BrowserRouter>
+          <Suspense fallback={<RouteLoading />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/signed-out" element={<SignedOut />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/case-studies" element={<CaseStudies />} />
               <Route path="/contact" element={<ContactUs />} />
@@ -43,18 +59,17 @@ function App() {
               <Route path="/hiring/positions" element={<HiringPosition />} />
               <Route path="/services" element={<Services />} />
               <Route path="/privacy" element={<Privacy />} />
-              
-              <Route path="/*" element={<AuthProvider element={
-                <div>
-                  <AllRoutes />
-                </div>
-              }/>} />
+              <Route
+                path="/auth/dashboard"
+                element={<AuthProvider element={<HomeDash />} />}
+              />
+              <Route path="*" element={<NotFound />} />
             </Routes>
-            </Suspense>
-          </BrowserRouter>
-      </QueryProvider>
-    </>
-  )
+          </Suspense>
+        </BrowserRouter>
+      </SessionProvider>
+    </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;
