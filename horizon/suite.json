@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0",
+  "repository": "appolon1908-hue/codestra",
+  "visualContract": {
+    "repository": "appolon1908-hue/SDK-repository",
+    "commit": "7db4c6549a0a007922355090f03c082a308f3855"
+  },
+  "suites": [
+    {
+      "id": "codestra-web",
+      "root": ".",
+      "surface": "customer",
+      "theme": "codestra",
+      "canonicalOrigin": "https://codestra.co",
+      "domains": {
+        "public": ["https://codestra.co"],
+        "identity": ["https://auth.codestra.co"],
+        "api": ["https://api.codestra.co"],
+        "social": ["https://social.codestra.co"],
+        "automation": ["https://automation.codestra.co"]
+      },
+      "shell": {
+        "mode": "application",
+        "rootFile": "index.html",
+        "headerFile": "src/Components/Layouts/Navbar.tsx",
+        "footerFile": "src/Components/Layouts/Footer.tsx",
+        "tokensFile": "src/horizon.css",
+        "requiredRootMarkers": [
+          "data-horizon-root",
+          "data-horizon-theme=\"codestra\"",
+          "data-horizon-appearance=\"dark\""
+        ],
+        "pageRoots": ["src/Pages"]
+      },
+      "auth": {
+        "mode": "api-session",
+        "protectedRoutes": true,
+        "loginPath": "/login",
+        "loginSourceFile": "src/Pages/Login/Login.tsx",
+        "logoutSourceFile": "src/lib/auth.ts",
+        "guardSourceFile": "src/Providers/AuthProvider.tsx",
+        "backendAuthorizationRequired": true,
+        "headerReflectsSession": true,
+        "durableIdentity": "backend-user-id",
+        "migrationTarget": "issuer+subject",
+        "browserTokenStorage": "legacy-session-storage-migration-required"
+      },
+      "colorPolicy": {
+        "rejectNewRawColors": true,
+        "allowedColorFiles": [
+          "index.html",
+          "src/index.css",
+          "src/horizon.css",
+          "src/horizon-auth.css"
+        ]
+      },
+      "newPagePolicy": {
+        "inheritsRootShell": true,
+        "usesHorizonTokens": true,
+        "requiresStateMatrix": true
+      }
+    }
+  ]
+}
