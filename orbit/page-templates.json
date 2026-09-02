@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "2.0.0",
+  "templates": [
+    {
+      "id": "marketing-home",
+      "shell": "public",
+      "allowedSections": [
+        "hero",
+        "media-story",
+        "feature-split",
+        "feature-grid",
+        "cta",
+        "faq"
+      ],
+      "requiredStates": [
+        "loading",
+        "degraded",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "marketing-content",
+      "shell": "public",
+      "allowedSections": [
+        "hero",
+        "media-story",
+        "feature-split",
+        "feature-grid",
+        "cta",
+        "faq"
+      ],
+      "requiredStates": [
+        "loading",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "contact",
+      "shell": "public",
+      "allowedSections": [
+        "hero",
+        "contact",
+        "form",
+        "faq"
+      ],
+      "requiredStates": [
+        "loading",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "form",
+      "shell": "public",
+      "allowedSections": [
+        "form"
+      ],
+      "requiredStates": [
+        "loading",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "listing",
+      "shell": "public",
+      "allowedSections": [
+        "hero",
+        "filters",
+        "feature-grid",
+        "cta"
+      ],
+      "requiredStates": [
+        "loading",
+        "empty",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "legal",
+      "shell": "legal",
+      "allowedSections": [
+        "legal"
+      ],
+      "requiredStates": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "auth-entry",
+      "shell": "auth",
+      "allowedSections": [
+        "form"
+      ],
+      "requiredStates": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "auth-status",
+      "shell": "auth",
+      "allowedSections": [
+        "error",
+        "cta"
+      ],
+      "requiredStates": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "id": "account-dashboard",
+      "shell": "account",
+      "allowedSections": [
+        "hero",
+        "feature-grid",
+        "table",
+        "tabs",
+        "timeline"
+      ],
+      "requiredStates": [
+        "loading",
+        "empty",
+        "offline",
+        "error",
+        "permission-denied",
+        "success"
+      ]
+    },
+    {
+      "id": "error",
+      "shell": "error",
+      "allowedSections": [
+        "error",
+        "cta"
+      ],
+      "requiredStates": [
+        "loading",
+        "error",
+        "success"
+      ]
+    }
+  ]
+}

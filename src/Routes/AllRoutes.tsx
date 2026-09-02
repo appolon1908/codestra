@@ -11,7 +11,7 @@ const AllRoutes = () => (
       path="/auth/dashboard"
       element={<AuthProvider element={<HomeDash />} />}
     />
-    <Route path="*" element={<NotFound />} />
+    <Route path="/*" element={<NotFound />} />
   </Routes>
 );
 
