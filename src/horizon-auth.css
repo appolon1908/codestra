@@ -1,0 +1,100 @@
+/* Horizon authentication page adapter. Uses only registered Horizon tokens. */
+.hz-auth-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 4rem);
+  background: var(--hz-bg);
+}
+
+.hz-auth-card {
+  width: min(100%, 32rem);
+  display: grid;
+  gap: 1.75rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  box-shadow: var(--hz-shadow-card, none);
+}
+
+.hz-auth-logo {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hz-auth-logo img {
+  width: 10rem;
+  height: auto;
+}
+
+.hz-auth-copy {
+  display: grid;
+  gap: .65rem;
+}
+
+.hz-auth-copy h1 {
+  margin: 0;
+  font-size: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+}
+
+.hz-auth-copy p:last-child,
+.hz-auth-support {
+  color: var(--hz-text-muted);
+}
+
+.hz-form-stack {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.hz-password-wrap {
+  position: relative;
+}
+
+.hz-password-wrap .hz-input {
+  padding-inline-end: 3.25rem;
+}
+
+.hz-password-toggle {
+  position: absolute;
+  inset: 50% .75rem auto auto;
+  transform: translateY(-50%);
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--hz-radius-control);
+  background: transparent;
+  color: var(--hz-text-muted);
+  cursor: pointer;
+}
+
+.hz-password-toggle:hover {
+  background: var(--hz-surface-raised);
+  color: var(--hz-text);
+}
+
+.hz-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  color: var(--hz-text-muted);
+  font-size: .875rem;
+}
+
+.hz-checkbox-row input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--hz-accent-ui);
+}
+
+.hz-auth-support {
+  margin: 0;
+  text-align: center;
+  font-size: .875rem;
+}
+
+.hz-auth-support a {
+  color: var(--hz-text);
+  font-weight: 700;
+}
