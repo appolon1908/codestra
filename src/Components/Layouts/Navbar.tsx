@@ -1,20 +1,33 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router";
-import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth";
+import {
+  hasUsableAccessToken,
+  logoutSession,
+  subscribeToAuthChanges,
+} from "@/lib/auth";
 import { SITE } from "@/config/site";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(hasUsableAccessToken());
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const isAuthenticated = hasUsableAccessToken();
 
   useEffect(() => {
     setIsOpen(false);
+    setIsAuthenticated(hasUsableAccessToken());
   }, [location.pathname]);
 
-  const handleLogout = () => {
-    clearAccessToken();
+  useEffect(() => subscribeToAuthChanges(() => {
+    setIsAuthenticated(hasUsableAccessToken());
+  }), []);
+
+  const handleLogout = async () => {
+    setIsSigningOut(true);
+    await logoutSession();
+    setIsAuthenticated(false);
+    setIsOpen(false);
     navigate("/", { replace: true });
   };
 
@@ -50,8 +63,13 @@ const Navbar = () => {
                 <Link className="hz-button hz-button--secondary hz-button--small" to="/auth/dashboard">
                   Dashboard
                 </Link>
-                <button className="hz-button hz-button--primary hz-button--small" type="button" onClick={handleLogout}>
-                  Log out
+                <button
+                  className="hz-button hz-button--primary hz-button--small"
+                  type="button"
+                  disabled={isSigningOut}
+                  onClick={() => void handleLogout()}
+                >
+                  {isSigningOut ? "Signing out…" : "Log out"}
                 </button>
               </>
             ) : (
@@ -90,12 +108,26 @@ const Navbar = () => {
                 {item.label}
               </NavLink>
             ))}
-            <a className="hz-site-nav__link" href={SITE.domains.social}>
-              Social platform
-            </a>
-            <a className="hz-site-nav__link" href={SITE.domains.identity}>
-              Identity
-            </a>
+            <a className="hz-site-nav__link" href={SITE.domains.social}>Social platform</a>
+            <a className="hz-site-nav__link" href={SITE.domains.identity}>Identity</a>
+            {isAuthenticated ? (
+              <>
+                <Link className="hz-site-nav__link" to="/auth/dashboard">Dashboard</Link>
+                <button
+                  className="hz-button hz-button--primary"
+                  type="button"
+                  disabled={isSigningOut}
+                  onClick={() => void handleLogout()}
+                >
+                  {isSigningOut ? "Signing out…" : "Log out"}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link className="hz-site-nav__link" to="/login">Log in</Link>
+                <Link className="hz-button hz-button--primary" to="/signup">Create account</Link>
+              </>
+            )}
           </nav>
         </div>
       </header>
