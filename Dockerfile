@@ -11,7 +11,11 @@ RUN npm run build
 FROM nginxinc/nginx-unprivileged:1.29-alpine
 
 USER root
-RUN apk upgrade --no-cache
+ARG ALPINE_SECURITY_REFRESH=2026-09-04
+RUN test -n "$ALPINE_SECURITY_REFRESH" \
+  && apk update \
+  && apk upgrade --no-cache \
+  && rm -rf /var/cache/apk/*
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build --chown=101:101 /app/dist /usr/share/nginx/html
