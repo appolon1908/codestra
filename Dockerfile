@@ -8,7 +8,7 @@ ARG VITE_API_ENDPOINT
 ENV VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
 RUN npm run build
 
-FROM nginxinc/nginx-unprivileged:1.29-alpine
+FROM nginxinc/nginx-unprivileged:1.31.5-alpine3.24
 
 USER root
 RUN apk upgrade --no-cache
