@@ -149,6 +149,55 @@ Preferred pattern:
 
 Create the worktree from the exact, freshly fetched base authority required by the mission. Do not assume the local `main` branch is current.
 
+## Four-level agent control model
+
+The default Codestra engineering pipeline has four controlled levels:
+
+1. **Builder** — sole writer for the active issue/worktree.
+2. **Reviewer** — independent read-only review.
+3. **Verifier** — independent tests/runtime/release evidence.
+4. **Merge Coordinator** — exact-SHA approval, conflict classification, protected merge queue, and successor dispatch.
+
+The Merge Coordinator is **not** another general feature-coding agent. It is deterministic-first and may use AI reasoning only to classify semantic or cross-repository conflicts.
+
+### Merge Coordinator rules
+
+A PR may become `MERGE_READY` only when all of these are true:
+
+- PR head SHA is the exact SHA reviewed;
+- PR head SHA is the exact SHA verified;
+- target/base branch freshness satisfies the repository's protected policy;
+- GitHub reports the PR mergeable;
+- all required CI/checks pass;
+- no unresolved blocking review comments remain;
+- Reviewer accepted the exact head SHA;
+- Verifier accepted the exact head SHA;
+- repository dependency / merge-order constraints are satisfied;
+- Linear + Notion + mission checkpoint are current;
+- protected GitHub rules permit merge.
+
+Any new push invalidates approval evidence bound to the prior SHA.
+
+### Conflict classes
+
+- **CLASS-0 NONE** — clean merge; continue.
+- **CLASS-1 MECHANICAL** — formatting/generated/simple non-semantic overlap; Builder resolves in an isolated worktree and affected checks rerun.
+- **CLASS-2 SEMANTIC** — behavior/API/auth/schema/migration/business logic overlap; Builder resolves, then Reviewer must re-review and Verifier must rerun the required evidence.
+- **CLASS-3 CROSS_REPO** — contract/route/schema/release conflict spanning repositories; create a convergence mission and dependency-aware merge order.
+- **CLASS-4 UNKNOWN/UNSAFE** — fail closed as `BLOCKED_CONFLICT`; no agent guesses.
+
+### Approval ladder
+
+- **L0** read/analyze — automatic.
+- **L1** dedicated worktree write — active Builder lease.
+- **L2** branch push / PR update — mission policy.
+- **L3** review acceptance — independent Reviewer.
+- **L4** verification acceptance — independent Verifier.
+- **L5** merge authorization — Merge Coordinator + GitHub protected rules.
+- **L6** staging mutation/certification — release policy.
+- **L7** production-ready certificate — release authority.
+- **L8** live production/business effect — explicit human approval.
+
 ## Agent roles
 
 ### Builder
