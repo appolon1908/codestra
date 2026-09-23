@@ -5,6 +5,68 @@
 
 This document is the canonical cross-agent operating contract. Repository-local files such as `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` may add repo-specific constraints, but they must not weaken this contract.
 
+## Portfolio mission and repository goal alignment
+
+Every agent must understand both the **portfolio mission** and the **repository-specific goal** before working.
+
+### Portfolio mission
+
+Codestra is being built as a governed, production-ready platform and product portfolio where components can be continued safely by different agents and machines without losing context, bypassing controls, or drifting from architecture.
+
+The shared engineering goals are:
+
+- production-ready software with evidence, not self-reported completion;
+- clear source-of-truth boundaries across GitHub, Linear, Notion, local worktrees, and Mission Control;
+- safe handoff between Codex, Claude Code, GitHub Copilot, and other agents;
+- one writer per active issue, with independent review and verification;
+- durable checkpoints so work resumes from the exact last accepted state;
+- explicit APIs, identity, secrets, observability, rollback, backup/restore, and release evidence where applicable;
+- no weakening of CI, branch protection, authentication, authorization, or security gates;
+- no live-production/business effects without the required human approval.
+
+### Core platform architecture
+
+For the core production program, agents must preserve the current architecture unless an authorized Linear/Notion decision changes it:
+
+- **Caddy** — public edge / TLS entry point;
+- **Kong** — governed API gateway and route/auth policy;
+- **Middleware V3** — canonical API, integration, command, execution, audit, reconciliation, and provider-adapter authority;
+- **Keycloak** — identity, token/JWKS, human/service authentication and authorization authority;
+- **OpenBao** — secrets authority and secret-reference boundary;
+- **Odoo 19** — governed business/master-record application where defined by the active domain mission;
+- **Observability stack** — Prometheus/Alertmanager/Grafana/Loki/Tempo/Alloy/exporters and related repositories provide release evidence, SLO/health visibility, logging/tracing, and alert acceptance.
+
+The current core production-readiness parent is **PAS-247**. Component execution lanes include PAS-234 through PAS-239, with PAS-251 as the final production-ready certificate lane.
+
+### Product/application repositories
+
+Product repositories such as Klyrow, Breero, Moneybee, Telnexa, Beyvra, communications, AI, Device Forge, DJONE, and others keep their own product-specific mission and architecture. They should integrate with the shared platform contracts **where applicable** rather than being forced into a core-platform role they do not own.
+
+### Repository goal resolution rule
+
+The repository's actual current goal must be resolved in this order:
+
+1. active Linear issue / project mission;
+2. linked Notion mission, architecture, or decision page;
+3. repository-local `.codestra-mission/current-mission.json`, checkpoint, and handoff;
+4. repository README / architecture docs;
+5. this portfolio mission.
+
+If these disagree, do not silently choose one. Record the conflict and use Linear + Notion + GitHub evidence to reconcile it before implementation.
+
+An agent must be able to state, before editing:
+
+```
+PORTFOLIO_MISSION=<one sentence>
+REPOSITORY_GOAL=<one sentence>
+ACTIVE_LINEAR_ISSUE=<issue or NONE>
+SUCCESS_CRITERIA=<evidence-based exit condition>
+ROLE=<Builder|Reviewer|Verifier>
+WORKER_NODE=<machine>
+```
+
+If the agent cannot state these accurately, it is not ready to write code.
+
 ## What to give an agent
 
 Give the agent:
