@@ -127,6 +127,8 @@ def api_get(repo: str, path: str, ref: str) -> tuple[str | None, str | None]:
     cp = run(
         "gh",
         "api",
+        "-X",
+        "GET",
         f"repos/{repo}/contents/{path}",
         "-f",
         f"ref={ref}",
