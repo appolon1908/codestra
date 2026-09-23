@@ -6,6 +6,12 @@ Give this page to any Claude, Copilot, Codex, or other coding agent.
 
 https://github.com/ingtrader21-spec/codestra/blob/main/docs/AGENT-CONTINUATION-PROTOCOL.md
 
+## All repository starting links
+
+https://github.com/ingtrader21-spec/codestra/blob/main/docs/REPOSITORY-AGENT-START-INDEX.md
+
+Before writing code, the agent must identify the portfolio mission, repository-specific goal, active Linear issue, success criteria, role, and worker node. If it cannot resolve those from Linear + Notion + repo-local mission files, it must stop and report the conflict rather than guess.
+
 ## Copy/paste prompt
 
 ```
