@@ -387,8 +387,8 @@ EXPECTED_REQUIRED_CHECK_SOURCE_CLOSURE_SHA256 = {
         "b3157ad80f52123abaf62bf1ffb4b494"
     ),
     "appolon1908/codestra": (
-        "4e3ea69c3ec2a4bd6e4b50395672f44d"
-        "ec4a75460ed8648186445f1e8793b016"
+        "b07a836fbd47bf143cc27e9cb2409806"
+        "2a9cd8fbb70bc1b817ca3d9d45ec085b"
     ),
     "appolon1908-hue/beyvra-backend": (
         "8a3a6eb731ece61cc83f8e0333689f70"
