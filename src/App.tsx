@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import AuthProvider from './Providers/AuthProvider'
 import QueryProvider from './Providers/QueryProvider'
+import { SessionProvider } from './Providers/SessionProvider'
 import { BrowserRouter, Routes, Route } from 'react-router'
 
 import AOS from 'aos';
@@ -21,13 +22,16 @@ const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
 const Services = lazy(() => import('./Pages/Services/Services'))
 const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 
-AOS.init();
 function App() {
+  useEffect(() => {
+    AOS.init()
+  }, [])
 
   return (
     <>
     <QueryProvider> 
           <BrowserRouter>
+            <SessionProvider>
             <Suspense fallback={<div className="min-h-screen bg-[#080808]" aria-label="Loading" />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -51,6 +55,7 @@ function App() {
               }/>} />
             </Routes>
             </Suspense>
+            </SessionProvider>
           </BrowserRouter>
       </QueryProvider>
     </>
