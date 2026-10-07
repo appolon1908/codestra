@@ -1,0 +1,53 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "timestamp": "2026-10-07T15:01:17.000667+00:00",
+  "issue": "https://github.com/appolon1908/codestra/issues/47",
+  "active_linear_issue": "NONE",
+  "linear_blocker": "workspace quota; user-assigned GitHub issue is task authority",
+  "notion": "https://app.notion.com/p/3ed7518c3e068161a766ef162e5d70cc",
+  "worker_node": "crm",
+  "agent_role": "builder",
+  "worktree": "/srv/codestra/verification/gh47-refresh-concurrency",
+  "branch": "mission/gh47-refresh-concurrency",
+  "base_sha": "0c1b43627b99ee8080cabd8dc027363350608a21",
+  "original_base_sha": "eb663acbc8cbea74230149966a78680bb270249c",
+  "source_hashes": {
+    "src/APIs/base.tsx": "f3e3373ac7c970755e6fa23cac39e1827eb4f85a975e907e2f10d7661d9428a7",
+    "src/APIs/base.test.ts": "6305e48450f1d6bc563a12eaea94c0a1b1307e8be0d369c54a60dd5a5fe6b0c8"
+  },
+  "tests": [
+    {
+      "name": "red regression against exact original base",
+      "result": "EXPECTED_FAILURE",
+      "detail": "6 tests, 3 expected failures: concurrent refresh calls duplicated, failed refresh duplicated, logout triggers refresh",
+      "evidence": "/srv/codestra/verification/gh47-red-result.json"
+    },
+    {
+      "name": "npm test",
+      "result": "PASS",
+      "detail": "8 passed across 2 test files"
+    },
+    {
+      "name": "npm run lint",
+      "result": "PASS",
+      "detail": "0 errors; 1 unchanged Fast Refresh warning in SessionProvider.tsx"
+    },
+    {
+      "name": "npm run build",
+      "result": "PASS",
+      "detail": "TypeScript/Vite same-origin build; VITE_API_ENDPOINT=/"
+    },
+    {
+      "name": "npm run audit:production",
+      "result": "PASS",
+      "detail": "0 vulnerabilities"
+    }
+  ],
+  "verification_environment": "Node 22.22.2 Alpine 3.23; ephemeral container; 1 CPU; 1536 MiB; no application networks/ports; tests/build without network",
+  "ci": "PENDING; base production orchestrator contract remains failing and is handled in separate lane",
+  "review": "PENDING",
+  "runtime": "NOT_DEPLOYED",
+  "live_effects": false,
+  "next_action": "Publish exact tested tree as stacked PR into fix/codestra-review-4-cookie-session; independent review and GitHub CI required",
+  "dev_worktree": "FROZEN_PRESERVED due host outage; synchronize committed result only after reconnect, without overwriting original files"
+}
