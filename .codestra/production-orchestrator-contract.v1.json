@@ -1,6 +1,6 @@
 {
   "schema_version": "codestra.production-orchestrator-contract.v1",
-  "repository": "appolon1908-hue/codestra",
+  "repository": "appolon1908/codestra",
   "repository_id": 1319808791,
   "default_branch": "main",
   "role": "application",
