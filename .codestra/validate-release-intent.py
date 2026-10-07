@@ -61,7 +61,7 @@ CATALOG_REPOSITORIES = {
     "appolon1908-hue/Middleware-",
     "appolon1908/codestra",
     "appolon1908-hue/beyvra-backend",
-    "appolon1908-hue/backend2",
+    "appolon1908/backend2",
     "appolon1908-hue/beyvra-frontend",
     "appolon1908-hue/scrapper",
     "appolon1908-hue/Breero.com",
@@ -115,7 +115,7 @@ EXPECTED_CHECK_WORKFLOWS = {
         "secrets": ".github/workflows/ci.yml",
         "validate": ".github/workflows/ci.yml",
     },
-    "appolon1908-hue/backend2": {
+    "appolon1908/backend2": {
         "orchestrator-contract": ".github/workflows/production-orchestrator-contract.yml",
         "validate": ".github/workflows/ci.yml",
         "container": ".github/workflows/ci.yml",
@@ -181,7 +181,7 @@ EXPECTED_CHECK_WORKFLOW_SHA256 = {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/ci.yml": "1c2e654ffd1011f662985d261411502c392789b882b6d089ba18e182e53248d1",
     },
-    "appolon1908-hue/backend2": {
+    "appolon1908/backend2": {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/ci.yml": "e27367a06aa79f7adca93d148f7e9c88efe35e77a3893407ffc3988f1b36c217",
     },
@@ -228,6 +228,7 @@ BACKEND_PRODUCTION_VALIDATOR_SHA256 = (
     "6006bbc7850ce7666de926b6cad2585b"
     "83d2fce102104543b871530f11115f20"
 )
+APPLICATION_PRODUCTION_VALIDATOR_SHA256 = '5837d773433b5c26cdc556bb9ea6f796003da032a87082cd06b30b7a2547ecc4'
 EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
     "appolon1908-hue/Infustruction-repo": {
         ".github/workflows/production-orchestrator-contract.yml": {
@@ -302,7 +303,7 @@ EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
     },
     "appolon1908/codestra": {
         ".github/workflows/production-orchestrator-contract.yml": {
-            ".codestra/validate-production-orchestrator-contract.py": SHARED_PRODUCTION_VALIDATOR_SHA256,
+            ".codestra/validate-production-orchestrator-contract.py": APPLICATION_PRODUCTION_VALIDATOR_SHA256,
         },
     },
     "appolon1908-hue/beyvra-backend": {
@@ -310,9 +311,9 @@ EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
             ".codestra/validate-production-orchestrator-contract.py": BACKEND_PRODUCTION_VALIDATOR_SHA256,
         },
     },
-    "appolon1908-hue/backend2": {
+    "appolon1908/backend2": {
         ".github/workflows/production-orchestrator-contract.yml": {
-            ".codestra/validate-production-orchestrator-contract.py": SHARED_PRODUCTION_VALIDATOR_SHA256,
+            ".codestra/validate-production-orchestrator-contract.py": APPLICATION_PRODUCTION_VALIDATOR_SHA256,
         },
     },
     "appolon1908-hue/beyvra-frontend": {
@@ -386,16 +387,14 @@ EXPECTED_REQUIRED_CHECK_SOURCE_CLOSURE_SHA256 = {
         "b3157ad80f52123abaf62bf1ffb4b494"
     ),
     "appolon1908/codestra": (
-        "4e3ea69c3ec2a4bd6e4b50395672f44d"
-        "ec4a75460ed8648186445f1e8793b016"
+        '074c671fb8b6c3dbfc5765b4b9d12935c1f6e49c9185ae76eb72d4490771dd69'
     ),
     "appolon1908-hue/beyvra-backend": (
         "8a3a6eb731ece61cc83f8e0333689f70"
         "87be9db4f7e93698a37f860fdd453135"
     ),
-    "appolon1908-hue/backend2": (
-        "fa191e95756aec0a8987425eb697eb8e"
-        "2316d7b59ba77e6cd10bb52b10c2c43a"
+    "appolon1908/backend2": (
+        '54bcd0a123c52d92febb33f0b91f70df3916ba8786cddc16b7245a627261f4c5'
     ),
     "appolon1908-hue/beyvra-frontend": (
         "ce51e23c535871d23306264bb3806bb1"

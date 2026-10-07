@@ -26,6 +26,7 @@ RELEASE_VALIDATOR_PATH = ROOT / ".codestra/validate-release-intent.py"
 RELEASE_VALIDATOR_NON_SELF_REFERENTIAL_BINDINGS = frozenset(
     {
         "SHARED_PRODUCTION_VALIDATOR_SHA256",
+        "APPLICATION_PRODUCTION_VALIDATOR_SHA256",
         "KEYCLOAK_PRODUCTION_VALIDATOR_SHA256",
         "MIDDLEWARE_PRODUCTION_VALIDATOR_SHA256",
         "BACKEND_PRODUCTION_VALIDATOR_SHA256",
@@ -48,13 +49,14 @@ MONEYBEE_RELEASE_VALIDATOR_SECURITY_SHA256 = (
     "15dbaa6d571a1d1e72c09ca417cc9419"
     "8d8f21260babfae5eaedbdd46472b1ec"
 )
+APPLICATION_RELEASE_VALIDATOR_SECURITY_SHA256 = '5abce2ab2183777d22fe4d19f1581ec9756e5ee62bb8ca0eac73c834f9912d7c'
 EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Infustruction-repo": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Keycloak": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Middleware-": MIDDLEWARE_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908/codestra": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
+    "appolon1908/codestra": APPLICATION_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-backend": BACKEND_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908-hue/backend2": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
+    "appolon1908/backend2": APPLICATION_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-frontend": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/scrapper": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Breero.com": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
@@ -362,7 +364,7 @@ EXPECTED_IDENTITIES: dict[str, tuple[int, str, bool, bool]] = {
     "appolon1908-hue/Middleware-": (1347559071, "canonical-middleware", False, False),
     "appolon1908/codestra": (1319808791, "application", True, False),
     "appolon1908-hue/beyvra-backend": (1319831182, "application", True, False),
-    "appolon1908-hue/backend2": (1319903950, "application", True, False),
+    "appolon1908/backend2": (1319903950, "application", True, False),
     "appolon1908-hue/beyvra-frontend": (1320246591, "application", True, False),
     "appolon1908-hue/scrapper": (1329513537, "migration-evidence", False, False),
     "appolon1908-hue/Breero.com": (1331354808, "application", True, False),
@@ -402,7 +404,7 @@ EXPECTED_ARTIFACT_POLICIES: dict[
         "github",
         "oci",
     ),
-    "appolon1908-hue/backend2": (
+    "appolon1908/backend2": (
         ("ghcr.io/appolon1908-hue/backend2",),
         True,
         True,
@@ -9341,6 +9343,12 @@ def main() -> int:
     validate_portfolio_control_plane_bindings()
     validate(contract)
     validate_negative_regressions(contract)
+    if contract.get("repository") in {"appolon1908/codestra", "appolon1908/backend2"}:
+        subprocess.run(
+            ["python3", str(ROOT / ".codestra/test_repository_identity.py")],
+            cwd=ROOT,
+            check=True,
+        )
     validate_intent_negative_regressions(contract)
     subprocess.run(
         ["python3", str(RELEASE_VALIDATOR_PATH), "--self-test"],
