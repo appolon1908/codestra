@@ -1,35 +1,42 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { clearAccessToken, hasUsableAccessToken, setAccessToken } from "./auth";
 
-const token = (payload: object) => {
-  const encoded = btoa(JSON.stringify(payload))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-  return `header.${encoded}.signature`;
-};
+const get = vi.fn();
+const post = vi.fn();
 
-describe("authentication token handling", () => {
+vi.mock("@/APIs/base", () => ({
+  base_url: { get, post },
+}));
+
+import { logoutPost, sessionGet } from "./auth";
+
+describe("cookie session API", () => {
   beforeEach(() => {
-    localStorage.clear();
-    vi.useRealTimers();
+    get.mockReset();
+    post.mockReset();
   });
 
-  it("rejects missing and malformed tokens", () => {
-    expect(hasUsableAccessToken()).toBe(false);
-    setAccessToken("not-a-jwt");
-    expect(hasUsableAccessToken()).toBe(false);
+  it("loads the current user from the server session", async () => {
+    get.mockResolvedValue({
+      data: {
+        user: {
+          id: "u1",
+          email: "user@example.invalid",
+          first_name: "Test",
+          last_name: "User",
+        },
+      },
+    });
+
+    await expect(sessionGet()).resolves.toMatchObject({
+      id: "u1",
+      email: "user@example.invalid",
+    });
+    expect(get).toHaveBeenCalledWith("/api/auth/session/");
   });
 
-  it("accepts an unexpired token", () => {
-    setAccessToken(token({ exp: Math.floor(Date.now() / 1000) + 60 }));
-    expect(hasUsableAccessToken()).toBe(true);
-  });
-
-  it("rejects expired tokens and can clear storage", () => {
-    setAccessToken(token({ exp: Math.floor(Date.now() / 1000) - 60 }));
-    expect(hasUsableAccessToken()).toBe(false);
-    clearAccessToken();
-    expect(localStorage.getItem("accessToken")).toBeNull();
+  it("logs out through the server cookie session", async () => {
+    post.mockResolvedValue({ status: 205 });
+    await logoutPost();
+    expect(post).toHaveBeenCalledWith("/api/auth/logout/", {});
   });
 });
