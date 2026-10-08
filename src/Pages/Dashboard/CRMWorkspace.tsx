@@ -59,6 +59,7 @@ export default function CRMWorkspace() {
   const [term, setTerm] = useState("");
   const [campaignPage, setCampaignPage] = useState(1);
   const [leadPage, setLeadPage] = useState(1);
+  const [selectedLeadId, setSelectedLeadId] = useState<number | null>(null);
 
   const overview = useQuery({ queryKey: ["odoo-crm", "overview"], queryFn: getCRMOverview, retry: 1, staleTime: 30000 });
   const campaignQuery = useQuery({ queryKey: ["odoo-crm", "campaigns", campaignPage], queryFn: () => getCRMCampaigns(campaignPage), enabled: overview.isSuccess && tab === "campaigns", retry: 1 });
@@ -74,8 +75,8 @@ export default function CRMWorkspace() {
   }, [tab, campaignQuery.data, leadQuery.data, term]);
   const reload = () => { void qc.invalidateQueries({ queryKey: ["odoo-crm"] }); };
   const logout = () => { clearAccessToken(); navigate("/login", { replace: true }); };
-  const selectCampaign = (item: Campaign) => { setCampaign(item); setTerm(""); setLeadPage(1); setTab("leads"); };
-  const setActiveTab = (newTab: "campaigns" | "leads") => { setTab(newTab); setTerm(""); };
+  const selectCampaign = (item: Campaign) => { setCampaign(item); setSelectedLeadId(null); setTerm(""); setLeadPage(1); setTab("leads"); };
+  const setActiveTab = (newTab: "campaigns" | "leads") => { setTab(newTab); setSelectedLeadId(null); setTerm(""); };
   const configuredURL = String(import.meta.env.VITE_ODOO_WEB_URL || "");
   const externalOdooURL = configuredURL.startsWith("https://") ? configuredURL : "";
 
@@ -112,7 +113,7 @@ export default function CRMWorkspace() {
               </div>
               <label className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 focus-within:border-amber-400"><Search className="text-slate-400" size={17}/><input aria-label="Filter displayed records" value={term} onChange={e => setTerm(e.target.value)} placeholder="Filter current page…" className="w-48 bg-transparent py-2.5 text-sm text-white outline-none placeholder:text-slate-500 sm:w-60"/></label>
             </div>
-            {tab === "leads" && campaign && <div className="my-5 flex flex-wrap items-center gap-3 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-sm"><span>Showing leads from <strong>{campaign.name}</strong></span><button type="button" onClick={() => { setCampaign(null); setLeadPage(1); }} className="ml-auto inline-flex items-center gap-2 rounded-lg px-3 py-2 text-amber-300 hover:bg-white/5"><FilterX size={16}/> Clear filter</button></div>}
+            {tab === "leads" && campaign && <div className="my-5 flex flex-wrap items-center gap-3 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-sm"><span>Showing leads from <strong>{campaign.name}</strong></span><button type="button" onClick={() => { setCampaign(null); setSelectedLeadId(null); setLeadPage(1); }} className="ml-auto inline-flex items-center gap-2 rounded-lg px-3 py-2 text-amber-300 hover:bg-white/5"><FilterX size={16}/> Clear filter</button></div>}
             {active.isLoading && <div role="status" className="flex items-center gap-3 py-14 text-slate-400"><LoaderCircle className="animate-spin" size={19}/> Loading {tab}…</div>}
             {active.isError && <div className="mt-6"><Failure error={active.error} retry={reload}/></div>}
             {active.isSuccess && <>
@@ -124,14 +125,26 @@ export default function CRMWorkspace() {
                     <span className="min-w-0 flex-1"><span className="block text-sm text-slate-400">{(item as Campaign).code}</span><span className="mt-1 block truncate text-base font-semibold">{item.name}</span></span>
                     <StateBadge state={(item as Campaign).state}/><ArrowRight size={19} className="text-amber-300 transition group-hover:translate-x-1"/>
                   </button>
-                  : <div key={item.id} className="flex flex-wrap items-center gap-4 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-5">
-                    <span className="rounded-lg bg-white/5 p-3 text-slate-300"><ListChecks size={22}/></span>
-                    <div className="min-w-0 flex-1"><p className="truncate font-semibold">{item.name}</p><p className="mt-1 text-sm text-slate-400">Lead #{item.id} · Campaign #{(item as Lead).campaign_id}</p></div>
-                    <StateBadge state={(item as Lead).queue_state}/>
+                  : <div key={item.id} className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+                    <button type="button" aria-expanded={selectedLeadId === item.id}
+                      aria-controls={`lead-details-${item.id}`}
+                      onClick={() => setSelectedLeadId(selectedLeadId === item.id ? null : item.id)}
+                      className="flex w-full flex-wrap items-center gap-4 px-5 py-5 text-left transition hover:bg-white/[0.07] focus-visible:outline-2 focus-visible:outline-amber-400">
+                      <span className="rounded-lg bg-white/5 p-3 text-slate-300"><ListChecks size={22}/></span>
+                      <span className="min-w-0 flex-1"><span className="block truncate font-semibold">{item.name}</span><span className="mt-1 block text-sm text-slate-400">Lead #{item.id} · Campaign #{(item as Lead).campaign_id}</span></span>
+                      <StateBadge state={(item as Lead).queue_state}/>
+                      <ArrowRight size={18} className={`text-amber-300 transition-transform ${selectedLeadId === item.id ? "rotate-90" : ""}`}/>
+                    </button>
+                    {selectedLeadId === item.id && <div id={`lead-details-${item.id}`} className="grid gap-4 border-t border-white/10 bg-black/10 px-5 py-5 text-sm sm:grid-cols-3">
+                      <div><p className="text-slate-400">Queue status</p><p className="mt-1 font-semibold">{stateLabel((item as Lead).queue_state)}</p></div>
+                      <div><p className="text-slate-400">Priority</p><p className="mt-1 font-semibold">{(item as Lead).priority || "Normal"}</p></div>
+                      <div><p className="text-slate-400">Assigned to your Odoo identity</p><p className="mt-1 font-semibold">{(item as Lead).assigned_to_me ? "Yes" : "No"}</p></div>
+                      <p className="sm:col-span-3 text-slate-400">Read-only preview. Edits and communication actions are restricted to the governed Odoo workflow.</p>
+                    </div>}
                   </div>
                 )}
               </div>}
-              <div className="mt-6"><Pager page={currentPage} total={total} back={() => tab === "campaigns" ? setCampaignPage(Math.max(1, campaignPage - 1)) : setLeadPage(Math.max(1, leadPage - 1))} next={() => tab === "campaigns" ? setCampaignPage(campaignPage + 1) : setLeadPage(leadPage + 1)}/></div>
+              <div className="mt-6"><Pager page={currentPage} total={total} back={() => tab === "campaigns" ? setCampaignPage(Math.max(1, campaignPage - 1)) : (setSelectedLeadId(null), setLeadPage(Math.max(1, leadPage - 1)))} next={() => tab === "campaigns" ? setCampaignPage(campaignPage + 1) : (setSelectedLeadId(null), setLeadPage(leadPage + 1))}/></div>
             </>}
           </section>
           <p className="mt-5 text-sm leading-relaxed text-slate-500">Read-only dashboard. To create leads, import lists, reassign agents, or run campaign lifecycle actions, use the protected Odoo CRM application. Those actions are intentionally not enabled through the public website.</p>
