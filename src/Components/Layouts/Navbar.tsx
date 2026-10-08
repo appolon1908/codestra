@@ -47,7 +47,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between text-xs fixed 2xl:w-[60%] xl:w-[80%] lg:w-[80%] w-[95%] rounded-lg z-50 p-2 px-5 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
             
             <div className="lg:w-32 w-20">
-                <img src={logo} alt="" />
+                <img src={logo} alt="Codestra" />
             </div>
 
             <ul className="lg:flex hidden items-center gap-7 ">
@@ -101,12 +101,16 @@ const Navbar = () => {
 
                     <Button2 text="Log out" onClick={handleLogout}/>
 
-                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                        {!isOpen ? 
-                            <p><RiMenu3Line /></p> :
-                            <p><IoMdClose /></p> 
-                        }
-                    </div>
+                    <button
+                        type="button"
+                        onClick={toggleMenu}
+                        className="text-lg lg:hidden block p-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD700]"
+                        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-navigation"
+                    >
+                        {!isOpen ? <RiMenu3Line /> : <IoMdClose />}
+                    </button>
                 </div>
                 : 
 
@@ -118,19 +122,23 @@ const Navbar = () => {
                     <Link to={'/signup'}>
                         <Button2 text="Sign up" />
                     </Link>
-                    <div onClick={toggleMenu} className="text-lg lg:hidden block">
-                        {!isOpen ? 
-                            <p><RiMenu3Line /></p> :
-                            <p><IoMdClose /></p> 
-                        }
-                    </div>
+                    <button
+                        type="button"
+                        onClick={toggleMenu}
+                        className="text-lg lg:hidden block p-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD700]"
+                        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-navigation"
+                    >
+                        {!isOpen ? <RiMenu3Line /> : <IoMdClose />}
+                    </button>
                 </div>
             }
 
         </div>
         
         {isOpen && 
-            <ul className="lg:hidden fixed rounded-lg text-lg top-20 right-0 left-0 flex m-auto p-5 flex-col gap-12 h-[80vh] w-[90%] z-30 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
+            <ul id="mobile-navigation" className="lg:hidden fixed rounded-lg text-lg top-20 right-0 left-0 flex m-auto p-5 flex-col gap-12 h-[80vh] w-[90%] z-30 backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-[#121212] border border-[#1b1b1b]">
                     <Link to={'/'}>
                         <li>Home</li>
                     </Link>
