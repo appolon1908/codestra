@@ -21,6 +21,7 @@ const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicB
 const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
 const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
 const Services = lazy(() => import('./Pages/Services/Services'))
+const LegalPage = lazy(() => import('./Pages/Legal/LegalPage'))
 const Terms = lazy(() => import('./Pages/Terms/Terms'))
 const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 
@@ -51,6 +52,9 @@ function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="/sms" element={<LegalPage kind="sms" />} />
+              <Route path="/sms-terms" element={<LegalPage kind="smsTerms" />} />
+              <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
               
               <Route path="/*" element={<AuthProvider element={
                 <div>

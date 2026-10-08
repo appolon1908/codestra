@@ -13,7 +13,7 @@ const resultPath = process.env.CHAT_TEST_OUTPUT || '/tmp/chat-widget-browser.jso
    await context.route('**/api/**', route => route.fulfill({status:401,contentType:'application/json',body:'{"detail":"Synthetic unauthenticated response"}'}));
    await context.route('https://widgets.leadconnectorhq.com/loader.js', route => route.fulfill({status:200,contentType:'application/javascript',body:'window.__codestraTestWidgetLoads=(window.__codestraTestWidgetLoads||0)+1;'}));
    const page=await context.newPage();
-   for (const path of ['/', '/contact', '/services', '/privacy', '/terms']) {
+   for (const path of ['/', '/contact', '/services', '/privacy', '/terms', '/sms', '/sms-terms', '/contact-information']) {
     const response=await page.goto(base+path,{waitUntil:'networkidle'});
     assert.equal(response.status(),200);
     await page.waitForFunction(() => window.__codestraTestWidgetLoads===1);
@@ -55,7 +55,7 @@ const resultPath = process.env.CHAT_TEST_OUTPUT || '/tmp/chat-widget-browser.jso
   await page.addInitScript(() => { window.__chatCspViolations=[]; document.addEventListener('securitypolicyviolation', e => window.__chatCspViolations.push({directive:e.effectiveDirective,blockedURI:e.blockedURI})); });
   page.on('response',response => {if(response.url().includes('leadconnector'))provider.push({url:response.url(),status:response.status()});});
   page.on('requestfailed',request => {if(request.url().includes('leadconnector'))provider.push({url:request.url(),error:request.failure()?.errorText});});
-  await page.goto(base+'/',{waitUntil:'domcontentloaded',timeout:15000});
+  await page.goto(base+'/sms',{waitUntil:'domcontentloaded',timeout:15000});
   await page.waitForTimeout(8000);
   await page.screenshot({path:resultPath.replace('.json','.png'),fullPage:true,timeout:15000});
   csp.push(...await page.evaluate(() => window.__chatCspViolations || []));
@@ -63,5 +63,8 @@ const resultPath = process.env.CHAT_TEST_OUTPUT || '/tmp/chat-widget-browser.jso
   const report={live_widget_element_count:rendered,csp_violations:csp,synthetic_checks:results,provider_mocked_for_contract_checks:true,live_provider_probe:provider,local_api_mocked_for_static_preview:true,live_form_submitted:false};
   fs.writeFileSync(resultPath,JSON.stringify(report,null,2));
   console.log(JSON.stringify(report,null,2));
+  assert.equal(rendered,1,'Real provider must create exactly one widget');
+  assert.equal(csp.length,0,'No CSP violation may be silently ignored');
+  assert.ok(provider.some(r => r.url.includes('/loader.js') && r.status===200),'Real vendor loader must succeed');
  } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode=1; });
