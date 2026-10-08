@@ -29,3 +29,7 @@ export const FAQS_ENDPOINT_GET = "/api/cms/faqs/"
 
 //TESTOMINIES
 export const TESTIMONIALS_ENDPOINT_GET = "/api/cms/testimonial/"
+
+export const ODOO_CRM_OVERVIEW_ENDPOINT = "/api/cms/odoo-crm/overview/";
+export const ODOO_CRM_CAMPAIGNS_ENDPOINT = "/api/cms/odoo-crm/campaigns/";
+export const ODOO_CRM_LEADS_ENDPOINT = "/api/cms/odoo-crm/leads/";
