@@ -2,7 +2,7 @@
 export const CHAT_WIDGET_ID = '6ac7add4b17ff091c6b9a42c';
 export const CHAT_LOCATION_ID = 'jpzEheys0lV7R6jsD8W9';
 export const CHAT_LOADER_ID = 'codestra-leadconnector-loader';
-const PUBLIC_PATHS = new Set(['/', '/about', '/case-studies', '/contact', '/contact/sales', '/contact/support', '/services', '/privacy', '/terms']);
+const PUBLIC_PATHS = new Set(['/', '/about', '/case-studies', '/contact', '/contact/sales', '/contact/support', '/services', '/privacy', '/terms', '/sms', '/sms-terms', '/contact-information']);
 
 export function isPublicChatPath(pathname: string): boolean {
   const path = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname;

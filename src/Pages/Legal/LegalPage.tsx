@@ -3,7 +3,7 @@ import Navbar from '../../Components/Layouts/Navbar';
 import Footer from '../../Components/Layouts/Footer';
 import content from './legalContent.json';
 
-type LegalPageKind = 'privacy' | 'terms';
+type LegalPageKind = 'privacy' | 'terms' | 'smsTerms' | 'sms' | 'contactInformation';
 export default function LegalPage({ kind }: { kind: LegalPageKind }) {
   const page = content[kind];
   useEffect(() => {
@@ -26,7 +26,9 @@ export default function LegalPage({ kind }: { kind: LegalPageKind }) {
     <nav aria-label="Policy and company links" className="flex flex-wrap gap-5">
       <a className="underline" href="/privacy">Privacy Policy</a>
       <a className="underline" href="/terms">Terms &amp; Conditions</a>
-      <a className="underline" href="/contact">Contact CODESTRA LLC</a>
+      <a className="underline" href="/sms-terms">SMS Terms</a>
+      <a className="underline" href="/sms">SMS Updates</a>
+      <a className="underline" href="/contact-information">Contact CODESTRA LLC</a>
       <a className="underline" href="/about">About Codestra</a>
     </nav>
   </main><Footer /></>;

@@ -41,6 +41,9 @@ const Footer = () => (
         <li><Link className="hover:text-[#FFD700]" to="/case-studies">Our Work</Link></li>
         <li><Link className="hover:text-[#FFD700]" to="/privacy">Privacy Policy</Link></li>
         <li><Link className="hover:text-[#FFD700]" to="/terms">Terms &amp; Conditions</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/sms-terms">SMS Terms</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/sms">SMS Updates</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/contact-information">Business Contact</Link></li>
       </ul>
     </div>
   </footer>
