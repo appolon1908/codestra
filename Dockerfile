@@ -6,6 +6,9 @@ RUN npm ci
 COPY . .
 ARG VITE_API_ENDPOINT
 ENV VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
+# Build-time browser URL only; never include API credentials here.
+ARG VITE_ODOO_WEB_URL
+ENV VITE_ODOO_WEB_URL=${VITE_ODOO_WEB_URL}
 RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:1.31.5-alpine3.24
