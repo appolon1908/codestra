@@ -87,7 +87,7 @@ const Navbar = () => {
                     <li>Contact us</li>
                 </Link>
 
-                <Link to={'/'}>
+                <Link to={'/hiring/positions'}>
                     <li>Join The Team</li>
                 </Link> 
             </ul>
@@ -170,6 +170,10 @@ const Navbar = () => {
 
                     <Link to={'/contact'}>
                         <li>Contact us</li>
+                    </Link>
+
+                    <Link to={'/hiring/positions'}>
+                        <li>Join The Team</li>
                     </Link>
             </ul>
         }

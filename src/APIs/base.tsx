@@ -1,5 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-import { LOGIN_ENDPOINT, LOGOUT_ENDPOINT, REFRESH_SESSION_ENDPOINT } from "./endpoints";
+import { LOGIN_ENDPOINT, LOGOUT_ENDPOINT, REFRESH_SESSION_ENDPOINT, SESSION_ENDPOINT } from "./endpoints";
 
 type RetryableConfig = InternalAxiosRequestConfig & { _codestraRetry?: boolean };
 
@@ -41,7 +41,7 @@ base_url.interceptors.response.use(
       error.response?.status === 401 &&
       config &&
       !config._codestraRetry &&
-      ![LOGIN_ENDPOINT, LOGOUT_ENDPOINT, REFRESH_SESSION_ENDPOINT]
+      ![LOGIN_ENDPOINT, LOGOUT_ENDPOINT, REFRESH_SESSION_ENDPOINT, SESSION_ENDPOINT]
         .some((endpoint) => url.includes(endpoint));
 
     if (canRefresh) {

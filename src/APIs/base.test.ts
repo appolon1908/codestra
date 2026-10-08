@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AxiosAdapter, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
 const refreshUrl = "/api/auth/refresh-session/";
+const sessionUrl = "/api/auth/session/";
 
 const deferred = () => {
   let release!: () => void;
@@ -99,10 +100,13 @@ describe("cookie session refresh recovery", () => {
     expect(expiredEvents).toBe(1);
 
     refreshSucceeds = true;
-    const response = await client.get("/api/auth/session/");
-    expect(response.data).toEqual({ resource: "/api/auth/session/" });
+    await expect(client.get(sessionUrl)).rejects.toMatchObject({ response: { status: 401 } });
+    expect(refreshRequests).toBe(1);
+    expect(attempts[sessionUrl]).toBe(1);
+
+    await expect(client.get("/api/later/")).resolves.toMatchObject({ status: 200 });
     expect(refreshRequests).toBe(2);
-    expect(attempts["/api/auth/session/"]).toBe(2);
+    expect(attempts["/api/later/"]).toBe(2);
   });
 
   it("stops after one replay if the protected request still returns 401", async () => {
@@ -113,7 +117,7 @@ describe("cookie session refresh recovery", () => {
     expect(attempts["/api/denied/"]).toBe(2);
   });
 
-  it.each(["/api/auth/login/", "/api/auth/logout/", refreshUrl])(
+  it.each(["/api/auth/login/", "/api/auth/logout/", refreshUrl, sessionUrl])(
     "does not refresh authentication failures from %s",
     async (url) => {
       refreshSucceeds = false;

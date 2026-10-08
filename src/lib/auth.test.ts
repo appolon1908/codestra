@@ -36,6 +36,12 @@ describe("cookie session API", () => {
     expect(get).toHaveBeenCalledWith("/api/auth/session/");
   });
 
+  it("returns null when no browser session exists", async () => {
+    get.mockResolvedValue({ data: { user: null } });
+    await expect(sessionGet()).resolves.toBeNull();
+    expect(get).toHaveBeenCalledWith("/api/auth/session/");
+  });
+
   it("logs out through the server cookie session", async () => {
     post.mockResolvedValue({ status: 205 });
     await logoutPost();
