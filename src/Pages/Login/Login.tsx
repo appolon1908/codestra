@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 import { useState } from 'react'
 import { HiEye, HiEyeOff } from "react-icons/hi"
 import { Link, useNavigate } from 'react-router'
@@ -131,6 +132,7 @@ const Login = () => {
                 </Link>
               </p>
             </div>
+          <FormLegalLinks />
           </form>
         </div>
     </div>

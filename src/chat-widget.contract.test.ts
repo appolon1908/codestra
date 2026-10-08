@@ -31,3 +31,12 @@ describe('observed vendor dependencies', () => {
     }
   });
 });
+
+
+describe('privacy-preserving font loading', () => {
+  it('does not request the blocked remote font stylesheet', () => {
+    const css = readFileSync('src/index.css', 'utf8');
+    expect(css).not.toMatch(/@import\s+url\(['"]?https?:/);
+    expect(css).toContain('system-ui');
+  });
+});

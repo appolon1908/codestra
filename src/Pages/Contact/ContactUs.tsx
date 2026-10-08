@@ -3,7 +3,6 @@ import Navbar from '../../Components/Layouts/Navbar'
 import { Button3 } from '../../Components/components/Button'
 import { GrMail } from "react-icons/gr";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { IoCheckmarkCircle } from "react-icons/io5";
 import Footer from '../../Components/Layouts/Footer';
 import { Link } from 'react-router';
 
@@ -46,9 +45,9 @@ const ContactUs = () => {
                 <div>
                     <h2 className='text-lg'>Join the community</h2>
                     <p className='text-sm py-4 text-[#B4B5B5] lg:w-[60%] w-full'>
-                        Join over 10,000 Codestra users in our Slack community to share insights, ask questions, and explore best practices.
+                        Contact our team to learn about available Codestra resources and support.
                     </p>
-                    <p className='flex items-center gap-2'>Join Slack <MdKeyboardArrowRight  /></p>
+                    <a className='underline' href='mailto:support@codestra.co'>Contact Codestra support</a>
                 </div>
 
                 <div>
@@ -77,7 +76,7 @@ const ContactUs = () => {
             </div>
 
             <p className='text-center text-[#FFD700] cursor-pointer pt-[5rem] flex items-center gap-2 justify-center m-auto text-sm '>
-                <IoCheckmarkCircle className='text-xl'/>All systems operational
+                Contact support for current service availability
             </p>
         </div>
         <Footer />
