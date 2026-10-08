@@ -39,6 +39,7 @@ const Footer = () => (
         <li><Link className="hover:text-[#FFD700]" to="/contact">Contact</Link></li>
         <li><Link className="hover:text-[#FFD700]" to="/case-studies">Our Work</Link></li>
         <li><Link className="hover:text-[#FFD700]" to="/privacy">Privacy Policy</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/terms">Terms &amp; Conditions</Link></li>
       </ul>
     </div>
   </footer>
