@@ -20,7 +20,9 @@ function StateBadge({ state }: { state: string }) {
 
 function Failure({ error, retry }: { error: unknown; retry: () => void }) {
   const responseCode = (error as { response?: { status?: number } })?.response?.status;
-  const message = responseCode === 403
+  const message = responseCode === 401
+    ? "Your Codestra session is missing or expired. Sign in again to access the CRM."
+    : responseCode === 403
     ? "This area is restricted to authorized Codestra staff."
     : responseCode === 503
     ? "The Odoo connection is not configured or is currently unavailable."
@@ -30,7 +32,10 @@ function Failure({ error, retry }: { error: unknown; retry: () => void }) {
       <CircleAlert size={26} className="text-rose-300"/>
       <h2 className="mt-3 text-xl font-semibold">CRM connection unavailable</h2>
       <p className="mt-2 max-w-xl text-slate-300">{message}</p>
-      <button type="button" onClick={retry} className="mt-5 rounded-lg border border-rose-300/40 px-5 py-2.5 text-sm hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-amber-400">Retry connection</button>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <button type="button" onClick={retry} className="rounded-lg border border-rose-300/40 px-5 py-2.5 text-sm hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-amber-400">Retry connection</button>
+        {responseCode === 401 && <Link to="/login" className="rounded-lg bg-amber-400 px-5 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-amber-400">Sign in again</Link>}
+      </div>
     </section>
   );
 }
