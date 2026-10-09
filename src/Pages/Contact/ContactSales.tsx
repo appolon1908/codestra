@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 import Footer from "../../Components/Layouts/Footer"
 import Navbar from "../../Components/Layouts/Navbar"
 import { Button2a } from "../../Components/components/Button"
@@ -157,9 +158,10 @@ const ContactSales = () => {
 
                             <div className="flex lg:flex-row flex-col gap-4 lg:items-center lg:justify-between">
                                 <h2>You can also email us at sales@codestra.co</h2>
-                                <Button2a text="Send Message" isPending={isPending}/>
+                                <Button2a type="submit" text="Send Message" isPending={isPending}/>
                             </div>
-                        </form>
+                        <FormLegalLinks />
+          </form>
                     </div>
                 </div>
                 {isOpen &&

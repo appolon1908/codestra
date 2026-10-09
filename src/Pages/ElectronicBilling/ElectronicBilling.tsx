@@ -1,6 +1,7 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
-import { Button2, Button3 } from '../../Components/components/Button'
+import { Button2, Button2b, Button3 } from '../../Components/components/Button'
 import { RiFolderTransferLine } from "react-icons/ri";
 import { BsStack } from "react-icons/bs";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -16,6 +17,9 @@ import { useState } from 'react';
 import { AiOutlineMinusCircle } from 'react-icons/ai';
 import useFAQ from '../../hooks/queries/useFAQ';
 import Loading from '../../Components/components/Loading';
+import { useForm } from 'react-hook-form';
+import { useElectronicBillingInterest } from '../../hooks/mutations/useElectronicBillingInterest';
+import type { ElectronicBillingInterest as ElectronicBillingInterestPayload } from '../../APIs/api/electronicBilling';
 
 
 interface FAQ{
@@ -33,6 +37,22 @@ const ElectronicBilling = () => {
 
     const {data, isLoading} = useFAQ()
     const faqData = data?.data as FAQ[] || []
+    const billingInterest = useElectronicBillingInterest()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<ElectronicBillingInterestPayload>({
+      defaultValues: { uses_erp: true, consent_to_contact: false },
+    })
+    const [submissionMessage, setSubmissionMessage] = useState('')
+
+    const submitBillingInterest = (values: ElectronicBillingInterestPayload) => {
+      setSubmissionMessage('')
+      billingInterest.mutate(values, {
+        onSuccess: () => {
+          setSubmissionMessage('Thank you. A Codestra specialist will contact you.')
+          reset({ uses_erp: true, consent_to_contact: false })
+        },
+        onError: () => setSubmissionMessage('We could not submit your request. Please try again.'),
+      })
+    }
 
   return (
     <div>
@@ -42,10 +62,10 @@ const ElectronicBilling = () => {
                 <div className='space-y-3 w-full' data-aos="fade-up" data-aos-duration="500">
                     <h2 className='text-3xl text-[#FFD700]'>Electronic Billing</h2>
                     <p className='text-base '>Modernize and streamline billing processes and comply with Law 32-23 of the DGII</p>
-                    <Button2 text='Contact US'/>
+                    <Link to='/contact/sales'><Button2 text='Contact Us'/></Link>
                 </div>
 
-                <form data-aos="fade-up" data-aos-duration="500" className="space-y-6 p-5 rounded-3xl w-full bg-neutral-900 border border-neutral-800 h-fit">
+                <form onSubmit={handleSubmit(submitBillingInterest)} data-aos="fade-up" data-aos-duration="500" className="space-y-6 p-5 rounded-3xl w-full bg-neutral-900 border border-neutral-800 h-fit">
                     <div className="space-y-4">
 
                         <div className="flex flex-col gap-2">
@@ -54,7 +74,7 @@ const ElectronicBilling = () => {
                                 type="text"
                                 placeholder="Kelvin Smith"
                                 className="bg-[#262729] 2xl:text-xs xl:text-xs lg:text-xs text-xs border-0 text-white p-3 rounded-lg"
-                                required
+                                {...register('full_name', { required: true })}
                             />
                         </div>
 
@@ -65,17 +85,17 @@ const ElectronicBilling = () => {
                                 type="email"
                                 placeholder="kelvinsmith@gmail.com"
                                 className="bg-[#262729] 2xl:text-xs xl:text-xs lg:text-xs text-xs border-0 text-white p-3 rounded-lg"
-                                required
+                                {...register('email', { required: true })}
                             />
                         </div>
 
                         <div className="flex flex-col gap-2">
                             <label className="lg:text-sm text-xs text-white">Phone</label>
                             <input
-                                type='phone'
+                                type='tel'
                                 placeholder="(000) 000 0000"
                                 className="bg-[#262729] 2xl:text-xs xl:text-xs lg:text-xs text-xs border-0 text-white p-3 rounded-lg w-full"
-                                required
+                                {...register('phone', { required: true })}
                             />
                         </div>
 
@@ -84,27 +104,33 @@ const ElectronicBilling = () => {
                             <h2>Use ERP</h2>
                             <div className='flex items-center gap-3 pt-3'>
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" name="radio-1" className="radio w-5 h-5" defaultChecked />
+                                    <input type="radio" value="true" className="radio w-5 h-5" {...register('uses_erp', { setValueAs: value => value === 'true' })} />
                                     <p>Yes</p>
                                 </div>
 
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" name="radio-1" className="radio w-5 h-5" />
+                                    <input type="radio" value="false" className="radio w-5 h-5" {...register('uses_erp', { setValueAs: value => value === 'true' })} />
                                     <p>No</p>
                                 </div>
                             </div>
 
                             <div className='flex items-center gap-2 mt-5'>
-                                <input type="radio" name="radio-1" className="radio w-5 h-5" defaultChecked />
-                                <p>I agree to be contacted by Codestra Dominican Republic.</p>
+                                <input type="checkbox" className="checkbox w-5 h-5" {...register('consent_to_contact', { required: true })} />
+                                <p>I request a reply by email about this enquiry. This does not opt me into text messages.</p>
                             </div>
                         </div>
 
                         <div className='flex lg:justify-end lg:ml-auto'>
-                            <Button2 text='Send Message'/>
+                            <Button2b type='submit' text='Send Message' isPending={billingInterest.isPending}/>
                         </div>
+                        {(submissionMessage || errors.consent_to_contact) && (
+                          <p role="status" className={billingInterest.isError || errors.consent_to_contact ? 'text-red-300' : 'text-green-300'}>
+                            {errors.consent_to_contact ? 'Please consent to being contacted.' : submissionMessage}
+                          </p>
+                        )}
                     </div>
-                </form>
+                <FormLegalLinks />
+          </form>
             </div>
 
             <div className='lg:pt-0 pt-[8rem] text-sm'>
@@ -236,7 +262,7 @@ const ElectronicBilling = () => {
                             </ul>
 
                             <div className='p-10 pt-0'>
-                                <Button3 text='Request'/>
+                                <Link to='/electronic-billing/form'><Button3 text='Request'/></Link>
                             </div>
                         </div>
 
@@ -256,7 +282,7 @@ const ElectronicBilling = () => {
                             </ul>
 
                             <div className='p-10 pt-0'>
-                                <Button3 text='Request'/>
+                                <Link to='/electronic-billing/form'><Button3 text='Request'/></Link>
                             </div>
                         </div>
 

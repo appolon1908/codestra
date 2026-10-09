@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+/* Use installed fonts; no third-party font request on public or private pages. */
 
 @tailwind base;
 @tailwind components;
@@ -9,7 +9,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Sora", serif;
+  font-family: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 

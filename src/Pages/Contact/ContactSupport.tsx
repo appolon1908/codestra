@@ -37,7 +37,7 @@ const ContactSupport = () => {
 
                     <div className='text-sm space-y-2'>
                         <p>Get an overview of Linear's features, integrations, and how to use them.</p>
-                        <p className="flex items-center gap-3 cursor-pointer">Visit Docs <MdKeyboardArrowRight /></p>
+                        <a href="/api/docs/" className="flex items-center gap-3 hover:text-[#FFD700]">Visit API docs <MdKeyboardArrowRight /></a>
                     </div>
                 </div>
 

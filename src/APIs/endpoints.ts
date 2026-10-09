@@ -1,6 +1,9 @@
 
 // LOGIN
 export const LOGIN_ENDPOINT = "/api/auth/login/";
+export const SESSION_ENDPOINT = "/api/auth/session/";
+export const REFRESH_SESSION_ENDPOINT = "/api/auth/refresh-session/";
+export const LOGOUT_ENDPOINT = "/api/auth/logout/";
 
 
 // REGISTER
@@ -9,6 +12,7 @@ export const REGISTER_ENDPOINT = "/api/auth/signup/";
 
 //CONTACT US
 export const CONTACT_US_ENDPOINT = "/api/cms/contact-us/"
+export const ELECTRONIC_BILLING_INTEREST_ENDPOINT = "/api/cms/electronic-billing-interest/"
 
 //EMPLOYEE
 

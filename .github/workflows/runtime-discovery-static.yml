@@ -1,0 +1,56 @@
+name: Runtime discovery static policy
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/runtime-discovery.yml'
+      - '.github/workflows/runtime-discovery-static.yml'
+      - 'scripts/deploy/read-only-runtime-discovery.sh'
+      - 'scripts/ci/check-runtime-discovery.mjs'
+      - 'scripts/ci/test-runtime-discovery-fixture.sh'
+      - 'scripts/ci/test-runtime-discovery-host-proxy.sh'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/runtime-discovery.yml'
+      - '.github/workflows/runtime-discovery-static.yml'
+      - 'scripts/deploy/read-only-runtime-discovery.sh'
+      - 'scripts/ci/check-runtime-discovery.mjs'
+      - 'scripts/ci/test-runtime-discovery-fixture.sh'
+      - 'scripts/ci/test-runtime-discovery-host-proxy.sh'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: runtime-discovery-static-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Validate shell syntax
+        run: |
+          bash -n scripts/deploy/read-only-runtime-discovery.sh
+          bash -n scripts/ci/test-runtime-discovery-fixture.sh
+          bash -n scripts/ci/test-runtime-discovery-host-proxy.sh
+
+      - name: Enforce no-write discovery policy
+        run: node scripts/ci/check-runtime-discovery.mjs
+
+      - name: Exercise container-proxy topologies
+        run: bash scripts/ci/test-runtime-discovery-fixture.sh
+
+      - name: Exercise host reverse-proxy topologies
+        run: bash scripts/ci/test-runtime-discovery-host-proxy.sh

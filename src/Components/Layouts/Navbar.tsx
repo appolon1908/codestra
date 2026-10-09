@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Button1, Button2 } from "../components/Button"
 import { Link, useNavigate } from "react-router"
-import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth"
+import { useSession } from "@/Providers/SessionProvider"
 import { RiMenu3Line } from "react-icons/ri";
 import { IoIosArrowUp, IoMdClose } from "react-icons/io";
 import logo from '../../assets/logo.png'
@@ -26,9 +26,9 @@ const Navbar = () => {
     const toggleMenu = () => setIsOpen(!isOpen)
 
     const navigate = useNavigate()
-    const isAuthenticated = hasUsableAccessToken()
-    const handleLogout = () =>{
-        clearAccessToken()
+    const { isAuthenticated, logout } = useSession()
+    const handleLogout = async () => {
+        await logout()
         navigate('/', { replace: true })
     }
 
@@ -60,21 +60,21 @@ const Navbar = () => {
                 </Link>  
 
                 <div className="relative">
-                    <li className="cursor-pointer flex items-center gap-2" onClick={()=>setShowServices(!showServices)}>Services 
-                        {showServices === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</li>
+                    <button type="button" aria-expanded={showServices} className="flex items-center gap-2" onClick={()=>setShowServices(!showServices)}>Services
+                        {showServices === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</button>
                     {showServices && 
                         <ul className="absolute bg-neutral-900 border border-neutral-800 top-10 p-3 rounded-lg w-[15rem] space-y-1">
                             <Link to={'/services'}>
                                 <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><FaBrain />AI Automation</li>
                             </Link>
 
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><LiaReact />React JS</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoPython />Python</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
+                            <Link to='/contact/sales'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbMessage2Filled />Consultation</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandCake />Brand Development</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoBuffer />Logo Development</li></Link>
+                            <Link to='/about'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoAppleAr />Codestra SRL</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><LiaReact />React JS</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><IoLogoPython />Python</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-3 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li></Link>
                         </ul>
                     }
                 </div>
@@ -145,21 +145,21 @@ const Navbar = () => {
                     </Link> */}
 
                     <div className="relative">
-                    <li className="cursor-pointer flex items-center gap-2" onClick={()=>setShowServices2(!showServices2)}>Services 
-                        {showServices2 === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</li>
+                    <button type="button" aria-expanded={showServices2} className="flex items-center gap-2" onClick={()=>setShowServices2(!showServices2)}>Services
+                        {showServices2 === false ? <IoIosArrowDown /> : <IoIosArrowUp />}</button>
                     {showServices2 && 
                         <ul className="absolute bg-neutral-900 border backdrop-blur-3xl bg-opacity-100 text-sm border-neutral-800 top-10 p-5 rounded-lg w-full space-y-1">
                             <Link to={'/services'}>
                                 <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><FaBrain />AI Automation</li>
                             </Link>
 
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Developement</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />CODESTRA SRL</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li>
-                            <li className="cursor-pointer hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li>
+                            <Link to='/contact/sales'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbMessage2Filled />Consultation</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandCake />Brand Development</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoBuffer />Logo Development</li></Link>
+                            <Link to='/about'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoAppleAr />Codestra SRL</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><LiaReact />React JS</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><IoLogoPython />Python</li></Link>
+                            <Link to='/services'><li className="hover:bg-[#FFD700] hover:text-black rounded-full p-3 px-6 flex items-center gap-2"><TbBrandSocketIo />Real Time Data Sync</li></Link>
                         </ul>
                     }
                 </div>

@@ -1,8 +1,8 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 
 import { useState } from 'react'
 import { HiEye } from "react-icons/hi";
 import { HiEyeOff } from "react-icons/hi";
-import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import useSignup from '@/hooks/mutations/useSignup';
@@ -136,7 +136,7 @@ interface ErrorResponse {
             </div>
 
             {!isPending ? 
-              <button className="w-full bg-white p-3 rounded-lg text-black hover:bg-gray-200">
+              <button type="submit" className="w-full bg-white p-3 rounded-lg text-black hover:bg-gray-200">
                 Sign Up
               </button> :
               <button type="button" className="w-full flex justify-center items-center gap-3 bg-white p-3 rounded-lg text-neutral-400 hover:bg-gray-200">
@@ -145,11 +145,6 @@ interface ErrorResponse {
               </button>
             }
 
-            <button className="w-full flex items-center gap-3 p-3 justify-center m-auto bg-[#262729] rounded-lg text-white hover:bg-[#1A1A1A] hover:text-white">
-                Sign Up with Google
-              <FcGoogle />
-            </button>
-
             <p className="text-center text-gray-400 text-sm">
               Have an account?{' '}
               <Link to="/login" className="text-white underline hover:text-gray-200">
@@ -157,7 +152,8 @@ interface ErrorResponse {
               </Link>
             </p>
           </div>
-        </form>
+        <FormLegalLinks />
+          </form>
       </div>
     </div>
   )
