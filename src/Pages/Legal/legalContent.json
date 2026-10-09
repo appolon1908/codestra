@@ -1,0 +1,193 @@
+{
+  "business": "CODESTRA LLC",
+  "updated": "October 8, 2026",
+  "email": "support@codestra.co",
+  "phone": "+1 346-544-6979",
+  "phoneHref": "tel:+13465446979",
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "CODESTRA LLC operates codestra.co. This policy explains how information is handled when you visit our website, request services, create an account, or use our chat widget.",
+    "sections": [
+      {
+        "heading": "Information we collect",
+        "paragraphs": [
+          "We collect information you choose to provide, including your name, email address, phone number, company, enquiry, and service-related details. Website and security systems may also record your IP address, browser or device information, and interactions needed to operate and protect the service.",
+          "Send only information relevant to your enquiry. Do not submit passwords, payment-card details, medical records, or sensitive documents through website chat. Use the appropriate secure service channel."
+        ]
+      },
+      {
+        "heading": "How information is used",
+        "paragraphs": [
+          "We use information to respond to enquiries, provide and support services, manage accounts, prevent abuse, maintain security, and meet applicable obligations. Enquiries may be recorded in our internal customer relationship and support systems."
+        ]
+      },
+      {
+        "heading": "Website chat and service providers",
+        "paragraphs": [
+          "HighLevel / LeadConnector processes information submitted through the chat widget to provide the chat and messaging service. Hosting, communications, and support providers may process information as needed to deliver services on our behalf. They are not authorized to use mobile information for their own marketing.",
+          "Cookies, browser storage, and similar technologies may support sessions, security, chat functionality, and service operation. Browser settings can restrict these technologies, although some features may not work correctly."
+        ]
+      },
+      {
+        "heading": "Mobile information and SMS consent",
+        "paragraphs": [
+          "No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. Information sharing to subcontractors in support services, such as customer service, is permitted. All other use case categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.",
+          "Providing a phone number or submitting an enquiry is not, by itself, SMS marketing consent. Messaging choices are presented in the widget. Consent is optional and is not a condition of purchase. Marketing permission is separate from permission for informational messages."
+        ]
+      },
+      {
+        "heading": "Your choices and privacy requests",
+        "paragraphs": [
+          "Reply STOP to the number sending you messages to withdraw SMS consent. Reply HELP for messaging assistance, or email support@codestra.co. A new opt-in is required before a withdrawn messaging subscription can resume.",
+          "You may request access, correction, or deletion of your information at support@codestra.co. We may need to verify your identity and retain records required for security, legal obligations, or respect for opt-out choices."
+        ]
+      },
+      {
+        "heading": "Retention and security",
+        "paragraphs": [
+          "We retain information for as long as needed to respond to enquiries, provide services, maintain necessary business and consent records, and meet applicable obligations. We use access controls and other safeguards appropriate to the information; no internet transmission or storage system is completely secure."
+        ]
+      },
+      {
+        "heading": "Policy updates",
+        "paragraphs": [
+          "Updates will be published on this page with a revised date. Review our Terms & Conditions for website and messaging rules. Contact us using the information below with questions about this policy."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "intro": "This website is operated by CODESTRA LLC. These terms cover website use, enquiries, and our optional messaging programs. Paid services are governed by the separate agreement accepted for that service; a website enquiry is not a purchase or a service contract.",
+    "sections": [
+      {
+        "heading": "Business and messaging program",
+        "paragraphs": [
+          "CODESTRA LLC provides software, web and application development, technology consulting, and related support. Available informational messages may include responses to your enquiries, service and project updates, and support information. Promotional messages are sent only with separate marketing consent and only for the program described when you opt in."
+        ]
+      },
+      {
+        "heading": "Optional consent",
+        "paragraphs": [
+          "Review the choices and disclosures in the chat widget before submitting. Providing a phone number alone does not authorize marketing. SMS consent is optional and is not a condition of purchase. Where both categories are offered, marketing and informational consent choices are independent and are not pre-selected.",
+          "Only the messaging categories you select may be used. Do not provide another person’s number or opt in on their behalf without authority."
+        ]
+      },
+      {
+        "heading": "Stopping and restarting messages",
+        "paragraphs": [
+          "Reply STOP to the number sending you messages to cancel that messaging subscription at any time. You may receive a confirmation of the opt-out; further messages under that subscription will stop. To subscribe again, complete a new opt-in through the applicable registration method."
+        ]
+      },
+      {
+        "heading": "Help, frequency, and charges",
+        "paragraphs": [
+          "Reply HELP for messaging assistance or contact support@codestra.co. Message frequency varies according to your requests and the program you select. Message and data rates may apply to messages sent and received. Ask your wireless provider about your plan and charges.",
+          "Carriers are not liable for delayed or undelivered messages. Delivery also depends on your device, network availability, and supported messaging service."
+        ]
+      },
+      {
+        "heading": "Responsible website use",
+        "paragraphs": [
+          "Do not use this website to submit unlawful content, attempt unauthorized access, disrupt services, or impersonate another person. Do not submit passwords, payment-card details, medical records, or sensitive documents through chat. Request an appropriate secure channel instead."
+        ]
+      },
+      {
+        "heading": "Privacy and changes",
+        "paragraphs": [
+          "Our Privacy Policy explains information handling and messaging consent. We may update these terms by publishing a revised version and date here. Questions about website access, privacy, or messaging can be sent to support@codestra.co."
+        ]
+      }
+    ]
+  },
+  "smsTerms": {
+    "title": "SMS Terms",
+    "intro": "CODESTRA LLC offers optional text-message updates related to software and application development, technology consulting, enquiries, and customer support. These SMS terms supplement our Terms & Conditions.",
+    "sections": [
+      {
+        "heading": "Business and messaging program",
+        "paragraphs": [
+          "CODESTRA LLC provides software, web and application development, technology consulting, and related support. Available informational messages may include responses to your enquiries, service and project updates, and support information. Promotional messages are sent only with separate marketing consent and only for the program described when you opt in."
+        ]
+      },
+      {
+        "heading": "Optional consent",
+        "paragraphs": [
+          "Review the choices and disclosures in the chat widget before submitting. Providing a phone number alone does not authorize marketing. SMS consent is optional and is not a condition of purchase. Where both categories are offered, marketing and informational consent choices are independent and are not pre-selected.",
+          "Only the messaging categories you select may be used. Do not provide another person’s number or opt in on their behalf without authority."
+        ]
+      },
+      {
+        "heading": "Stopping and restarting messages",
+        "paragraphs": [
+          "Reply STOP to the number sending you messages to cancel that messaging subscription at any time. You may receive a confirmation of the opt-out; further messages under that subscription will stop. To subscribe again, complete a new opt-in through the applicable registration method."
+        ]
+      },
+      {
+        "heading": "Help, frequency, and charges",
+        "paragraphs": [
+          "Reply HELP for messaging assistance or contact support@codestra.co. Message frequency varies according to your requests and the program you select. Message and data rates may apply to messages sent and received. Ask your wireless provider about your plan and charges.",
+          "Carriers are not liable for delayed or undelivered messages. Delivery also depends on your device, network availability, and supported messaging service."
+        ]
+      },
+      {
+        "heading": "Privacy and support",
+        "paragraphs": [
+          "Our Privacy Policy describes mobile information and consent handling. For assistance, reply HELP or email support@codestra.co. Consent to receive texts is not a condition of buying any service."
+        ]
+      }
+    ]
+  },
+  "sms": {
+    "title": "SMS Updates",
+    "intro": "Use the CODESTRA LLC chat widget on this page to ask about our software development and support services and review any optional messaging choices. This page does not add a second SMS consent form.",
+    "sections": [
+      {
+        "heading": "Choose how we may contact you",
+        "paragraphs": [
+          "Open the chat button, review the program disclosures, and choose only the messaging categories you wish to receive. Providing a phone number is not, by itself, permission to send marketing texts. Consent is optional and is not a condition of purchase.",
+          "The widget is the only SMS opt-in form on this page. Its disclosures and consent choices are supplied by HighLevel. No other contact or appointment form on this page collects SMS consent."
+        ]
+      },
+      {
+        "heading": "Message information",
+        "paragraphs": [
+          "CODESTRA LLC informational messages may cover your enquiries, service and project updates, and support. Promotional messages require separate marketing consent when offered. Message frequency varies. Message and data rates may apply.",
+          "Reply STOP to cancel the applicable messaging subscription; reply HELP for assistance. Read the Privacy Policy, Terms & Conditions, and SMS Terms linked below before making your choices."
+        ]
+      },
+      {
+        "heading": "Another way to reach us",
+        "paragraphs": [
+          "Email support@codestra.co or call +1 346-544-6979. Emailing or calling us does not enroll you in SMS marketing. Do not send sensitive documents, passwords, or payment information through chat."
+        ]
+      }
+    ]
+  },
+  "contactInformation": {
+    "title": "Business Contact Information",
+    "intro": "CODESTRA LLC provides software and application development, technology consulting, and related customer support. Use the contact details below for website, privacy, and messaging questions.",
+    "sections": [
+      {
+        "heading": "Support",
+        "paragraphs": [
+          "Email: support@codestra.co. United States telephone: +1 346-544-6979. Dominican Republic telephone: +1 809-734-7580."
+        ]
+      },
+      {
+        "heading": "Offices",
+        "paragraphs": [
+          "Dominican Republic: Condominio Progreso Business Center, Av. Lope de Vega 13, Santo Domingo 10130.",
+          "United States: 20634 Longen Baugh RD, Cypress, TX 77433."
+        ]
+      },
+      {
+        "heading": "Website and messaging",
+        "paragraphs": [
+          "Our website is codestra.co. Review our Privacy Policy, Terms & Conditions, and SMS Terms using the links below. SMS subscriptions are optional; telephone details provided for an enquiry are not marketing consent.",
+          "For privacy access, correction, or deletion requests, email support@codestra.co. For text-message assistance, reply HELP to the sending number; to unsubscribe from that messaging subscription, reply STOP."
+        ]
+      }
+    ]
+  }
+}
