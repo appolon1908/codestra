@@ -1,0 +1,182 @@
+[
+  {
+    "slug": "ai-consulting",
+    "kind": "service",
+    "name": "AI Consulting",
+    "eyebrow": "AI advisory and delivery",
+    "headline": "AI consulting that turns opportunity into an executable system",
+    "description": "Identify the AI opportunities worth funding, define the operating model, and move from broad ambition to a secure production plan with clear ownership and evidence.",
+    "challenge": "Teams often begin with a model, vendor, or executive mandate before they have agreed on the workflow to improve, the data they can use, or the risk they can accept. That creates pilots with no owner and no path into daily operations.",
+    "approach": "Codestra maps decisions, handoffs, data, controls, and success measures first. We rank opportunities by value and feasibility, then translate the strongest candidate into a product brief, integration architecture, governance plan, and phased delivery backlog.",
+    "capabilities": ["AI opportunity and workflow assessment", "Use-case prioritization and value modeling", "Data, security, and governance readiness", "Production architecture and implementation roadmap"],
+    "outcomes": ["A ranked portfolio of practical AI opportunities", "An agreed first production use case and owner", "A documented risk and data-control model", "A delivery roadmap tied to measurable business results"],
+    "keywords": ["AI consulting company", "enterprise AI consulting", "AI transformation consulting", "AI implementation roadmap", "AI use case assessment", "AI strategy consultant", "production AI advisory", "AI governance consulting"],
+    "faqs": [
+      {"question": "What does an AI consulting engagement produce?", "answer": "The engagement produces concrete artifacts: a workflow map, prioritized opportunities, data and risk findings, target architecture, success metrics, ownership model, and a phased implementation plan."},
+      {"question": "Can Codestra help when we do not know which AI use case to start with?", "answer": "Yes. We compare candidate workflows by business value, data readiness, operational risk, adoption difficulty, and time to first evidence so the first investment is deliberate."},
+      {"question": "Does consulting include implementation?", "answer": "It can. Codestra can continue from advisory into product design, engineering, integration, testing, rollout, and operation, preserving the decisions made during discovery."}
+    ]
+  },
+  {
+    "slug": "ai-strategy-roadmap",
+    "kind": "service",
+    "name": "AI Strategy & Roadmap",
+    "eyebrow": "Enterprise AI planning",
+    "headline": "An AI strategy your teams can sequence, govern, and deliver",
+    "description": "Create a portfolio-level AI roadmap that connects business priorities, shared capabilities, data foundations, governance, change management, and investment decisions.",
+    "challenge": "Separate departments frequently launch overlapping AI experiments with different vendors, definitions, and controls. The organization spends more while accumulating duplicated infrastructure, inconsistent risk decisions, and little reusable capability.",
+    "approach": "We establish strategic themes, map the opportunity portfolio, identify shared platform needs, and define decision gates. The roadmap sequences quick evidence, foundational work, and higher-risk capabilities while assigning accountable business and technical owners.",
+    "capabilities": ["AI portfolio and dependency mapping", "Build-buy-partner decision framework", "Shared platform and data capability planning", "Governance, funding, and operating-model design"],
+    "outcomes": ["A sequenced multi-quarter AI roadmap", "Reduced duplication across business units", "Clear investment and stop-go decision gates", "Shared governance and platform principles"],
+    "keywords": ["AI strategy roadmap", "enterprise AI strategy", "AI transformation roadmap", "AI operating model", "AI portfolio planning", "AI governance framework", "AI investment strategy", "generative AI roadmap"],
+    "faqs": [
+      {"question": "How long should an AI roadmap cover?", "answer": "Most roadmaps use a rolling 12-to-24-month horizon, with detailed near-term milestones and less prescriptive later phases that can adapt as evidence and technology change."},
+      {"question": "How do you prevent the roadmap from becoming a presentation that nobody uses?", "answer": "Each initiative is linked to an owner, business metric, dependency, risk class, decision gate, and next executable milestone. The roadmap is designed to operate as a portfolio tool."},
+      {"question": "Can the roadmap include existing AI projects?", "answer": "Yes. We assess current pilots and vendors, identify what should be scaled, corrected, consolidated, paused, or stopped, and incorporate reusable assets into the target plan."}
+    ]
+  },
+  {
+    "slug": "generative-ai-development",
+    "kind": "service",
+    "name": "Generative AI Development",
+    "eyebrow": "Production generative AI",
+    "headline": "Generative AI products grounded in your work and your controls",
+    "description": "Design and build generative AI applications that create, summarize, classify, extract, and reason over business information with traceability and human oversight.",
+    "challenge": "A generic model can produce impressive output while still being unreliable for a real workflow. Missing context, weak evaluation, uncontrolled prompts, sensitive data, and unclear review responsibilities turn demonstrations into operational risk.",
+    "approach": "Codestra builds the product around a bounded task. We engineer context, prompts, tools, permissions, evaluations, fallback behavior, and review checkpoints, then observe quality and cost in production instead of relying on anecdotal demos.",
+    "capabilities": ["Prompt and context engineering", "Structured output and tool-use workflows", "Model evaluation and quality monitoring", "Guardrails, review queues, and audit trails"],
+    "outcomes": ["Consistent output for a defined business task", "Lower manual drafting and analysis time", "Visible quality, latency, and cost measures", "Controlled handling of sensitive business context"],
+    "keywords": ["generative AI development company", "custom generative AI application", "enterprise generative AI", "LLM application development", "generative AI integration", "production LLM system", "AI content automation", "secure generative AI"],
+    "faqs": [
+      {"question": "Which model does Codestra use for generative AI applications?", "answer": "Model choice follows the task, quality target, latency, privacy, hosting, and cost requirements. The architecture can support more than one model so the product is not unnecessarily locked to one provider."},
+      {"question": "How do you reduce hallucinations?", "answer": "We narrow the task, ground responses in approved sources, require structured evidence where appropriate, run repeatable evaluations, set confidence and fallback rules, and preserve human review for consequential actions."},
+      {"question": "Can generative AI connect to our current software?", "answer": "Yes. The application can retrieve authorized context and invoke allowlisted actions through APIs, gateways, queues, and audited service accounts rather than exposing internal systems directly."}
+    ]
+  },
+  {
+    "slug": "ai-agent-development",
+    "kind": "service",
+    "name": "AI Agent Development",
+    "eyebrow": "Agentic workflow engineering",
+    "headline": "AI agents that act inside controlled business boundaries",
+    "description": "Build task-oriented AI agents that gather context, choose approved tools, complete multi-step work, request human decisions, and leave a complete operational record.",
+    "challenge": "An agent with broad tools and vague goals can create unpredictable actions, hidden cost, and difficult-to-debug failures. Production agents need explicit authority, state, idempotency, timeouts, escalation, and observable decisions.",
+    "approach": "We model the agent as a governed workflow rather than an autonomous black box. Every tool is allowlisted, inputs are validated, actions are scoped, side effects are idempotent, and uncertain or high-impact steps are routed to people.",
+    "capabilities": ["Agent workflow and state-machine design", "Secure tool and API orchestration", "Human approval and escalation paths", "Agent evaluation, tracing, and cost controls"],
+    "outcomes": ["Automated completion of bounded multi-step tasks", "Fewer manual transfers between systems", "Auditable agent decisions and actions", "Safe fallback when confidence or dependencies fail"],
+    "keywords": ["AI agent development company", "enterprise AI agents", "agentic workflow automation", "custom AI agent", "AI tool orchestration", "multi agent system development", "AI agent integration", "production agentic AI"],
+    "faqs": [
+      {"question": "What business tasks are suitable for an AI agent?", "answer": "Good candidates have a repeatable goal, accessible context, bounded tools, observable completion criteria, and a clear escalation path. Open-ended authority over consequential systems is not a good first target."},
+      {"question": "How is an AI agent different from a chatbot?", "answer": "A chatbot primarily exchanges messages. An agent may maintain task state, select tools, execute steps, verify results, and request approvals while the conversation is only one possible interface."},
+      {"question": "Can an agent write into Odoo or another CRM?", "answer": "Yes, through a private adapter and narrowly scoped service identity. We validate commands, enforce tenant and field permissions, add idempotency, and retain an audit trail before any CRM mutation."}
+    ]
+  },
+  {
+    "slug": "ai-chatbot-development",
+    "kind": "service",
+    "name": "AI Chatbot Development",
+    "eyebrow": "Conversational AI",
+    "headline": "AI chatbots that resolve questions and complete real work",
+    "description": "Create branded conversational experiences that answer from approved knowledge, capture qualified intent, connect to live systems, and hand off with full context.",
+    "challenge": "Many chatbots trap customers in scripted loops or generate unsupported answers. They lack account context, cannot complete a useful action, and lose the conversation when a human agent becomes necessary.",
+    "approach": "Codestra combines retrieval, conversation design, identity-aware context, API actions, and explicit escalation. We measure containment, answer quality, conversion, abandonment, and handoff success rather than counting messages alone.",
+    "capabilities": ["Knowledge-grounded question answering", "Lead qualification and guided workflows", "Authenticated customer self-service", "Context-rich human agent handoff"],
+    "outcomes": ["Faster answers across web and messaging", "Higher-quality lead and support intake", "Reduced repetitive work for service teams", "Continuity between automation and human support"],
+    "keywords": ["AI chatbot development company", "custom customer service chatbot", "enterprise chatbot development", "website AI chatbot", "AI lead qualification chatbot", "Odoo chatbot integration", "conversational AI services", "multilingual AI chatbot"],
+    "faqs": [
+      {"question": "Can the chatbot answer only from our approved information?", "answer": "Yes. We can require retrieval from an approved knowledge set, attach citations or source references, and decline or escalate when the available evidence is insufficient."},
+      {"question": "Can it support more than one language?", "answer": "Yes. Language detection, translated knowledge, terminology controls, evaluation sets, and handoff routing can be designed for the languages and regions your operation supports."},
+      {"question": "How does the chatbot hand a conversation to a person?", "answer": "The handoff includes the transcript, detected intent, customer details, retrieved sources, completed steps, and the unresolved question so the agent does not restart the interaction."}
+    ]
+  },
+  {
+    "slug": "ai-copilot-development",
+    "kind": "service",
+    "name": "AI Copilot Development",
+    "eyebrow": "Human-in-the-loop AI",
+    "headline": "AI copilots that make expert teams faster without hiding judgment",
+    "description": "Build role-specific copilots that prepare context, recommend next actions, draft work, verify completeness, and keep the responsible professional in control.",
+    "challenge": "Knowledge workers lose time searching across systems, reconstructing context, and repeating administrative work. Generic assistants do not understand role permissions, internal terminology, quality standards, or the exact decision being made.",
+    "approach": "We embed the copilot in the point of work, assemble authorized context, and shape output around an explicit professional decision. Users can inspect sources, edit recommendations, provide feedback, and approve every consequential action.",
+    "capabilities": ["Role and workflow-specific copilot design", "Context assembly across authorized systems", "Drafting, recommendation, and validation tools", "Feedback capture and continuous evaluation"],
+    "outcomes": ["Less time spent finding and reformatting information", "More consistent preparation and documentation", "Faster onboarding for new team members", "Preserved human accountability for important decisions"],
+    "keywords": ["AI copilot development", "enterprise AI assistant", "custom workplace copilot", "employee AI copilot", "AI productivity application", "role based AI assistant", "knowledge worker automation", "human in the loop AI"],
+    "faqs": [
+      {"question": "Where does an AI copilot live?", "answer": "It can live inside a web portal, CRM panel, browser extension, internal application, messaging interface, or a dedicated workspace depending on where the user makes the decision."},
+      {"question": "Can different roles receive different context and actions?", "answer": "Yes. Context and tools are filtered through the same identity, tenant, role, and record-level permissions that govern the underlying systems."},
+      {"question": "How do we know the copilot is helping?", "answer": "We compare task time, completion quality, error and rework rates, adoption, override patterns, and downstream outcomes against a pre-launch baseline."}
+    ]
+  },
+  {
+    "slug": "custom-llm-development",
+    "kind": "service",
+    "name": "Custom LLM Development",
+    "eyebrow": "Language model engineering",
+    "headline": "Custom LLM systems tuned to the language and constraints of your business",
+    "description": "Adapt language-model behavior through data preparation, retrieval, prompting, fine-tuning, evaluation, routing, and deployment choices matched to your use case.",
+    "challenge": "Organizations often assume a custom model is the starting point when better context, evaluation, or workflow design would solve the problem faster. Others need specialized behavior but lack clean examples and objective quality measures.",
+    "approach": "Codestra establishes a task benchmark first, then tests the least complex method that can meet it. We compare prompt and retrieval improvements, structured tool use, fine-tuning, model routing, and private deployment using the same evaluation set.",
+    "capabilities": ["Domain dataset preparation and governance", "Prompt, retrieval, and fine-tuning experiments", "Model evaluation and comparative benchmarking", "Private inference and model-routing architecture"],
+    "outcomes": ["Model behavior matched to a defined task", "Evidence-based choice between adaptation methods", "Controlled quality, latency, privacy, and cost", "Reusable evaluation assets for future model changes"],
+    "keywords": ["custom LLM development", "LLM fine tuning services", "domain specific language model", "private LLM deployment", "enterprise LLM engineering", "LLM evaluation services", "custom language model company", "LLM model routing"],
+    "faqs": [
+      {"question": "Do we need to train a language model from scratch?", "answer": "Usually not. Retrieval, better context, tool use, or fine-tuning an existing model is typically faster and more economical. Training from scratch requires a strong specialized case and substantial data and infrastructure."},
+      {"question": "What data is needed for fine-tuning?", "answer": "The useful dataset contains representative inputs and high-quality target behavior, with rights, privacy, provenance, and split controls. Volume matters less than relevance and consistency for many tasks."},
+      {"question": "Can a custom LLM run in a private environment?", "answer": "Yes when the selected model and infrastructure support it. We compare private, dedicated, and managed deployment based on security, latency, operations, and cost requirements."}
+    ]
+  },
+  {
+    "slug": "retrieval-augmented-generation",
+    "kind": "service",
+    "name": "Retrieval-Augmented Generation",
+    "eyebrow": "Grounded enterprise AI",
+    "headline": "RAG systems that answer from the right evidence at the right time",
+    "description": "Build retrieval-augmented generation systems that locate authorized evidence, preserve source context, and produce grounded answers across business knowledge.",
+    "challenge": "A simple vector search can retrieve plausible but irrelevant fragments, ignore permissions, lose document structure, and provide no way to assess whether the answer was supported. Better embeddings alone do not solve the information architecture.",
+    "approach": "We design ingestion, chunking, metadata, access control, hybrid retrieval, reranking, citation, abstention, and evaluation as one system. Retrieval quality and answer faithfulness are measured separately so failures can be diagnosed.",
+    "capabilities": ["Document ingestion and metadata pipelines", "Hybrid search, reranking, and query planning", "Permission-aware retrieval and source citations", "Retrieval and answer-quality evaluation"],
+    "outcomes": ["Faster access to trusted internal knowledge", "Answers linked to inspectable source material", "Reduced unsupported model output", "A maintainable index that respects information access"],
+    "keywords": ["RAG development company", "retrieval augmented generation services", "enterprise RAG system", "private knowledge chatbot", "vector search development", "permission aware RAG", "LLM knowledge retrieval", "RAG evaluation"],
+    "faqs": [
+      {"question": "What information can a RAG system use?", "answer": "It can index approved documents, knowledge articles, databases, tickets, product records, policies, and other sources, provided ownership, freshness, permissions, and extraction quality are addressed."},
+      {"question": "How do you protect documents with different permissions?", "answer": "Identity and access filters are applied before evidence reaches the model. Documents and chunks carry tenant and authorization metadata, and retrieval is tested for cross-boundary leakage."},
+      {"question": "How is RAG quality measured?", "answer": "We use representative questions with expected evidence to measure retrieval relevance, source coverage, answer correctness, faithfulness, citation accuracy, latency, and abstention behavior."}
+    ]
+  },
+  {
+    "slug": "ai-knowledge-base",
+    "kind": "service",
+    "name": "AI Knowledge Base",
+    "eyebrow": "Knowledge operations",
+    "headline": "An AI knowledge base that stays useful as the business changes",
+    "description": "Unify scattered policies, product information, procedures, and expert answers into governed knowledge that employees and customers can search conversationally.",
+    "challenge": "Knowledge is frequently duplicated across drives, wikis, tickets, inboxes, and individual memory. Search returns outdated material, ownership is unclear, and teams repeatedly answer the same question without improving the source.",
+    "approach": "Codestra treats knowledge as an operating process. We define source authority, owners, review cycles, ingestion rules, version signals, access boundaries, search and conversational experiences, and a feedback loop for missing or weak answers.",
+    "capabilities": ["Knowledge-source inventory and authority model", "Automated ingestion, classification, and freshness checks", "Semantic search and conversational retrieval", "Answer feedback, gap detection, and editorial workflow"],
+    "outcomes": ["A trusted place to find current operational knowledge", "Less repeated questioning across teams", "Faster employee and customer resolution", "Visible ownership and gaps in the knowledge estate"],
+    "keywords": ["AI knowledge base", "enterprise knowledge management AI", "internal AI search", "AI powered knowledge portal", "semantic knowledge search", "customer support knowledge AI", "knowledge base chatbot", "company knowledge assistant"],
+    "faqs": [
+      {"question": "Does an AI knowledge base replace our existing wiki or document system?", "answer": "Not necessarily. It can provide a governed discovery layer over existing authoritative systems while preserving their ownership, or it can support a consolidation plan where duplication is the core problem."},
+      {"question": "How does outdated information get handled?", "answer": "Sources carry ownership and freshness metadata. Review windows, change events, expired-content rules, user feedback, and answer-quality monitoring identify material that should be updated or excluded."},
+      {"question": "Can employees and customers see different knowledge?", "answer": "Yes. Separate audiences, tenant boundaries, identity rules, document permissions, and response policies determine what each user can retrieve and what actions are available."}
+    ]
+  },
+  {
+    "slug": "machine-learning-development",
+    "kind": "service",
+    "name": "Machine Learning Development",
+    "eyebrow": "Applied machine learning",
+    "headline": "Machine learning built around a decision, not just a model score",
+    "description": "Develop machine-learning systems for prediction, classification, ranking, anomaly detection, and optimization with production data pipelines and decision integration.",
+    "challenge": "A model can perform well in a notebook and still fail operationally because labels are weak, data changes, latency is wrong, users cannot act on the output, or the cost of false positives and false negatives was never agreed.",
+    "approach": "We define the decision and error economics first, establish a baseline, build reproducible data and feature pipelines, compare models, and integrate predictions into a monitored workflow with thresholds, overrides, and retraining triggers.",
+    "capabilities": ["Problem framing and baseline modeling", "Data, feature, and training pipelines", "Model serving and decision integration", "Drift, performance, and fairness monitoring"],
+    "outcomes": ["Predictions tied to an explicit operational decision", "Reproducible training and deployment", "Visible model and business performance", "Controlled response to drift and changing data"],
+    "keywords": ["machine learning development company", "custom machine learning solution", "enterprise ML development", "predictive model development", "machine learning integration", "MLOps consulting", "production machine learning", "applied AI engineering"],
+    "faqs": [
+      {"question": "How much historical data is required?", "answer": "The answer depends on event frequency, signal strength, label quality, variation, and the acceptable error. We inspect the available data and establish whether a useful baseline is possible before committing to a complex model."},
+      {"question": "Can you improve an existing model?", "answer": "Yes. We can assess the target definition, leakage, feature pipeline, validation method, calibration, serving path, monitoring, and the business threshold to locate the actual constraint."},
+      {"question": "What happens when model performance changes?", "answer": "Production monitoring tracks data distribution, prediction behavior, delayed outcomes, and business metrics. Defined thresholds can trigger investigation, fallback rules, recalibration, or a controlled retraining workflow."}
+    ]
+  }
+]
