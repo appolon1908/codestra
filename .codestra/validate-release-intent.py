@@ -59,7 +59,7 @@ CATALOG_REPOSITORIES = {
     "appolon1908-hue/Infustruction-repo",
     "appolon1908-hue/Keycloak",
     "appolon1908-hue/Middleware-",
-    "appolon1908-hue/codestra",
+    "appolon1908/codestra",
     "appolon1908-hue/beyvra-backend",
     "appolon1908-hue/backend2",
     "appolon1908-hue/beyvra-frontend",
@@ -103,7 +103,7 @@ EXPECTED_CHECK_WORKFLOWS = {
         "Temporal critical workflow integration": ".github/workflows/middleware-ci.yml",
         "Synthetic no-effect acceptance E2E": ".github/workflows/middleware-ci.yml",
     },
-    "appolon1908-hue/codestra": {
+    "appolon1908/codestra": {
         "orchestrator-contract": ".github/workflows/production-orchestrator-contract.yml",
         "verify": ".github/workflows/ci.yml",
         "container": ".github/workflows/ci.yml",
@@ -173,7 +173,7 @@ EXPECTED_CHECK_WORKFLOW_SHA256 = {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/middleware-ci.yml": "385d1f652556de076cb26a480351ab6bb2c5f1d6200b9e7beae06add8ee75d42",
     },
-    "appolon1908-hue/codestra": {
+    "appolon1908/codestra": {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/ci.yml": "7b0a377343c86b1274ecb91c4cc2423d6c045c0197eae9eb1abe775d791a73d1",
     },
@@ -213,8 +213,8 @@ EXPECTED_CHECK_WORKFLOW_SHA256 = {
     },
 }
 SHARED_PRODUCTION_VALIDATOR_SHA256 = (
-    "6006bbc7850ce7666de926b6cad2585b"
-    "83d2fce102104543b871530f11115f20"
+    "3668858e7ed5f8854312aabe460faa81"
+    "947848d8ee1bbd6dbce6ac38546a6d2f"
 )
 KEYCLOAK_PRODUCTION_VALIDATOR_SHA256 = (
     "6006bbc7850ce7666de926b6cad2585b"
@@ -300,7 +300,7 @@ EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
             ),
         },
     },
-    "appolon1908-hue/codestra": {
+    "appolon1908/codestra": {
         ".github/workflows/production-orchestrator-contract.yml": {
             ".codestra/validate-production-orchestrator-contract.py": SHARED_PRODUCTION_VALIDATOR_SHA256,
         },
@@ -385,9 +385,9 @@ EXPECTED_REQUIRED_CHECK_SOURCE_CLOSURE_SHA256 = {
         "6c8f60985d114a88693e1f2214cecedd"
         "b3157ad80f52123abaf62bf1ffb4b494"
     ),
-    "appolon1908-hue/codestra": (
-        "4e3ea69c3ec2a4bd6e4b50395672f44d"
-        "ec4a75460ed8648186445f1e8793b016"
+    "appolon1908/codestra": (
+        "1403619ef661b7599bdaea17a2ae4347"
+        "d4cecbf6143fdbca6ff0d96e45d347df"
     ),
     "appolon1908-hue/beyvra-backend": (
         "8a3a6eb731ece61cc83f8e0333689f70"
