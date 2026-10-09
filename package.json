@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/prerender-legal.mjs",
     "audit:production": "npm audit --omit=dev --audit-level=high",
     "lint": "eslint .",
     "preview": "vite preview",

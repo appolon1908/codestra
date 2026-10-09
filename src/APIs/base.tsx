@@ -1,5 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-import { REFRESH_SESSION_ENDPOINT } from "./endpoints";
+import { LOGIN_ENDPOINT, LOGOUT_ENDPOINT, REFRESH_SESSION_ENDPOINT } from "./endpoints";
 
 type RetryableConfig = InternalAxiosRequestConfig & { _codestraRetry?: boolean };
 
@@ -14,6 +14,23 @@ const clientOptions = {
 
 export const base_url = axios.create(clientOptions);
 const refresh_client = axios.create(clientOptions);
+let refreshPromise: Promise<void> | null = null;
+
+const refreshSession = () => {
+  if (!refreshPromise) {
+    // Rotating cookies must be refreshed once for all requests waiting on expiry.
+    refreshPromise = refresh_client.post(REFRESH_SESSION_ENDPOINT, {})
+      .then(() => undefined)
+      .catch((error) => {
+        window.dispatchEvent(new Event("codestra-auth-expired"));
+        throw error;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
+};
 
 base_url.interceptors.response.use(
   (response) => response,
@@ -24,17 +41,17 @@ base_url.interceptors.response.use(
       error.response?.status === 401 &&
       config &&
       !config._codestraRetry &&
-      !url.includes("/api/auth/login/") &&
-      !url.includes(REFRESH_SESSION_ENDPOINT);
+      ![LOGIN_ENDPOINT, LOGOUT_ENDPOINT, REFRESH_SESSION_ENDPOINT]
+        .some((endpoint) => url.includes(endpoint));
 
     if (canRefresh) {
       config._codestraRetry = true;
       try {
-        await refresh_client.post(REFRESH_SESSION_ENDPOINT, {});
-        return base_url(config);
+        await refreshSession();
       } catch {
-        window.dispatchEvent(new Event("codestra-auth-expired"));
+        return Promise.reject(error);
       }
+      return base_url(config);
     }
 
     return Promise.reject(error);
