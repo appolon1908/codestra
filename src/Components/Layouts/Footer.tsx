@@ -7,6 +7,7 @@ const industryLinks = ['Finance', 'Healthcare', 'iGaming', 'Real Estate', 'Educa
 const Footer = () => (
   <footer className="flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-8 bg-[#08090A] border-t border-neutral-800 lg:py-20 pt-10 pb-10 lg:mt-[10rem] mt-[5rem] justify-between">
     <div>
+      <p className="mb-3 text-base font-bold">CODESTRA LLC</p>
       <h2 className="text-base text-white font-bold">Offices</h2>
       <div className="text-xs">
         <div className="pb-3 pt-3 border-b border-neutral-800">
@@ -39,6 +40,10 @@ const Footer = () => (
         <li><Link className="hover:text-[#FFD700]" to="/contact">Contact</Link></li>
         <li><Link className="hover:text-[#FFD700]" to="/case-studies">Our Work</Link></li>
         <li><Link className="hover:text-[#FFD700]" to="/privacy">Privacy Policy</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/terms">Terms &amp; Conditions</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/sms-terms">SMS Terms</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/sms">SMS Updates</Link></li>
+        <li><Link className="hover:text-[#FFD700]" to="/contact-information">Business Contact</Link></li>
       </ul>
     </div>
   </footer>
