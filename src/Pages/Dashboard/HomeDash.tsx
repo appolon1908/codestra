@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router"
-import { clearAccessToken } from "@/lib/auth"
+import { useSession } from "@/Providers/SessionProvider"
 import { Button2 } from "../../Components/components/Button"
 
 const HomeDash = () => {
 
   const navigate = useNavigate()
-  const handleLogout = () =>{
-       clearAccessToken()
+  const { logout } = useSession()
+  const handleLogout = async () => {
+       await logout()
        navigate('/', { replace: true })
    }  
 
