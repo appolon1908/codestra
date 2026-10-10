@@ -14,7 +14,7 @@ const industryLinks = [
 const Footer = () => {
   const { t } = useTranslation(["common", "navigation", "legal"]);
   return (
-  <footer className="site-footer flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl: xl: lg: px-8 corporate-bg-canvas border-t corporate-border-line lg:py-20 pt-10 pb-10 lg:mt-[10rem] mt-[5rem] justify-between overflow-hidden">
+  <footer className="site-footer flex lg:flex-row flex-col lg:gap-14 gap-8 text-sm 2xl: xl: lg: px-8 corporate-bg-canvas border-t corporate-border-line lg:py-20 pt-10 pb-10   justify-between overflow-hidden">
     <LocalizedLink className="button button--primary button--lg" to="/contact/sales">{t("navigation:servicesMenu.consultation")}</LocalizedLink>
     <div>
       <h2 className="text-base corporate-text-ink font-bold">{t("common:office")}</h2>
