@@ -33,7 +33,6 @@ class OutboxWorker:
     def start(self) -> None:
         if not self._settings.N8N_DELIVERY_ENABLED:
             logger.warning("n8n outbox delivery is disabled by configuration")
-            return
         if self._task is None:
             self._task = asyncio.create_task(self._run(), name="lead-n8n-outbox")
 
@@ -64,6 +63,8 @@ class OutboxWorker:
                 await asyncio.sleep(min(10, self._settings.N8N_OUTBOX_POLL_SECONDS * 2))
 
     async def _deliver_one(self) -> bool:
+        if not self._settings.N8N_DELIVERY_ENABLED:
+            return False
         event = await self._database.claim_outbox_event()
         if event is None:
             return False

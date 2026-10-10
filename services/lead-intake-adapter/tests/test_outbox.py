@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import hmac
 import json
@@ -77,3 +78,43 @@ async def test_n8n_request_is_hmac_signed(settings) -> None:
     assert request.headers["x-codestra-signature"] == f"sha256={expected}"
     assert request.headers["x-codestra-event-id"] == str(event.event_id)
     assert json.loads(body) == event.payload
+
+
+@pytest.mark.asyncio
+async def test_disabled_delivery_still_schedules_retention_cleanup(settings) -> None:
+    cleanup_completed = asyncio.Event()
+
+    class MaintenanceDatabase:
+        async def cleanup_retention(self) -> tuple[int, int]:
+            cleanup_completed.set()
+            return 1, 0
+
+        async def claim_outbox_event(self) -> None:
+            raise AssertionError("disabled delivery must not claim events")
+
+    def reject_delivery(request: httpx.Request) -> httpx.Response:
+        raise AssertionError("disabled delivery must not make outbound requests")
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(reject_delivery)) as client:
+        worker = OutboxWorker(settings, MaintenanceDatabase(), client)  # type: ignore[arg-type]
+        worker._last_cleanup = -86_400  # Make cleanup due even on a newly booted host.
+        worker.start()
+        try:
+            await asyncio.wait_for(cleanup_completed.wait(), timeout=2)
+            assert worker._task is not None
+            assert not worker._task.done()
+        finally:
+            await worker.stop()
+        assert worker._task is None
+
+
+@pytest.mark.asyncio
+async def test_disabled_delivery_does_not_claim_an_outbox_event(settings) -> None:
+    class NoDeliveryDatabase:
+        async def claim_outbox_event(self) -> None:
+            raise AssertionError("disabled delivery must not claim events")
+
+    transport = httpx.MockTransport(lambda _: httpx.Response(202))
+    async with httpx.AsyncClient(transport=transport) as client:
+        worker = OutboxWorker(settings, NoDeliveryDatabase(), client)  # type: ignore[arg-type]
+        assert await worker._deliver_one() is False
