@@ -1,0 +1,4 @@
+import type { Candle } from "./chartTypes";
+export const sma = (values: number[], period: number) => values.map((_, i) => i + 1 < period ? null : values.slice(i + 1 - period, i + 1).reduce((a, b) => a + b, 0) / period);
+export const ema = (values: number[], period: number) => { if (period < 1 || values.length === 0) return []; const k = 2 / (period + 1); let previous = values[0]; return values.map((value, i) => { previous = i === 0 ? value : value * k + previous * (1 - k); return previous; }); };
+export const rsi = (candles: Candle[], period = 14) => { const changes = candles.slice(1).map((c, i) => c.close - candles[i].close); return changes.map((_, i) => { if (i + 1 < period) return null; const window = changes.slice(i + 1 - period, i + 1); const gains = window.filter((v) => v > 0).reduce((a, b) => a + b, 0); const losses = Math.abs(window.filter((v) => v < 0).reduce((a, b) => a + b, 0)); return losses === 0 ? 100 : 100 - (100 / (1 + gains / losses)); }); };
