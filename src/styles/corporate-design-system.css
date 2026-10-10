@@ -1147,3 +1147,6 @@ body {
   .corporate-footer { grid-template-columns: minmax(0, 1fr); }
   .corporate-header { width: calc(100% - var(--space-6)); gap: var(--space-2); }
 }
+
+/* Prevent the legacy universal font rule from overriding corporate typography. */
+.marketing-route :where(*) { font-family: var(--font-ui); }
