@@ -37,13 +37,13 @@
         "protectedRoutes": true,
         "loginPath": "/login",
         "loginSourceFile": "src/Pages/Login/Login.tsx",
-        "logoutSourceFile": "src/lib/auth.ts",
+        "logoutSourceFile": "src/Components/Layouts/Navbar.tsx",
         "guardSourceFile": "src/Providers/AuthProvider.tsx",
         "backendAuthorizationRequired": true,
         "headerReflectsSession": true,
         "durableIdentity": "backend-user-id",
         "migrationTarget": "issuer+subject",
-        "browserTokenStorage": "legacy-session-storage-migration-required"
+        "browserTokenStorage": "forbidden"
       },
       "colorPolicy": {
         "rejectNewRawColors": true,

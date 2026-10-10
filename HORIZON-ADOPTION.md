@@ -30,14 +30,14 @@ These roles are not interchangeable. Public navigation may link to them, but API
 The current Codestra frontend uses a real legacy API-session login. It is not described as the final production identity model.
 
 - Login calls the existing `/api/auth/login/` API through `useLogin`.
-- Invalid or expired JWT access tokens are removed before a page is considered authenticated.
+- Authentication is established by the backend cookie-session endpoint; browser bearer-token storage is forbidden.
 - Protected wildcard routes fail closed through `AuthProvider`.
 - A protected deep link is preserved as a validated same-origin `next` path.
-- The shared header reacts to login, logout, expiry, route changes, and cross-tab storage changes.
-- Logout disables duplicate clicks, attempts `VITE_AUTH_LOGOUT_ENDPOINT` when the backend publishes it, and always clears the local Codestra token.
+- The shared header reflects the shared SessionProvider and reacts to login, logout, and backend session expiry.
+- Logout disables duplicate clicks, invokes the backend logout endpoint, and clears the shared session cache.
 - Backend permission, tenant, record, capability, and state checks remain authoritative.
 - The migration target is Keycloak Authorization Code Flow with PKCE S256 and durable identity `issuer + subject`.
-- Browser bearer-token storage is explicitly `legacy-session-storage-migration-required`.
+- Browser bearer-token storage is explicitly `forbidden`.
 
 Public-only repositories must not copy these account buttons unless they also provide a real registered session implementation.
 

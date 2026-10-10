@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import { useSession } from "./SessionProvider";
 
 interface AuthProps {
@@ -7,20 +6,19 @@ interface AuthProps {
 }
 
 const AuthProvider = ({ element }: AuthProps) => {
-  const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, isLoading } = useSession();
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate("/login", { replace: true });
-    }
-  }, [isAuthenticated, isLoading, navigate]);
-
   if (isLoading) {
-    return <div className="min-h-screen bg-[#080808]" aria-label="Checking session" />;
+    return <div className="hz-auth-page" aria-label="Checking session" />;
   }
 
-  return isAuthenticated ? element : null;
+  if (!isAuthenticated) {
+    const requested = `${location.pathname}${location.search}`;
+    return <Navigate to={`/login?next=${encodeURIComponent(requested)}`} replace />;
+  }
+
+  return element;
 };
 
 export default AuthProvider;
