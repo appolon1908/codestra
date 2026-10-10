@@ -53,7 +53,7 @@ const industries = [
 const Home = () => (
   <div className="modern-shell">
     <Navbar />
-    <main id="main-content" className="home-page">
+    <main lang="en" id="main-content" className="home-page">
       <section className="hero shell" aria-labelledby="hero-title">
         <div className="hero__copy">
           <p className="eyebrow"><Sparkles size={15} aria-hidden="true" /> AI that connects to the real business</p>

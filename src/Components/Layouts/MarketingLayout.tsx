@@ -11,7 +11,7 @@ interface MarketingLayoutProps {
 const MarketingLayout = ({ children, className = '' }: MarketingLayoutProps) => (
   <div className={`marketing-site ${className}`.trim()}>
     <Navbar />
-    <main id="main-content">{children}</main>
+    <main lang="en" id="main-content">{children}</main>
     <Footer />
   </div>
 )

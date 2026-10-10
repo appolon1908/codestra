@@ -985,3 +985,5 @@
     scroll-behavior: auto !important;
   }
 }
+
+.modern-shell .hero > * { grid-area: auto; min-width: 0; }

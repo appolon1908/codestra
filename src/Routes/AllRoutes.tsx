@@ -8,8 +8,8 @@ const NotFound = lazy(() => import('../Pages/NotFound'))
 const AllRoutes = () => {
   return (
     <Routes>
-        <Route path="/auth/dashboard" element={<HomeDash />} />
-        <Route path="/auth/webhooks" element={<Webhooks />} />
+        <Route path="dashboard" element={<HomeDash />} />
+        <Route path="webhooks" element={<Webhooks />} />
         <Route path="*" element={<NotFound />} />
     </Routes>
   )

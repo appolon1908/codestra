@@ -116,6 +116,8 @@ function App() {
                 <Route path="electronic-billing" element={<MarketingRoute><ElectronicBilling /></MarketingRoute>} />
                 <Route path="electronic-billing/form" element={<MarketingRoute><ElectronicBillingForm /></MarketingRoute>} />
                 <Route path="hiring/positions" element={<MarketingRoute><HiringPosition /></MarketingRoute>} />
+                <Route path="services/:slug" element={<MarketingRoute><LandingPage kind="service" /></MarketingRoute>} />
+                <Route path="industries/:slug" element={<MarketingRoute><LandingPage kind="industry" /></MarketingRoute>} />
                 <Route path="services" element={<MarketingRoute><Services /></MarketingRoute>} />
                 <Route path="services/software-development" element={<MarketingRoute><ServiceDetailPage kind="software-development" /></MarketingRoute>} />
                 <Route path="services/ai-automation" element={<MarketingRoute><ServiceDetailPage kind="ai-automation" /></MarketingRoute>} />

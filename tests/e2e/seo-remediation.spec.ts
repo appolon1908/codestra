@@ -54,6 +54,7 @@ test.describe("SEO remediation browser checks", () => {
       expect(response?.status(), `${route} static response`).toBe(200);
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,follow");
+      await expect(page).toHaveURL(/\/en\/login/);
       const results = await new AxeBuilder({ page }).analyze();
       const serious = results.violations.filter((item) => item.impact === "serious" || item.impact === "critical");
       expect(serious, `${route} accessibility violations`).toEqual([]);

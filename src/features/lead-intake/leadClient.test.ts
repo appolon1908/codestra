@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   LEAD_FORM_VERSION,
+  identifyLeadAttempt,
   submitLead,
   type LeadCommand,
 } from './leadClient'
@@ -113,5 +114,19 @@ describe('submitLead', () => {
       code: 'CAMPAIGN_NOT_ALLOWED',
       correlationId: 'correlation-456',
     })
+  })
+})
+
+
+describe('lead retries', () => {
+  it('keeps the same id and submission time after a timeout and token refresh', () => {
+    const retry = identifyLeadAttempt({ ...command, submittedAt: '2026-10-10T18:00:00Z', antiAbuse: { ...command.antiAbuse, turnstileToken: 'refreshed', dwellMs: 9000 } }, command)
+    expect(retry.leadId).toBe(command.leadId)
+    expect(retry.submittedAt).toBe(command.submittedAt)
+    expect(retry.antiAbuse.turnstileToken).toBe('refreshed')
+  })
+  it('allocates a new command when the customer changes enquiry data', () => {
+    const next = identifyLeadAttempt({ ...command, contact: { ...command.contact, fullName: 'Another customer' } }, command)
+    expect(next.leadId).not.toBe(command.leadId)
   })
 })

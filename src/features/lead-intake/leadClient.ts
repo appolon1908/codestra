@@ -144,3 +144,21 @@ export const submitLead = async (command: LeadCommand): Promise<LeadReceipt> => 
     window.clearTimeout(timeout)
   }
 }
+
+/** Reuse a command's identity on transport retries while allowing a changed
+ * enquiry to become a new command. Anti-abuse tokens may refresh independently. */
+export const identifyLeadAttempt = (candidate: LeadCommand, previous: LeadCommand | null): LeadCommand => {
+  if (!previous) return candidate
+  const semanticFields = (command: LeadCommand) => ({
+    schemaVersion: command.schemaVersion,
+    campaign: command.campaign,
+    contact: command.contact,
+    company: command.company,
+    qualification: command.qualification,
+    consent: command.consent,
+    attribution: command.attribution,
+  })
+  return JSON.stringify(semanticFields(candidate)) === JSON.stringify(semanticFields(previous))
+    ? { ...candidate, leadId: previous.leadId, submittedAt: previous.submittedAt }
+    : { ...candidate, leadId: createLeadId() }
+}

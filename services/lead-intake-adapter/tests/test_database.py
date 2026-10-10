@@ -101,3 +101,17 @@ async def test_failed_command_can_be_reclaimed_with_fresh_anti_abuse_token(
     reclaimed = await database.claim_command(retry, lead_id, "correlation-2")
 
     assert reclaimed.state == "claimed"
+
+
+@pytest.mark.asyncio
+async def test_changed_submission_time_cannot_reuse_command_identity(
+    database, lead_command, lead_id
+):
+    from datetime import timedelta
+
+    await database.claim_command(lead_command, lead_id, "initial")
+    changed = lead_command.model_copy(
+        update={"submittedAt": lead_command.submittedAt + timedelta(seconds=1)}
+    )
+    with pytest.raises(IdempotencyConflictError):
+        await database.claim_command(changed, lead_id, "retry-with-new-time")
