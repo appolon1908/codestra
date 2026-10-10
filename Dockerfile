@@ -1,5 +1,9 @@
 FROM node:22.22.2-alpine3.23 AS build
 
+ARG SOURCE_REVISION=unknown
+ARG APP_VERSION=development
+ARG BUILD_CREATED=unknown
+
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -20,6 +24,14 @@ ARG SOURCE_REVISION=unknown
 ARG APP_VERSION=development
 ARG BUILD_CREATED=unknown
 LABEL org.opencontainers.image.source="https://github.com/appolon1908/codestra" \
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.version="${APP_VERSION}" \
+      org.opencontainers.image.created="${BUILD_CREATED}"
+
+ARG SOURCE_REVISION=unknown
+ARG APP_VERSION=development
+ARG BUILD_CREATED=unknown
+LABEL org.opencontainers.image.source="https://github.com/appolon1908-hue/codestra" \
       org.opencontainers.image.revision="${SOURCE_REVISION}" \
       org.opencontainers.image.version="${APP_VERSION}" \
       org.opencontainers.image.created="${BUILD_CREATED}"
