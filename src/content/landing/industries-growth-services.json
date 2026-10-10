@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "hospitality",
+    "kind": "industry",
+    "name": "Hospitality",
+    "eyebrow": "AI for guest operations",
+    "headline": "Hospitality AI that gives guests faster service and teams better context",
+    "description": "Automate guest questions, reservations, requests, service recovery, staff knowledge, housekeeping coordination, reviews, and back-office workflows.",
+    "challenge": "Hospitality teams serve guests across web, phone, messaging, front desk, housekeeping, maintenance, food and beverage, and booking platforms. Context gets lost between shifts and channels while expectations remain immediate.",
+    "approach": "Codestra creates a guest and stay-aware service workflow, grounded in approved property information and policies. Automation handles bounded requests, assigns operational tasks, preserves preferences appropriately, and escalates sensitive or recovery cases to staff.",
+    "capabilities": ["Guest messaging and reservation assistance", "Housekeeping, maintenance, and service task orchestration", "Staff knowledge and shift-handoff summaries", "Review, feedback, and service-recovery workflows"],
+    "outcomes": ["Faster response to common guest requests", "Clearer ownership across property teams", "Consistent information across channels and shifts", "Earlier identification of service-recovery needs"],
+    "keywords": ["hospitality AI solutions", "hotel chatbot development", "guest messaging automation", "hotel operations software", "housekeeping workflow automation", "reservation AI assistant", "hospitality CRM integration", "hotel service automation"],
+    "faqs": [
+      {"question": "Can the assistant answer property and reservation questions?", "answer": "Yes, using current property, room, amenity, policy, and reservation context. Price, availability, cancellation, and booking changes remain grounded in the authoritative booking system."},
+      {"question": "Can guest requests create tasks for hotel staff?", "answer": "Yes. Requests can be classified, linked to guest and stay, assigned by department and location, tracked against service targets, and escalated when not completed."},
+      {"question": "Can the system support multiple languages?", "answer": "Yes. We evaluate property terminology and service quality in each target language, retain the original message, and route conversations when language or request complexity requires staff."}
+    ]
+  },
+  {
+    "slug": "restaurants",
+    "kind": "industry",
+    "name": "Restaurants & Food Service",
+    "eyebrow": "AI for restaurant operations",
+    "headline": "Restaurant AI for ordering, guest service, labor, inventory, and daily execution",
+    "description": "Improve reservations, ordering support, guest questions, catering intake, inventory signals, staff tasks, review response, and multi-location reporting.",
+    "challenge": "Restaurants operate with thin margins, changing menus, allergens, peak demand, labor constraints, delivery channels, supplier variability, and high customer expectations. Incorrect automation can create immediate service or safety problems.",
+    "approach": "Codestra grounds customer experiences in current menu, location, availability, allergen policy, and ordering systems. Operational automation focuses on timely tasks and exceptions while food safety and final preparation remain with trained staff.",
+    "capabilities": ["Reservation, catering, and guest inquiry automation", "Menu knowledge and guided ordering support", "Inventory, prep, and location task workflows", "Review, loyalty, and multi-location reporting automation"],
+    "outcomes": ["Faster handling of routine guest questions", "More complete catering and reservation intake", "Earlier visibility into stock and operating exceptions", "Consistent workflows across locations"],
+    "keywords": ["restaurant AI solutions", "restaurant chatbot", "catering lead automation", "menu AI assistant", "restaurant inventory automation", "multi location restaurant software", "food service workflow automation", "restaurant operations AI"],
+    "faqs": [
+      {"question": "Can AI answer allergen questions?", "answer": "It can retrieve approved menu and allergen information, but should clearly state limitations and route uncertain or cross-contact questions to trained staff rather than infer safety."},
+      {"question": "Can the system take orders?", "answer": "Yes through the supported ordering platform, with current price and availability, explicit confirmation, payment-provider boundaries, and a clear recovery path when an item or integration is unavailable."},
+      {"question": "Can one system support several restaurant locations?", "answer": "Yes. Menu, hours, availability, routing, staff roles, reporting, and campaigns can be location-aware while shared content and workflows remain centrally governed."}
+    ]
+  },
+  {
+    "slug": "nonprofits",
+    "kind": "industry",
+    "name": "Nonprofits",
+    "eyebrow": "AI for mission operations",
+    "headline": "Nonprofit AI that gives teams more time for the mission",
+    "description": "Automate supporter intake, program applications, case routing, volunteer coordination, donor stewardship, reporting preparation, and institutional knowledge.",
+    "challenge": "Nonprofits manage high service demand, limited administrative capacity, diverse stakeholders, restricted funds, sensitive beneficiary data, grants, volunteers, and reporting requirements across disconnected tools.",
+    "approach": "Codestra prioritizes workflows that reduce administration without weakening dignity, consent, or program judgment. We clarify data purpose, access, and retention, then connect intake, tasks, evidence, communications, and outcome reporting.",
+    "capabilities": ["Program and beneficiary intake workflows", "Donor, supporter, and volunteer automation", "Grant, document, and reporting preparation", "Staff knowledge and case coordination tools"],
+    "outcomes": ["Faster routing of program and supporter requests", "Reduced repetitive administration", "More complete evidence for grants and reporting", "Staff capacity redirected toward mission delivery"],
+    "keywords": ["nonprofit AI solutions", "nonprofit workflow automation", "donor CRM automation", "volunteer management software", "grant reporting automation", "program intake portal", "AI for charities", "nonprofit Odoo integration"],
+    "faqs": [
+      {"question": "Can AI help prepare grant applications and reports?", "answer": "It can organize approved program evidence, retrieve funder requirements, identify missing information, and draft sections for human review without fabricating outcomes or commitments."},
+      {"question": "How is beneficiary information protected?", "answer": "Collection is minimized to program purpose, sensitive fields have stricter role and record access, logs are redacted, sharing is controlled, and retention follows approved policy and consent."},
+      {"question": "Can the system work with an existing donor CRM?", "answer": "Yes. We can connect forms, campaigns, events, communications, and reporting through a controlled adapter while preserving consent, deduplication, and authoritative supporter records."}
+    ]
+  },
+  {
+    "slug": "agriculture",
+    "kind": "industry",
+    "name": "Agriculture",
+    "eyebrow": "AI for agricultural operations",
+    "headline": "Agricultural AI that connects field observations, planning, and market operations",
+    "description": "Apply vision, forecasting, mobile workflows, traceability, document automation, equipment support, inventory, and commercial operations across agriculture.",
+    "challenge": "Agricultural decisions depend on crop stage, soil, weather, labor, inputs, pests, equipment, harvest timing, storage, and market conditions. Connectivity and data quality vary widely between field and office.",
+    "approach": "Codestra begins with a specific field or commercial decision, designs mobile and offline evidence capture, combines local observations with trusted external signals, and keeps agronomic and safety decisions with qualified people.",
+    "capabilities": ["Field scouting, photo, and mobile evidence workflows", "Crop, demand, harvest, and resource forecasting", "Input, inventory, equipment, and task automation", "Traceability, buyer, supplier, and document workflows"],
+    "outcomes": ["Faster field-to-office information flow", "Earlier visibility into crop and resource exceptions", "More consistent records across farms and seasons", "Improved traceability from input through delivery"],
+    "keywords": ["agriculture AI solutions", "farm management software development", "crop monitoring computer vision", "agriculture workflow automation", "farm mobile application", "harvest forecasting AI", "agricultural traceability software", "agtech development company"],
+    "faqs": [
+      {"question": "Can AI identify crop disease from a photo?", "answer": "It can screen for defined visual patterns and prioritize review, but image quality and symptom overlap limit certainty. Agronomic diagnosis and treatment remain with qualified local expertise."},
+      {"question": "Can farm workflows work without continuous internet?", "answer": "Yes. Mobile tasks can cache minimum authorized data, queue observations and commands, show synchronization state, and resolve conflicts when connectivity returns."},
+      {"question": "Can weather data be included in planning?", "answer": "Yes, with provider provenance, location resolution, update timing, licensing, uncertainty, and fallback defined. Weather is combined with local observations rather than treated as complete truth."}
+    ]
+  },
+  {
+    "slug": "media-entertainment",
+    "kind": "industry",
+    "name": "Media & Entertainment",
+    "eyebrow": "AI for media operations",
+    "headline": "Media AI that accelerates production, discovery, and audience operations",
+    "description": "Build tools for archive discovery, metadata, transcription, localization, content operations, rights workflows, audience service, and production coordination.",
+    "challenge": "Media organizations manage large archives, fast production cycles, fragmented metadata, multiple languages, rights restrictions, brand standards, and growing volumes of derivative content. Generative speed can create rights and accuracy risk.",
+    "approach": "Codestra links every generated or transformed asset to approved sources, rights, versions, talent and brand policy, and human approval. AI assists discovery and preparation while editorial and creative ownership remains explicit.",
+    "capabilities": ["Archive search, transcription, and metadata enrichment", "Localization, clipping, and content preparation", "Rights, approval, and asset workflow automation", "Audience support, recommendation, and analytics tools"],
+    "outcomes": ["Faster discovery and reuse of authorized assets", "Reduced manual transcription and metadata work", "Clear rights and approval evidence for derivatives", "More efficient multi-channel content operations"],
+    "keywords": ["media AI solutions", "AI media asset management", "video transcription automation", "content localization AI", "media workflow automation", "archive semantic search", "entertainment software development", "AI content operations"],
+    "faqs": [
+      {"question": "Can AI generate derivative media content?", "answer": "It can assist within approved rights, source, talent, brand, disclosure, and review policies. Provenance and final human approval should remain attached to every published derivative."},
+      {"question": "Can old archives become searchable by meaning?", "answer": "Yes. Transcripts, OCR, captions, metadata, entities, scenes, and rights information can support semantic retrieval while access filters protect restricted assets."},
+      {"question": "How are model-generated assets tracked?", "answer": "Generation inputs, model and version, source assets, rights context, reviewer, edits, approvals, and publication destination can be recorded as provenance metadata."}
+    ]
+  },
+  {
+    "slug": "travel-tourism",
+    "kind": "industry",
+    "name": "Travel & Tourism",
+    "eyebrow": "AI for travel journeys",
+    "headline": "Travel AI that helps customers plan, book, and recover when plans change",
+    "description": "Create conversational discovery, itinerary assistance, booking support, supplier coordination, service alerts, document workflows, and traveler communications.",
+    "challenge": "Travel information changes quickly across suppliers, availability, pricing, entry requirements, disruptions, and local conditions. An appealing answer is harmful if it is stale, unsupported, or cannot be converted into a controlled booking action.",
+    "approach": "Codestra grounds travel experiences in current supplier and policy data, distinguishes inspiration from confirmed availability, preserves quote expiry, and designs clear transfer and recovery when disruption or complex advice requires a person.",
+    "capabilities": ["Conversational destination and product discovery", "Itinerary and quote preparation workflows", "Booking, document, reminder, and supplier integration", "Disruption, alert, rebooking, and service communication"],
+    "outcomes": ["Faster movement from travel intent to a complete request", "More consistent itinerary and quote preparation", "Reduced repetitive status and document communication", "Clearer recovery during supplier or itinerary changes"],
+    "keywords": ["travel AI solutions", "AI travel assistant development", "tourism chatbot", "itinerary builder software", "travel booking automation", "tour operator CRM automation", "travel disruption communication", "travel technology development"],
+    "faqs": [
+      {"question": "Can AI confirm live travel prices and availability?", "answer": "Only through an authoritative supplier or booking interface. The experience must distinguish an estimate from a held or confirmed offer and preserve price, rules, and expiration."},
+      {"question": "Can it advise on visas or entry requirements?", "answer": "It can retrieve dated official guidance with source links and a clear disclaimer, but travelers should verify consequential entry requirements with the responsible authority or qualified advisor."},
+      {"question": "Can the assistant help when a trip is disrupted?", "answer": "Yes. It can gather the reservation, supplier event, policy, traveler needs, and available options, then execute allowlisted actions or transfer a complete case to an agent."}
+    ]
+  },
+  {
+    "slug": "professional-services",
+    "kind": "industry",
+    "name": "Professional Services",
+    "eyebrow": "AI for expert service firms",
+    "headline": "Professional-services AI that protects expert time for higher-value work",
+    "description": "Improve lead intake, scoping, proposals, project setup, knowledge retrieval, delivery preparation, time capture, client reporting, and recurring administration.",
+    "challenge": "Expert firms repeatedly reconstruct client context, search prior work, prepare similar deliverables, coordinate reviews, and update multiple systems. Valuable knowledge stays in individual inboxes and project folders.",
+    "approach": "Codestra standardizes the operational path without flattening expertise. AI assembles authorized context, prepares drafts and checklists, surfaces precedent, and automates administration while named professionals own advice, quality, and client commitments.",
+    "capabilities": ["Lead, scope, and proposal workflow automation", "Client and project knowledge copilots", "Deliverable preparation and review orchestration", "Time, status, billing, and client-reporting automation"],
+    "outcomes": ["Faster response and project setup", "Less time spent searching and formatting", "More consistent delivery and review practices", "Firm knowledge reused with permissions and provenance"],
+    "keywords": ["professional services AI", "consulting workflow automation", "proposal automation software", "knowledge management for firms", "client portal development", "project delivery automation", "AI copilot professional services", "PSA integration services"],
+    "faqs": [
+      {"question": "Can AI reuse content from prior client work?", "answer": "Yes only when permissions, confidentiality, ownership, and purpose allow it. Retrieval must respect client and project boundaries and preserve source provenance."},
+      {"question": "Can proposals be generated automatically?", "answer": "AI can prepare a draft from approved service language, requirements, pricing inputs, and relevant experience, while an authorized professional approves scope, claims, commercial terms, and commitments."},
+      {"question": "Can this integrate CRM, project, and billing systems?", "answer": "Yes. We define the authoritative owner for client, opportunity, engagement, task, time, and invoice data, then connect commands and events without uncontrolled synchronization loops."}
+    ]
+  },
+  {
+    "slug": "startups-saas",
+    "kind": "industry",
+    "name": "Startups & SaaS",
+    "eyebrow": "AI product engineering for growth",
+    "headline": "AI and software delivery for startups that need evidence before scale",
+    "description": "Validate, design, build, integrate, and operate AI-enabled SaaS products with a production foundation that can grow beyond the first customer.",
+    "challenge": "Early teams must learn quickly without accumulating identity, billing, data, tenant, integration, and deployment decisions that make every later feature risky. AI adds uncertain quality and variable unit cost to the normal product constraints.",
+    "approach": "Codestra narrows the first user and workflow, ships a production-worthy thin slice, and instruments behavior, quality, cost, and business evidence. Architecture is intentionally extensible but avoids building platform complexity before demand proves it.",
+    "capabilities": ["AI product discovery and prototype validation", "Multi-tenant SaaS frontend and backend engineering", "Identity, billing, integration, and data foundations", "Evaluation, observability, CI/CD, and scale readiness"],
+    "outcomes": ["A faster path to real-user evidence", "A product foundation that supports iteration", "Visible AI quality and unit economics", "Reduced rewrite risk as customers and integrations grow"],
+    "keywords": ["AI startup development company", "SaaS product development", "AI MVP development", "multi tenant SaaS engineering", "startup CTO services", "generative AI SaaS development", "production ready MVP", "software product studio"],
+    "faqs": [
+      {"question": "Can Codestra build an MVP quickly?", "answer": "Yes, by limiting the first user, workflow, integrations, and success measure. Production-worthy means secure and operable, not that every future platform capability is built on day one."},
+      {"question": "Will the product support multiple customer organizations?", "answer": "When required, tenant identity, membership, roles, record isolation, metering, configuration, and audit are modeled explicitly rather than adding an organization ID only in the interface."},
+      {"question": "How do you control model cost in a SaaS product?", "answer": "We measure cost per completed user outcome, use caching and routing where valid, enforce quotas and timeouts, expose usage, and connect plan economics to actual model and human-review cost."}
+    ]
+  }
+]
