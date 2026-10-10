@@ -1,3 +1,4 @@
+import FormLegalLinks from "../../Components/FormLegalLinks";
 import Navbar from "../../Components/Layouts/Navbar";
 import Footer from "../../Components/Layouts/Footer";
 import { Button2, Button2b, Button3 } from "../../Components/components/Button";
@@ -45,7 +46,7 @@ const ElectronicBilling = () => {
     reset,
     formState: { errors },
   } = useForm<ElectronicBillingInterestPayload>({
-    defaultValues: { uses_erp: true, consent_to_contact: true },
+    defaultValues: { uses_erp: true, consent_to_contact: false },
   });
   const [submissionMessage, setSubmissionMessage] = useState("");
 
@@ -54,7 +55,7 @@ const ElectronicBilling = () => {
     billingInterest.mutate(values, {
       onSuccess: () => {
         setSubmissionMessage(t("page.form.success"));
-        reset({ uses_erp: true, consent_to_contact: true });
+        reset({ uses_erp: true, consent_to_contact: false });
       },
       onError: () => setSubmissionMessage(t("page.form.error")),
     });
@@ -173,7 +174,7 @@ const ElectronicBilling = () => {
                     {...register("consent_to_contact", { required: true })}
                   />
                   <label htmlFor="billing-interest-consent">
-                    {t("page.form.consent")}
+                    {t("page.form.consent", "I request a reply by email about this enquiry. This does not opt me into text messages.")}
                   </label>
                 </div>
               </div>
@@ -200,7 +201,7 @@ const ElectronicBilling = () => {
                 </p>
               )}
             </div>
-          </form>
+          <FormLegalLinks /></form>
         </div>
 
         <div className="lg:pt-0 pt-[8rem] text-sm">

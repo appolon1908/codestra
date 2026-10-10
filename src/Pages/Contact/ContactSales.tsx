@@ -1,3 +1,4 @@
+import FormLegalLinks from "../../Components/FormLegalLinks";
 import Footer from "../../Components/Layouts/Footer";
 import Navbar from "../../Components/Layouts/Navbar";
 import { Button2a } from "../../Components/components/Button";
@@ -178,7 +179,7 @@ const ContactSales = () => {
                   isPending={isPending}
                 />
               </div>
-            </form>
+            <FormLegalLinks /></form>
           </div>
         </div>
         {isOpen && (

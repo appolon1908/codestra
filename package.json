@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/prerender-localized-routes.mjs",
+    "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/prerender-localized-routes.mjs && node scripts/prerender-legal.mjs",
     "serve:prerendered": "node scripts/serve-prerendered.mjs",
     "test:seo": "node scripts/validate-prerendered-seo.mjs",
     "generate:sitemap": "node scripts/generate-localized-sitemap.mjs",
@@ -24,7 +24,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@tanstack/react-query": "^5.64.1",
     "aos": "^3.0.0-beta.6",
-    "axios": "^1.19.0",
+    "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.5.2",
@@ -40,7 +40,9 @@
     "react-router": "8.3.0",
     "react-toastify": "^11.0.3",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "echarts": "^6.1.0",
+    "lightweight-charts": "^5.0.5"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
@@ -63,6 +65,13 @@
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "overrides": {
+    "nanoid": "3.3.18"
   }
 }

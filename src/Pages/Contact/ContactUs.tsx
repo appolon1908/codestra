@@ -1,3 +1,4 @@
+import FormLegalLinks from "../../Components/FormLegalLinks";
 import { LuMessageCircle } from "react-icons/lu";
 import Navbar from "../../Components/Layouts/Navbar";
 import { Button3 } from "../../Components/components/Button";

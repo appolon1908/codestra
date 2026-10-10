@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 
 import { useState } from 'react'
 import { HiEye } from "react-icons/hi";
@@ -155,7 +156,8 @@ interface ErrorResponse {
               <LocalizedLink to="/login" className="text-white underline hover:text-gray-200">{t('signup.login')}</LocalizedLink>
             </p>
           </div>
-        </form>
+        <FormLegalLinks />
+          </form>
       </div>
     </div>
   )

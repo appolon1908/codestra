@@ -11,6 +11,7 @@ const escape = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<",
 const indexableRoutes = [...coreRoutes, ...industries.map((slug) => industryEntry(slug, "en")).filter((route) => route.indexable)];
 const noindexRoutes = industries.map((slug) => industryEntry(slug, "en")).filter((route) => !route.indexable);
 const template = existsSync(join(dist, "index.html")) ? readFileSync(join(dist, "index.html"), "utf8") : "";
+writeFileSync(join(dist, ".app-shell.html"), template);
 const productionAssetTags = [...template.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).join("");
 const productionScriptTag = template.match(/<script type="module"[^>]*><\/script>/)?.[0] ?? '<script type="module" src="/assets/index.js"></script>';
 

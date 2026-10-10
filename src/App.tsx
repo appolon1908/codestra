@@ -1,4 +1,7 @@
-import { lazy, Suspense } from "react";
+import AuthProvider from "./Providers/AuthProvider";
+import { SessionProvider } from "./Providers/SessionProvider";
+import ChatWidgetBoundary from "./Components/ChatWidgetBoundary";
+import { lazy, Suspense, useEffect } from "react";
 import QueryProvider from "./Providers/QueryProvider";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -38,11 +41,6 @@ const SecurityPage = lazy(() =>
     default: module.SecurityPage,
   })),
 );
-const TermsPage = lazy(() =>
-  import("./Pages/AIReceptionist/ConversionPages").then((module) => ({
-    default: module.TermsPage,
-  })),
-);
 const ThankYouPage = lazy(() =>
   import("./Pages/AIReceptionist/ConversionPages").then((module) => ({
     default: module.ThankYouPage,
@@ -67,19 +65,28 @@ const CookiePreferencesPage = lazy(() => import("./Pages/Privacy/PrivacyControls
 const PrivacyChoicesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.PrivacyChoicesPage })));
 const CommunicationsPreferencesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.CommunicationsPreferencesPage })));
 
-AOS.init();
+const AllRoutes = lazy(() => import("./Routes/AllRoutes"));
+const LegalPage = lazy(() => import("./Pages/Legal/LegalPage"));
+const Terms = lazy(() => import("./Pages/Terms/Terms"));
 function App() {
   const { t } = useTranslation("common");
+  useEffect(() => { AOS.init(); }, []);
   return (
     <>
       <QueryProvider>
         <BrowserRouter>
-          <Suspense
+          <ChatWidgetBoundary><SessionProvider><Suspense
             fallback={
               <div className="min-h-screen bg-[#080808]" aria-label={t("loading")} />
             }
           >
             <Routes>
+              <Route path="/auth/*" element={<AuthProvider element={<AllRoutes />} />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/sms" element={<LegalPage kind="sms" />} />
+              <Route path="/sms-terms" element={<LegalPage kind="smsTerms" />} />
+              <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
               <Route path="/:locale" element={<LocaleBoundary />}>
                 <Route index element={<Home />} />
                 <Route path="login" element={<Login />} />
@@ -113,13 +120,17 @@ function App() {
                 <Route path="industries" element={<IndustriesDirectory />} />
                 <Route path="industries/:industrySlug" element={<IndustryPage />} />
                 <Route path="security" element={<SecurityPage />} />
-                <Route path="terms" element={<TermsPage />} />
+                <Route path="terms" element={<Terms />} />
+                <Route path="sms" element={<LegalPage kind="sms" />} />
+                <Route path="sms-terms" element={<LegalPage kind="smsTerms" />} />
+                <Route path="contact-information" element={<LegalPage kind="contactInformation" />} />
+                <Route path="auth/*" element={<AuthProvider element={<AllRoutes />} />} />
                 <Route path="thank-you" element={<ThankYouPage />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="*" element={<LocalizedRedirect />} />
             </Routes>
-          </Suspense>
+          </Suspense></SessionProvider></ChatWidgetBoundary>
         </BrowserRouter>
       </QueryProvider>
     </>

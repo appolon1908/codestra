@@ -9,7 +9,7 @@ import { LiaReact } from "react-icons/lia";
 import { useNavigate } from "react-router";
 
 import logo from "../../assets/logo.png";
-import { clearAccessToken, hasUsableAccessToken } from "@/lib/auth";
+import { useSession } from "@/Providers/SessionProvider";
 import LanguageSelector from "../../i18n/LanguageSelector";
 import LocalizedLink from "../../i18n/LocalizedLink";
 import { Button1, Button2 } from "../components/Button";
@@ -80,7 +80,7 @@ export default function Navbar() {
   const trigger = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const authenticated = hasUsableAccessToken();
+  const { isAuthenticated: authenticated, logout: endSession } = useSession();
   useEffect(() => {
     if (!open) return;
     const previous = document.body.style.overflow;
@@ -90,7 +90,7 @@ export default function Navbar() {
     document.addEventListener("keydown", keydown);
     return () => { document.body.style.overflow = previous; document.removeEventListener("keydown", keydown); };
   }, [open]);
-  const logout = () => { clearAccessToken(); navigate("/", {replace:true}); };
+  const logout = async () => { await endSession(); navigate("/", {replace:true}); };
   const close = () => setOpen(false);
 
   return <header className="relative flex justify-center pt-3 lg:pt-10">

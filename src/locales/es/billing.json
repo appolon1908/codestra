@@ -14,7 +14,7 @@
       "phone": "Teléfono",
       "phonePlaceholder": "Escribe tu número de teléfono",
       "usesErp": "¿Utilizas un ERP?",
-      "consent": "Acepto que Codestra República Dominicana me contacte.",
+      "consent": "Solicito una respuesta por correo electrónico sobre esta consulta. Esto no me suscribe a mensajes de texto.",
       "submit": "Enviar mensaje",
       "consentError": "Debes aceptar que te contactemos.",
       "success": "Gracias. Un especialista de Codestra te contactará.",

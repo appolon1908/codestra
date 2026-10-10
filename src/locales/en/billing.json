@@ -14,7 +14,7 @@
       "phone": "Phone",
       "phonePlaceholder": "Enter your telephone number",
       "usesErp": "Do you use an ERP?",
-      "consent": "I agree to be contacted by Codestra Dominican Republic.",
+      "consent": "I request a reply by email about this enquiry. This does not opt me into text messages.",
       "submit": "Send message",
       "consentError": "Please consent to being contacted.",
       "success": "Thank you. A Codestra specialist will contact you.",
@@ -159,27 +159,50 @@
         "label": "Trade name",
         "placeholder": "Enter the business name"
       },
-      "taxpayerTelephone": { "label": "Taxpayer telephone" },
-      "taxpayerCell": { "label": "Taxpayer mobile telephone" },
-      "taxpayerEmail": { "label": "Taxpayer email" },
+      "taxpayerTelephone": {
+        "label": "Taxpayer telephone"
+      },
+      "taxpayerCell": {
+        "label": "Taxpayer mobile telephone"
+      },
+      "taxpayerEmail": {
+        "label": "Taxpayer email"
+      },
       "telephonePlaceholder": "Enter the telephone number",
       "cellPlaceholder": "Enter the mobile number",
       "emailPlaceholder": "Enter the email address",
-      "number": { "label": "Number", "placeholder": "Enter the number" },
-      "sector": { "label": "Sector", "placeholder": "Enter the sector" },
-      "province": { "label": "Province", "placeholder": "Enter the province" },
+      "number": {
+        "label": "Number",
+        "placeholder": "Enter the number"
+      },
+      "sector": {
+        "label": "Sector",
+        "placeholder": "Enter the sector"
+      },
+      "province": {
+        "label": "Province",
+        "placeholder": "Enter the province"
+      },
       "visitingHours": {
         "label": "Visiting hours",
         "placeholder": "Enter the visiting hours"
       },
-      "representativeRnc": { "label": "Representative RNC" },
+      "representativeRnc": {
+        "label": "Representative RNC"
+      },
       "representativeName": {
         "label": "Representative or applicant name",
         "placeholder": "Enter the name"
       },
-      "representativePhone": { "label": "Representative telephone" },
-      "representativeCell": { "label": "Representative mobile telephone" },
-      "representativeEmail": { "label": "Representative email" },
+      "representativePhone": {
+        "label": "Representative telephone"
+      },
+      "representativeCell": {
+        "label": "Representative mobile telephone"
+      },
+      "representativeEmail": {
+        "label": "Representative email"
+      },
       "alternatePremise": {
         "label": "Do you operate from premises or a warehouse at another address?",
         "placeholder": "Select yes or no"
@@ -188,9 +211,15 @@
         "label": "Street of the premises or warehouse",
         "placeholder": "Enter the street"
       },
-      "warehouseNumber": { "label": "Premises or warehouse number" },
-      "warehouseSector": { "label": "Premises or warehouse sector" },
-      "warehouseProvince": { "label": "Province of the premises or warehouse" },
+      "warehouseNumber": {
+        "label": "Premises or warehouse number"
+      },
+      "warehouseSector": {
+        "label": "Premises or warehouse sector"
+      },
+      "warehouseProvince": {
+        "label": "Province of the premises or warehouse"
+      },
       "warehouseReference": {
         "label": "Premises or warehouse reference",
         "placeholder": "Enter an address reference"

@@ -1,16 +1,2 @@
-import Footer from "../../Components/Layouts/Footer";
-import Navbar from "../../Components/Layouts/Navbar";
-import LocalizedLink from "../../i18n/LocalizedLink";
-import { businessProfile, formatMainOffice } from "../../config/businessProfile";
-
-const Meta = () => <div className="my-8 grid gap-2 rounded-xl border border-neutral-800 bg-[#151517] p-5 text-sm text-neutral-300 sm:grid-cols-3"><p><strong className="block text-white">Effective</strong>{businessProfile.policy.effectiveDate}</p><p><strong className="block text-white">Last updated</strong>{businessProfile.policy.lastUpdated}</p><p><strong className="block text-white">Version</strong>{businessProfile.policy.version}</p></div>;
-
-const Privacy = () => <><Navbar /><main id="main-content" className="policy-page mx-auto max-w-4xl px-5 pb-16 pt-32 text-base leading-7 lg:pt-44"><p className="text-sm font-semibold uppercase tracking-[.18em] text-[#FFD700]">Privacy</p><h1 className="mt-3 text-3xl font-semibold lg:text-5xl">Privacy Policy</h1><p className="mt-5 text-neutral-300">This policy describes how {businessProfile.legalOperator.name}, operating the Codestra website and U.S. customer-facing services, handles information submitted through this site. Codestra SRL is the Dominican Republic affiliate and is identified separately where it is responsible for an engagement.</p><Meta />
-<section><h2>Information we collect</h2><p>We collect information a visitor submits in a contact, demo, pricing, support or account form; basic request and security data; and consent evidence when an optional communications choice is selected. Campaign attribution and analytics events are stored or sent only when the applicable analytics preference is granted.</p></section>
-<section><h2>How we use information</h2><p>We use information to respond to requests, scope and deliver services, operate accounts, protect the site, maintain records, honor communications choices and meet applicable obligations. A service inquiry does not by itself enroll a person in marketing.</p></section>
-<section><h2>Mobile and messaging data</h2><p className="rounded-xl border border-[#FFD700]/40 bg-[#FFD700]/5 p-5 font-semibold">Mobile information and text-message originator opt-in data and consent will not be sold or shared with third parties or affiliates for their marketing or promotional purposes.</p></section>
-<section><h2>Service providers and disclosures</h2><p>Codestra may provide information to contracted infrastructure, communications and business-system providers only as needed to operate an approved service, follow instructions, protect rights or comply with law. This website does not currently load live advertising or AdSense tags. A complete public subprocessor list remains gated until the production processor inventory is owner-approved.</p></section>
-<section><h2>Choices and requests</h2><p>You may request access, correction or deletion, subject to applicable exceptions, by emailing <a href={`mailto:${businessProfile.privacyEmail}`}>{businessProfile.privacyEmail}</a>. You may also use <LocalizedLink to="/privacy-choices">Privacy Choices</LocalizedLink> or <LocalizedLink to="/communications-preferences">Communications Preferences</LocalizedLink>. Identity verification may be required before a request is fulfilled.</p></section>
-<section><h2>Contact</h2><p>{businessProfile.legalOperator.name}<br />{formatMainOffice()}<br /><a href={`mailto:${businessProfile.privacyEmail}`}>{businessProfile.privacyEmail}</a></p></section>
-</main><Footer /></>;
-export default Privacy;
+import LegalPage from '../Legal/LegalPage';
+export default function Privacy() { return <LegalPage kind="privacy" />; }

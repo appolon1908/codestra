@@ -128,6 +128,7 @@ const Footer = () => {
         </li>
         <li>
           <LanguageSelector id="footer-language" />
+          <LocalizedLink to="/sms">SMS Updates</LocalizedLink> · <LocalizedLink to="/sms-terms">SMS Terms</LocalizedLink> · <LocalizedLink to="/contact-information">Business Contact</LocalizedLink>
         </li>
         <li className="text-xs text-neutral-400">
           {t("common:copyright", { year: new Date().getFullYear() })}
