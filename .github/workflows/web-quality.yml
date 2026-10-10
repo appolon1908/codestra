@@ -100,7 +100,13 @@ jobs:
           SITE_URL: https://codestra.co
 
       - name: Run Lighthouse CI
-        run: npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.json
+        run: |
+          set -o pipefail
+          npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.json 2>&1 | tee /tmp/codestra-lighthouse.log
+
+      - name: Publish Lighthouse diagnostics
+        if: always()
+        run: node scripts/ci/summarize-web-check.mjs lighthouse
 
       - name: Upload Lighthouse reports
         if: always()
