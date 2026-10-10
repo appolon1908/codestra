@@ -98,8 +98,12 @@ let baseCommit = ''
 const eventBefore = process.env.DESIGN_SYSTEM_BASE_SHA
 const baseBranch = process.env.GITHUB_BASE_REF
 
-if (eventBefore && !/^0+$/.test(eventBefore) && commitExists(eventBefore)) {
-  baseCommit = eventBefore
+if (eventBefore && !/^0+$/.test(eventBefore)) {
+  if (commitExists(eventBefore)) {
+    baseCommit = eventBefore
+  } else {
+    failures.push(`Explicit design-system base commit is unavailable: ${eventBefore}`)
+  }
 }
 
 if (!baseCommit && baseBranch) {
@@ -109,7 +113,11 @@ if (!baseCommit && baseBranch) {
   }
 }
 
-if (!baseCommit) {
+if (!baseCommit && baseBranch) {
+  failures.push(`Design-system target branch is unavailable: ${baseBranch}`)
+}
+
+if (!baseCommit && !baseBranch && !eventBefore) {
   baseCommit = runGit(['rev-parse', 'HEAD^'])
 }
 

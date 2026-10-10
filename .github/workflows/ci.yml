@@ -34,7 +34,7 @@ jobs:
       - run: npm test
       - run: npm run test:design
         env:
-          DESIGN_SYSTEM_BASE_SHA: ${{ github.event.before }}
+          DESIGN_SYSTEM_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
       - run: npm run test:deployment
       - run: npm run build
         env:
