@@ -53,7 +53,7 @@ EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Infustruction-repo": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Keycloak": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Middleware-": MIDDLEWARE_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908/codestra": "e1f37ff41aead471c9e5b630d7b56e11201513edbe035b7100281239ce7cd7e7",
+    "appolon1908/codestra": '9e003fc287fb6ef5c664a8c57402b898f297dc680d56aa90d6a3588347980f09',
     "appolon1908-hue/beyvra-backend": BACKEND_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/backend2": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-frontend": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
@@ -541,6 +541,9 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         ),
     },
     "appolon1908/codestra": {
+        'scripts/registry/ghcr-readonly-preflight.sh': 'f6e6e52177b5a236de8d6677686f550881a81c85b33c05e637deaf3bda30e250',
+        'scripts/ci/check-ghcr-readonly-preflight.mjs': '52db936621493c9fd6bfd7acf445ec5d3eb74776917025dc47fc36b325d80721',
+        'scripts/ci/test-ghcr-readonly-preflight-fixture.sh': 'eb74b2dabaa533b543e7a70c4bff66668a36aeb4373005e8a3def59b6c22f6d4',
         "scripts/deploy/read-only-runtime-discovery.sh": "14cd8ce2653da1e284da480408ba071fd989279ba889a22d0b1f21ec887e1d13",
         "scripts/ci/check-runtime-discovery.mjs": "a0ccd39eb918093ba7715c9fc40fc9facaef6feef95210c46e9fead61323708f",
         "scripts/ci/test-runtime-discovery-fixture.sh": "a7b6557ed6dc927f6dc78a45440c3cf8deda6a2410a3bf94c70231be3bda751d",
@@ -656,6 +659,10 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
     ),
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
+    "appolon1908/codestra": {
+        '.github/workflows/horizon-contract.yml': '1b24384415db88ec3f3c77c0f0d72434bbfda0cacac79a617e67beea91beb2f7',
+        '.github/workflows/ghcr-readonly-preflight.yml': '88e1789d8cb421a2a9d8be03e4c4e9525467c66d4853e55c090fe165dd6cacf9',
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
             "7cb2d9269f490623385689c712e520ae"
