@@ -1,0 +1,36 @@
+{
+  "repository": "appolon1908/codestra",
+  "issue": "https://github.com/appolon1908/codestra/issues/52",
+  "base_sha": "db43a02073baea648ce26fd1a01eecf750a95a6c",
+  "branch": "feat/leadconnector-public-widget-20261008",
+  "worktree": "/srv/codestra/verification/leadconnector-frontend",
+  "worker_node": "crm",
+  "role": "Builder",
+  "sole_writer": "ChatGPT current approved widget implementation",
+  "authorization": "User: Approve continue implement",
+  "status": "CODE_VERIFIED_REVIEW_PENDING",
+  "production_deployed": false,
+  "independent_review": "PENDING",
+  "carrier_approval": "NOT_VERIFIED",
+  "outbound_effects": false,
+  "preserved_other_worktrees": true,
+  "evidence_directory": "/srv/codestra/verification/leadconnector-evidence",
+  "updated_at": "2026-10-08T16:07:01.994475+00:00",
+  "tests": {
+    "frontend_passed": 29,
+    "browser_contract_passed": 18,
+    "lint_errors": 0,
+    "existing_fast_refresh_warning": 1,
+    "build": "PASS",
+    "production_audit_vulnerabilities": 0,
+    "live_widget_rendered": true,
+    "observed_provider_requests_http_200": 16
+  },
+  "remaining_csp_warning": [
+    {
+      "directive": "style-src-elem",
+      "blockedURI": "https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap"
+    }
+  ],
+  "verified_at": "2026-10-08T16:16:58.451236+00:00"
+}
