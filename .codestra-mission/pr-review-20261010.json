@@ -28,5 +28,13 @@
   "independent_review": "Logout race fixes reviewed and targeted suite independently passed; no external approval submitted",
   "remote_ci": "PENDING exact final-head readback",
   "production_deployed": false,
-  "next_action": "Verify pushed exact head checks; protected approvals required before merge"
+  "next_action": "Verify pushed exact head checks; protected approvals required before merge",
+  "ghcr_workflow_context_fix": {
+    "reason": "GitHub disallows runner.temp in job-level env; evaluate identical temporary paths at step scope",
+    "actionlint": "PASS",
+    "context_regression": "PASS",
+    "contract_and_release_selftest": "PASS",
+    "negative_workflow_hash_drift": "PASS",
+    "remote_ci": "pending new head"
+  }
 }
