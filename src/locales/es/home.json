@@ -80,7 +80,9 @@
         "name": "Tailwind CSS",
         "description": "Framework CSS basado en utilidades."
       }
-    ]
+    ],
+    "frontendTitle": "Frameworks y herramientas de interfaz",
+    "frontendBody": "Interfaces y productos diseñados para las personas y las operaciones."
   },
   "design": {
     "title": "Soluciones UI/UX integrales con sistemas de diseño líderes",

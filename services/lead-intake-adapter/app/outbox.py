@@ -11,7 +11,7 @@ from contextlib import suppress
 import httpx
 
 from .config import Settings
-from .database import Database, OutboxEvent
+from .database import Database
 
 logger = logging.getLogger(__name__)
 

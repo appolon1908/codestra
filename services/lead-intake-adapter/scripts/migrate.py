@@ -6,13 +6,15 @@ from pathlib import Path
 
 import asyncpg
 
+MIGRATIONS_DIRECTORY = Path(__file__).resolve().parents[1] / "migrations"
+
 
 async def migrate() -> None:
     database_url = os.environ.get("DATABASE_URL", "").strip()
     if not database_url:
         raise SystemExit("DATABASE_URL is required")
 
-    migrations_directory = Path(__file__).resolve().parents[1] / "migrations"
+    migrations_directory = MIGRATIONS_DIRECTORY
     migration_files = sorted(migrations_directory.glob("*.sql"))
     if not migration_files:
         raise SystemExit(f"No migrations found in {migrations_directory}")

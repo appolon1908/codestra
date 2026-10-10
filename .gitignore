@@ -52,3 +52,6 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+test-results/
+playwright-report/

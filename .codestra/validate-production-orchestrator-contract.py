@@ -53,7 +53,7 @@ EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Infustruction-repo": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Keycloak": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Middleware-": MIDDLEWARE_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908/codestra": "e1f37ff41aead471c9e5b630d7b56e11201513edbe035b7100281239ce7cd7e7",
+    "appolon1908/codestra": '9e003fc287fb6ef5c664a8c57402b898f297dc680d56aa90d6a3588347980f09',
     "appolon1908-hue/beyvra-backend": BACKEND_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/backend2": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-frontend": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
@@ -541,6 +541,19 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         ),
     },
     "appolon1908/codestra": {
+        'services/lead-intake-adapter/scripts/migrate.py': 'a002a23f08398b779f05ac416317ecf065bd3011a8372efc75ce0512c2401d71',
+        'scripts/ci/check-deployment-scaffold.mjs': 'b9cfbea1cebea2ecba4da0c288a2f45440c28db88b8ed73449de0c1ce0b724cb',
+        'scripts/deploy/validate-runtime-manifest.mjs': 'c8f34d5b354b09c0344822784355e75cddc7693fd4df0dd2417b164cb35769be',
+        'scripts/generate-localized-sitemap.mjs': 'c1846d2bd174781131d3d96da988a1f737facab786d4bcc80bf8f7cbbea0a747',
+        'scripts/generate-seo.mjs': '5881c503355821f875b091bf175d54c8a67fbf81831a5051a8e23bb0b91c0495',
+        'scripts/prerender-localized-routes.mjs': 'd789e6748e05bdca03375a6889044f5381b47dbf284405589c8773ae178af40b',
+        'scripts/prerender-legal.mjs': '0e7374813021d811c1d60a2b8cbfd5409cfff7c80dd16ccb77cbcd33c9d6ba1c',
+        'scripts/validate-prerendered-seo.mjs': 'efff6cbcc264e6e7368a55454b783104ad3bfdc581e46f0b3c161e03709943ff',
+        'scripts/check-performance.mjs': '61d38c5ec567a6113fbe62b23f95993a648b39e11447236b652ba20e7099f3ae',
+        'scripts/check-seo.mjs': '2a0a6bc9dfec4d815985934351c5a9fe8d095384a5aba6b26c3b64960d5e6547',
+        'scripts/registry/ghcr-readonly-preflight.sh': 'f6e6e52177b5a236de8d6677686f550881a81c85b33c05e637deaf3bda30e250',
+        'scripts/ci/check-ghcr-readonly-preflight.mjs': '52db936621493c9fd6bfd7acf445ec5d3eb74776917025dc47fc36b325d80721',
+        'scripts/ci/test-ghcr-readonly-preflight-fixture.sh': 'eb74b2dabaa533b543e7a70c4bff66668a36aeb4373005e8a3def59b6c22f6d4',
         "scripts/deploy/read-only-runtime-discovery.sh": "14cd8ce2653da1e284da480408ba071fd989279ba889a22d0b1f21ec887e1d13",
         "scripts/ci/check-runtime-discovery.mjs": "a0ccd39eb918093ba7715c9fc40fc9facaef6feef95210c46e9fead61323708f",
         "scripts/ci/test-runtime-discovery-fixture.sh": "a7b6557ed6dc927f6dc78a45440c3cf8deda6a2410a3bf94c70231be3bda751d",
@@ -656,6 +669,11 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
     ),
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
+    "appolon1908/codestra": {
+        '.github/workflows/web-quality.yml': '21b28492ab57de9b10f7c468ecb4288397253eca27ca663d04f85e3d073c4e46',
+        '.github/workflows/lead-intake-quality.yml': '25e07c2dce0afb2780818d7a0bbfcd442287f1d567d91ab007f92fdf1c0535eb',
+        '.github/workflows/ghcr-readonly-preflight.yml': '0034e54b9012e63967227c19ce60fa33c6f9480f6f5d20b8d6c4ed848c0825be',
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
             "7cb2d9269f490623385689c712e520ae"
@@ -778,6 +796,33 @@ APPROVED_DEFAULT_TEST_DISCOVERY_SOURCE_SHA256 = {
 APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256: dict[
     str, dict[str, dict[str, str]]
 ] = {
+    "appolon1908/codestra": {
+        ".github/workflows/web-quality.yml": {
+            'lighthouserc.json': 'f055723de41d935d28c05ba27f12223228600893aeb9ed4fa416055d7efb8e48',
+            'package-lock.json': '19bed7155395146070d6cc94b19de81e96006ef188c2f0b7b1c9a5ee30cfafde',
+        },
+        ".github/workflows/lead-intake-quality.yml": {
+            'services/lead-intake-adapter/app/__init__.py': '1e66d2f1077c99964e4650aeb8215aae8dd803c577f3b97da7e2eacd9d15288f',
+            'services/lead-intake-adapter/app/config.py': '533e6080a882aa09f650bef4d36924ab11c4eff4ecde1f25786489c89926b8a4',
+            'services/lead-intake-adapter/app/database.py': '0bedfae20e5f167bb34af25c1539067b28ff4891ec959a4bb46309291671a21c',
+            'services/lead-intake-adapter/app/main.py': '74603a958d9270cec4b624c9ce7cfbafa4016948055b68069d8910a5ff4f81a3',
+            'services/lead-intake-adapter/app/models.py': '8088b48dad6ed3119a556dda27ad9d4daaa791bb742473b23ce46652fb8d2fde',
+            'services/lead-intake-adapter/app/odoo.py': '8f359f20cc6bedf455e50d97a312ec03e4fc217f9537215fe43a3009c4da7f92',
+            'services/lead-intake-adapter/app/outbox.py': '5dd7afeb405772d18a297900836fafc05ca438b231337a6f2d07810569597bf4',
+            'services/lead-intake-adapter/app/security.py': 'e916c023f36483da2b1d24b2f5b7d54413b7bb33bb86d6fc76f1f9197c20dc75',
+            'services/lead-intake-adapter/migrations/001_init.sql': 'db68655df7c925e465b5da4cf9b00b8697300bc0142647bf9db41453d09b12c7',
+            'services/lead-intake-adapter/pyproject.toml': 'c2c72a8e9bf3fb2fd91c792debdf63707e30565b13f53e5cad20f08999f753b2',
+            'services/lead-intake-adapter/scripts/migrate.py': 'a002a23f08398b779f05ac416317ecf065bd3011a8372efc75ce0512c2401d71',
+            'services/lead-intake-adapter/tests/conftest.py': '2d7fa74eaa6bd98b78962d405705648e3ea48a13c0706fdf7283202460e0cdfa',
+            'services/lead-intake-adapter/tests/test_config.py': 'ebfe896e1bdfd780584259b9f5f62234d0444f8ed47fcf9f3105014eb6c1c995',
+            'services/lead-intake-adapter/tests/test_database.py': '15aceac32df081de7562bd7724eeea35e069419a4b00e1cdc57cd29ecae1ca7b',
+            'services/lead-intake-adapter/tests/test_main.py': 'd0ee070e032c8c9de56cf92fc98e90da96f867417c77085c2e159b1ead1401d7',
+            'services/lead-intake-adapter/tests/test_models.py': 'bbeae3a70af822381d6a1f6b0a35e9f8844205c5c8ab58ac5bc292fc7dab7b9e',
+            'services/lead-intake-adapter/tests/test_odoo.py': 'b69b8baa4d072ecc7c9185666a1bbe224c1fb10278bb65ed25970335ffb194ca',
+            'services/lead-intake-adapter/tests/test_outbox.py': 'e91ba3a26152bdce1bb7da5612b4a27751256e3697645d589a6e80b2d5a1a7fa',
+            'services/lead-intake-adapter/tests/test_security.py': '0cdcebc1415c8e7cc052e32215a772c8ecc39bc43e6463bef0eac64b5536d1d5',
+        },
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": {
             "config/ai-production-branch-ruleset.v1.json": "52db5e583b88edb069ba1d7b829d1f49ad820d0bb90e41bcf5b94e4074403ae1",
@@ -9337,8 +9382,73 @@ def validate_portfolio_control_plane_bindings() -> None:
             bindings[dependency] = expected
 
 
+def validate_ephemeral_lead_database(workflow: str) -> None:
+    document = yaml.load(workflow, Loader=UniqueKeyLoader)
+    job = document["jobs"]["adapter-contract"]
+    url = "postgresql://postgres:postgres@127.0.0.1:5432/codestra_leads_test"
+    require(job.get("env", {}).get("TEST_DATABASE_URL") == url, "CI database must be isolated localhost test database")
+    postgres = job.get("services", {}).get("postgres", {})
+    require(postgres.get("image") == "postgres:17-alpine", "CI database service image drift")
+    require(postgres.get("env", {}).get("POSTGRES_DB") == "codestra_leads_test", "CI database name drift")
+    require(job.get("defaults", {}).get("run", {}).get("working-directory") == "services/lead-intake-adapter", "CI adapter working directory drift")
+    steps = [step for step in job.get("steps", []) if "scripts/migrate.py" in str(step.get("run", ""))]
+    require(len(steps) == 1, "CI migration entrypoint drift")
+    command = steps[0]["run"]
+    require(f'test "$TEST_DATABASE_URL" = "{url}"' in command, "CI migration database guard missing")
+    require('DATABASE_URL="$TEST_DATABASE_URL" python scripts/migrate.py' in command, "CI migration URL binding drift")
+    require("secrets." not in str(job) and "environment" not in job, "CI database must have no production credentials")
+
+
+def validate_ephemeral_lead_database_regressions() -> None:
+    path = ROOT / ".github/workflows/lead-intake-quality.yml"
+    if not path.is_file():
+        return
+    source = path.read_text(encoding="utf-8")
+    validate_ephemeral_lead_database(source)
+    for altered in (
+        source.replace("127.0.0.1:5432/codestra_leads_test", "production.example:5432/live"),
+        source.replace('test "$TEST_DATABASE_URL" =', 'echo "$TEST_DATABASE_URL" ='),
+    ):
+        try:
+            validate_ephemeral_lead_database(altered)
+        except ContractError:
+            pass
+        else:
+            raise ContractError("CI database endpoint or guard drift was accepted")
+
+
+def validate_local_lighthouse(configuration: dict[str, Any]) -> None:
+    ci = configuration.get("ci", {})
+    collect = ci.get("collect", {})
+    require(collect.get("staticDistDir") == "./dist", "Lighthouse must serve local dist")
+    urls = collect.get("url", [])
+    require(isinstance(urls, list) and bool(urls), "Lighthouse URLs missing")
+    require(all(isinstance(url, str) and url.startswith("http://localhost/en/") for url in urls), "Lighthouse must audit only local pages")
+    upload = ci.get("upload", {})
+    require(upload == {"target": "filesystem", "outputDir": ".lighthouseci"}, "Lighthouse upload must remain local filesystem")
+
+
+def validate_local_lighthouse_regressions() -> None:
+    path = ROOT / "lighthouserc.json"
+    if not path.is_file():
+        return
+    configuration = json.loads(path.read_text(encoding="utf-8"))
+    validate_local_lighthouse(configuration)
+    for section, key, value in (("collect", "staticDistDir", "../production"), ("collect", "url", ["https://production.example/"]), ("upload", "target", "lhci")):
+        altered = deepcopy(configuration)
+        altered["ci"][section][key] = value
+        try:
+            validate_local_lighthouse(altered)
+        except ContractError:
+            pass
+        else:
+            raise ContractError("Lighthouse remote runtime or upload drift was accepted")
+
+
 def main() -> int:
     contract = load_contract()
+    validate_local_lighthouse_regressions()
+    validate_ephemeral_lead_database_regressions()
     validate_portfolio_control_plane_bindings()
     validate(contract)
     validate_negative_regressions(contract)

@@ -25,7 +25,8 @@
   "dashboard": {
     "title": "Panel",
     "logout": "Cerrar sesión",
-    "home": "Inicio"
+    "home": "Inicio",
+    "webhooks": "Notificaciones webhook"
   },
   "footer": {
     "craftsmanship": "Artesanía en cada línea de código.",
@@ -48,5 +49,37 @@
       "education": "Educación",
       "web3": "Web3 y blockchain"
     }
+  },
+  "webhooks": {
+    "eyebrow": "Operaciones autenticadas",
+    "title": "Suscripciones a webhooks",
+    "body": "Crea, controla, prueba y audita entregas firmadas de webhooks.",
+    "loadError": "No se pudieron cargar los datos de webhooks.",
+    "created": "Suscripción creada.",
+    "saveError": "No se pudo guardar la suscripción.",
+    "secretOnce": "Copia este secreto de firma ahora. No se volverá a mostrar:",
+    "add": "Añadir suscripción",
+    "name": "Nombre",
+    "url": "URL del receptor",
+    "events": "Eventos",
+    "create": "Crear suscripción",
+    "subscriptions": "Tus suscripciones",
+    "empty": "Aún no hay suscripciones a webhooks.",
+    "enabled": "Activada",
+    "disabled": "Desactivada",
+    "sendTest": "Enviar webhook de prueba",
+    "testQueued": "Entrega de prueba en cola.",
+    "testError": "No se pudo poner en cola la entrega de prueba.",
+    "disable": "Desactivar",
+    "enable": "Activar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar esta suscripción?",
+    "history": "Historial de entregas",
+    "event_type": "Evento",
+    "status": "Estado",
+    "attempts": "Intentos",
+    "response_code": "Código de respuesta",
+    "error": "Fallo",
+    "retryHistory": "Historial de reintentos"
   }
 }

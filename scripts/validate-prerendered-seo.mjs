@@ -12,7 +12,7 @@ const sitemap = readFileSync(join(dist, "sitemap.xml"), "utf8");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, url]) => url);
 if (new Set(sitemapUrls).size !== sitemapUrls.length) fail("sitemap contains duplicate URLs");
 if (sitemapUrls.filter(url => /\/(en|es|fr)(\/|$)/.test(new URL(url).pathname)).length !== routes.length * locales.length) fail(`sitemap expected ${routes.length * locales.length} URLs, found ${sitemapUrls.length}`);
-for (const utility of utilityRoutes) if (sitemap.includes(`/${utility}`)) fail(`utility route is in sitemap: ${utility}`);
+for (const utility of utilityRoutes) if (sitemapUrls.some(url => { const path = new URL(url).pathname.replace(/^\/(en|es|fr)(?=\/)/, "").replace(/\/$/, ""); return path === `/${utility}`; })) fail(`utility route is in sitemap: ${utility}`);
 for (const locale of locales) for (const path of noindexRoutes) {
   const html = htmlAt(locale, path);
   if (!/<meta name="robots" content="noindex,follow"/.test(html)) fail(`${locale}/${path} must be noindex`);

@@ -4,8 +4,8 @@ import { resolve } from 'node:path'
 
 const requiredFiles = [
   '.github/workflows/ci.yml',
-  '.github/workflows/release-image.yml',
-  '.github/workflows/runtime-preflight.yml',
+  'deploy/reference-release-image.yml',
+  'deploy/reference-runtime-preflight.yml',
   '.github/workflows/deploy.yml',
   'deploy/runtime-paths.production.json',
   'deploy/compose.production.yaml',
@@ -29,14 +29,17 @@ for (const path of requiredFiles) {
 }
 
 if (failures.length === 0) {
-  const deployWorkflow = read('.github/workflows/deploy.yml')
-  const releaseWorkflow = read('.github/workflows/release-image.yml')
-  const preflightWorkflow = read('.github/workflows/runtime-preflight.yml')
+  const deployWorkflow = read('deploy/reference-production-activation.yml')
+  const releaseWorkflow = read('deploy/reference-release-image.yml')
+  const preflightWorkflow = read('deploy/reference-runtime-preflight.yml')
   const preflightScript = read('scripts/deploy/read-only-preflight.sh')
   const activationScript = read('scripts/deploy/activate-release.sh')
   const rollbackScript = read('scripts/deploy/rollback-release.sh')
   const productionCompose = read('deploy/compose.production.yaml')
   const manifest = JSON.parse(read('deploy/runtime-paths.production.json'))
+
+  const activeWorkflow = read('.github/workflows/deploy.yml');
+  if (!activeWorkflow.includes('Build immutable candidate image (no deployment)') || activeWorkflow.includes('activate-release.sh')) failures.push('Active workflow must preserve candidate-only production boundary');
 
   const requiredDeployMarkers = [
     'runtime_manifest_sha256',
@@ -50,7 +53,7 @@ if (failures.length === 0) {
     'ghcr.io/${GITHUB_REPOSITORY,,}@${IMAGE_DIGEST}',
     "steps.public_smoke.outcome == 'failure'",
     'rollback-release.sh',
-    'sigstore/cosign-installer@v4.1.2',
+    'sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6',
     'cosign verify',
     "grep -Fx 'PREFLIGHT_READINESS=PASS'",
     'activation',
@@ -120,7 +123,7 @@ if (failures.length === 0) {
   }
 
   for (const marker of [
-    'sigstore/cosign-installer@v4.1.2',
+    'sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6',
     'cosign sign --yes',
     'cosign verify',
     'provenance: mode=max',

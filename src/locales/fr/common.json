@@ -25,7 +25,8 @@
   "dashboard": {
     "title": "Tableau de bord",
     "logout": "Se déconnecter",
-    "home": "Accueil"
+    "home": "Accueil",
+    "webhooks": "Notifications webhook"
   },
   "footer": {
     "craftsmanship": "Le savoir-faire dans chaque ligne de code.",
@@ -48,5 +49,37 @@
       "education": "Éducation",
       "web3": "Web3 et blockchain"
     }
+  },
+  "webhooks": {
+    "eyebrow": "Opérations authentifiées",
+    "title": "Abonnements aux webhooks",
+    "body": "Créez, contrôlez, testez et auditez les livraisons signées de webhooks.",
+    "loadError": "Impossible de charger les données des webhooks.",
+    "created": "Abonnement créé.",
+    "saveError": "Impossible d’enregistrer l’abonnement.",
+    "secretOnce": "Copiez ce secret de signature maintenant. Il ne sera plus affiché :",
+    "add": "Ajouter un abonnement",
+    "name": "Nom",
+    "url": "URL du destinataire",
+    "events": "Événements",
+    "create": "Créer un abonnement",
+    "subscriptions": "Vos abonnements",
+    "empty": "Aucun abonnement aux webhooks pour le moment.",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "sendTest": "Envoyer un webhook de test",
+    "testQueued": "Livraison de test mise en attente.",
+    "testError": "Impossible de mettre la livraison de test en attente.",
+    "disable": "Désactiver",
+    "enable": "Activer",
+    "delete": "Supprimer",
+    "confirmDelete": "Supprimer cet abonnement ?",
+    "history": "Historique des livraisons",
+    "event_type": "Événement",
+    "status": "État",
+    "attempts": "Tentatives",
+    "response_code": "Code de réponse",
+    "error": "Échec",
+    "retryHistory": "Historique des nouvelles tentatives"
   }
 }

@@ -5,7 +5,6 @@ from pydantic import ValidationError
 
 from app.config import Settings
 
-
 BASE_SETTINGS = {
     "DATABASE_URL": "postgresql://postgres:postgres@127.0.0.1:5432/codestra",
     "ODOO_BASE_URL": "https://odoo.example.test",

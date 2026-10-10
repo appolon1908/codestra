@@ -44,10 +44,7 @@ class OdooClient:
         }
 
     async def _call(self, model: str, method: str, payload: dict[str, Any]) -> Any:
-        url = (
-            f"{str(self._settings.ODOO_BASE_URL).rstrip('/')}"
-            f"/json/2/{model}/{method}"
-        )
+        url = f"{str(self._settings.ODOO_BASE_URL).rstrip('/')}/json/2/{model}/{method}"
         try:
             response = await self._client.post(
                 url,
@@ -61,7 +58,9 @@ class OdooClient:
         if response.status_code >= 500:
             raise OdooUnavailableError(f"Odoo returned upstream status {response.status_code}")
         if response.status_code >= 400:
-            raise OdooContractError(f"Odoo rejected the adapter contract with status {response.status_code}")
+            raise OdooContractError(
+                f"Odoo rejected the adapter contract with status {response.status_code}"
+            )
 
         try:
             return response.json()

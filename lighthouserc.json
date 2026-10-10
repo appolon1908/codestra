@@ -3,9 +3,9 @@
     "collect": {
       "staticDistDir": "./dist",
       "url": [
-        "http://localhost/",
-        "http://localhost/services/",
-        "http://localhost/industries/"
+        "http://localhost/en/",
+        "http://localhost/en/services/",
+        "http://localhost/en/industries/"
       ],
       "numberOfRuns": 1,
       "settings": {

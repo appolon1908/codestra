@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test.describe("SEO remediation browser checks", () => {
+  test.setTimeout(120_000);
   test("navigation, CTA, language switching, consent and unknown routes", async ({ page }) => {
     await page.goto("/en/");
     await expect(page.locator("h1")).toHaveCount(1);

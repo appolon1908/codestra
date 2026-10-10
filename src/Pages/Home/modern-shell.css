@@ -914,8 +914,8 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
-.modern-shell .myBg { background-image: url('./assets/bg.png'); }
-.modern-shell .myBg2 { background-image: url('./assets/services.png'); }
+.modern-shell .myBg { background-image: url('../../assets/bg.png'); }
+.modern-shell .myBg2 { background-image: url('../../assets/services.png'); }
 
 @media (max-width: 1080px) {
   .modern-shell .desktop-nav { display: none; }

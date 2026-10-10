@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 10
     environment: production
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
 
@@ -157,7 +157,7 @@ jobs:
           sha256sum preflight-report.txt > preflight-report.sha256
 
       - name: Upload runtime evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: production-runtime-preflight-${{ github.run_id }}
           path: |
