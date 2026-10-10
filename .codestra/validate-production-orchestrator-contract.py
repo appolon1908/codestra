@@ -541,6 +541,9 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         ),
     },
     "appolon1908/codestra": {
+        'scripts/registry/ghcr-readonly-preflight.sh': 'f6e6e52177b5a236de8d6677686f550881a81c85b33c05e637deaf3bda30e250',
+        'scripts/ci/check-ghcr-readonly-preflight.mjs': '52db936621493c9fd6bfd7acf445ec5d3eb74776917025dc47fc36b325d80721',
+        'scripts/ci/test-ghcr-readonly-preflight-fixture.sh': 'eb74b2dabaa533b543e7a70c4bff66668a36aeb4373005e8a3def59b6c22f6d4',
         "scripts/deploy/read-only-runtime-discovery.sh": "14cd8ce2653da1e284da480408ba071fd989279ba889a22d0b1f21ec887e1d13",
         "scripts/ci/check-runtime-discovery.mjs": "a0ccd39eb918093ba7715c9fc40fc9facaef6feef95210c46e9fead61323708f",
         "scripts/ci/test-runtime-discovery-fixture.sh": "a7b6557ed6dc927f6dc78a45440c3cf8deda6a2410a3bf94c70231be3bda751d",
@@ -656,6 +659,10 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
     ),
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
+    "appolon1908/codestra": {
+        '.github/workflows/ghcr-readonly-preflight.yml': '0034e54b9012e63967227c19ce60fa33c6f9480f6f5d20b8d6c4ed848c0825be',
+        '.github/workflows/required-exact-sha-ci.yml': 'd7ce7d6bb13ef6c6d1364e763f79de4ee0138d3e2d6acd403582518ab3e16b36',
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
             "7cb2d9269f490623385689c712e520ae"
@@ -778,6 +785,12 @@ APPROVED_DEFAULT_TEST_DISCOVERY_SOURCE_SHA256 = {
 APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256: dict[
     str, dict[str, dict[str, str]]
 ] = {
+    "appolon1908/codestra": {
+        '.github/workflows/required-exact-sha-ci.yml': {
+            'package.json': '74c0c929d2a12ea703464a8f181c6231de4233846a02e5e7c3140062f93ec05d',
+            'package-lock.json': 'ffc855cfeb0390b8fedb463185938607a5872258c432ee4bbd903b54d1a354f0',
+        },
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": {
             "config/ai-production-branch-ruleset.v1.json": "52db5e583b88edb069ba1d7b829d1f49ad820d0bb90e41bcf5b94e4074403ae1",
