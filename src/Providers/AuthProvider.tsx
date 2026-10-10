@@ -1,52 +1,26 @@
-import { type ReactNode, useEffect } from "react";
-import { useLocation } from "react-router";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { useSession } from "./SessionProvider";
 
-type AuthProviderProps = {
-  element: ReactNode;
-};
+interface AuthProps {
+  element: React.ReactNode;
+}
 
-const AuthProvider = ({ element }: AuthProviderProps) => {
-  const location = useLocation();
-  const { status, error, beginLogin, refreshSession } = useSession();
-  const returnTo = `${location.pathname}${location.search}${location.hash}`;
+const AuthProvider = ({ element }: AuthProps) => {
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useSession();
 
   useEffect(() => {
-    if (status === "anonymous") {
-      beginLogin(returnTo);
+    if (!isLoading && !isAuthenticated) {
+      navigate("/login", { replace: true });
     }
-  }, [beginLogin, returnTo, status]);
+  }, [isAuthenticated, isLoading, navigate]);
 
-  if (status === "authenticated") {
-    return element;
+  if (isLoading) {
+    return <div className="min-h-screen bg-[#080808]" aria-label="Checking session" />;
   }
 
-  if (status === "error") {
-    return (
-      <main className="orbit-state-page" id="main-content">
-        <section className="orbit-status-panel" aria-labelledby="account-unavailable-title">
-          <p className="orbit-eyebrow">Account</p>
-          <h1 id="account-unavailable-title">Account service unavailable</h1>
-          <p>{error}</p>
-          <div className="orbit-action-row">
-            <button className="orbit-button orbit-button--primary" onClick={() => void refreshSession()} type="button">
-              Try again
-            </button>
-            <button className="orbit-button orbit-button--secondary" onClick={() => beginLogin(returnTo)} type="button">
-              Restart login
-            </button>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  return (
-    <main className="orbit-state-page" id="main-content" aria-live="polite">
-      <div className="orbit-loading-indicator" aria-hidden="true" />
-      <p>Checking your secure session.</p>
-    </main>
-  );
+  return isAuthenticated ? element : null;
 };
 
 export default AuthProvider;

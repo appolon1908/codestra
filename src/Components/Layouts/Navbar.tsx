@@ -12,7 +12,7 @@ const navigation = [
 
 const Navbar = () => {
   const location = useLocation();
-  const { session, status, beginLogin, logout } = useSession();
+  const { user, isAuthenticated, isLoading, logout } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mutationPending, setMutationPending] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -76,10 +76,10 @@ const Navbar = () => {
 
         <div className="orbit-account-actions">
           {actionError ? <span className="orbit-action-error" role="alert">{actionError}</span> : null}
-          {status === "authenticated" && session?.authenticated ? (
+          {isAuthenticated ? (
             <>
               <Link className="orbit-text-action" to="/auth/dashboard">
-                {session.user?.displayName ?? "Account"}
+                {user?.first_name || user?.email || "Account"}
               </Link>
               <button
                 className="orbit-button orbit-button--primary orbit-button--header"
@@ -90,16 +90,15 @@ const Navbar = () => {
                 {mutationPending ? "Signing out" : "Log out"}
               </button>
             </>
-          ) : status === "loading" ? (
+          ) : isLoading ? (
             <span className="orbit-session-status">Checking session</span>
           ) : (
-            <button
+            <Link
               className="orbit-button orbit-button--primary orbit-button--header"
-              onClick={() => beginLogin(returnTo)}
-              type="button"
+              to={`/login?return_to=${encodeURIComponent(returnTo)}`}
             >
               Log in
-            </button>
+            </Link>
           )}
         </div>
       </div>

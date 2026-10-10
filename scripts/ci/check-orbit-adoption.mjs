@@ -154,7 +154,7 @@ if (routeManifest) {
 }
 
 if (adoptionManifest) {
-  if (adoptionManifest.repository !== "appolon1908-hue/codestra") failures.push("adoption manifest repository mismatch");
+  if (adoptionManifest.repository !== "appolon1908/codestra") failures.push("adoption manifest repository mismatch");
   if (adoptionManifest.targetBranch !== "codex/codestra-orbit-v2-codestra") failures.push("adoption branch mismatch");
   if (adoptionManifest.domain !== "codestra.co") failures.push("adoption domain mismatch");
 }

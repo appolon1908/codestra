@@ -1,49 +1,43 @@
-import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import AuthProvider from "./Providers/AuthProvider";
-import { SessionProvider } from "./Providers/SessionProvider";
+import ChatWidgetBoundary from './Components/ChatWidgetBoundary'
+import { lazy, Suspense, useEffect } from 'react'
+import AuthProvider from './Providers/AuthProvider'
+import QueryProvider from './Providers/QueryProvider'
+import { SessionProvider } from './Providers/SessionProvider'
+import { BrowserRouter, Routes, Route } from 'react-router'
 
-const Home = lazy(() => import("./Pages/Home/Home"));
-const Login = lazy(() => import("./Pages/Login/Login"));
-const Signup = lazy(() => import("./Pages/Signup/Signup"));
-const AboutUs = lazy(() => import("./Pages/About/AboutUs"));
-const CaseStudies = lazy(() => import("./Pages/CaseStudies/CaseStudies"));
-const ContactUs = lazy(() => import("./Pages/Contact/ContactUs"));
-const ContactSales = lazy(() => import("./Pages/Contact/ContactSales"));
-const ContactSupport = lazy(() => import("./Pages/Contact/ContactSupport"));
-const ElectronicBilling = lazy(() => import("./Pages/ElectronicBilling/ElectronicBilling"));
-const ElectronicBillingForm = lazy(() => import("./Pages/BillingForm/ElectronicBillingForm"));
-const HiringPosition = lazy(() => import("./Pages/Hiring/HiringPosition"));
-const Services = lazy(() => import("./Pages/Services/Services"));
-const Privacy = lazy(() => import("./Pages/Privacy/Privacy"));
-const HomeDash = lazy(() => import("./Pages/Dashboard/HomeDash"));
-const SignedOut = lazy(() => import("./Pages/SignedOut"));
-const NotFound = lazy(() => import("./Pages/NotFound"));
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-const queryClient = new QueryClient();
-
-const RouteLoading = () => (
-  <main className="orbit-state-page" id="main-content" aria-live="polite">
-    <div className="orbit-loading-indicator" aria-hidden="true" />
-    <p>Loading page.</p>
-  </main>
-);
+const AboutUs = lazy(() => import('./Pages/About/AboutUs'))
+const ContactSales = lazy(() => import('./Pages/Contact/ContactSales'))
+const ContactSupport = lazy(() => import('./Pages/Contact/ContactSupport'))
+const ContactUs = lazy(() => import('./Pages/Contact/ContactUs'))
+const Home = lazy(() => import('./Pages/Home/Home'))
+const Login = lazy(() => import('./Pages/Login/Login'))
+const Signup = lazy(() => import('./Pages/Signup/Signup'))
+const AllRoutes = lazy(() => import('./Routes/AllRoutes'))
+const ElectronicBilling = lazy(() => import('./Pages/ElectronicBilling/ElectronicBilling'))
+const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicBillingForm'))
+const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
+const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
+const Services = lazy(() => import('./Pages/Services/Services'))
+const LegalPage = lazy(() => import('./Pages/Legal/LegalPage'))
+const SignedOut = lazy(() => import('./Pages/SignedOut'))
+const Terms = lazy(() => import('./Pages/Terms/Terms'))
+const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 
 function App() {
   useEffect(() => {
-    if (typeof window.matchMedia !== "function" || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      AOS.init({ once: true, duration: 600 });
-    }
-  }, []);
+    AOS.init()
+  }, [])
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionProvider>
-        <BrowserRouter>
-          <Suspense fallback={<RouteLoading />}>
+    <>
+    <QueryProvider> 
+          <BrowserRouter>
+            <ChatWidgetBoundary>
+            <SessionProvider>
+            <Suspense fallback={<div className="min-h-screen bg-[#080808]" aria-label="Loading" />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -59,17 +53,24 @@ function App() {
               <Route path="/hiring/positions" element={<HiringPosition />} />
               <Route path="/services" element={<Services />} />
               <Route path="/privacy" element={<Privacy />} />
-              <Route
-                path="/auth/dashboard"
-                element={<AuthProvider element={<HomeDash />} />}
-              />
-              <Route path="/*" element={<NotFound />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/sms" element={<LegalPage kind="sms" />} />
+              <Route path="/sms-terms" element={<LegalPage kind="smsTerms" />} />
+              <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
+              
+              <Route path="/*" element={<AuthProvider element={
+                <div>
+                  <AllRoutes />
+                </div>
+              }/>} />
             </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </SessionProvider>
-    </QueryClientProvider>
-  );
+            </Suspense>
+            </SessionProvider>
+            </ChatWidgetBoundary>
+          </BrowserRouter>
+      </QueryProvider>
+    </>
+  )
 }
 
-export default App;
+export default App

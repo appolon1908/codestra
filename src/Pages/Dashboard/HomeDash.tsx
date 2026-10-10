@@ -4,24 +4,20 @@ import { useSession } from "@/Providers/SessionProvider";
 import { useState } from "react";
 
 const HomeDash = () => {
-  const { session, logout, logoutAll } = useSession();
-  const [pendingAction, setPendingAction] = useState<"current" | "all" | null>(null);
+  const { user, logout } = useSession();
+  const [pendingAction, setPendingAction] = useState<boolean>(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  const revoke = async (scope: "current" | "all") => {
+  const revoke = async () => {
     if (pendingAction) return;
-    setPendingAction(scope);
+    setPendingAction(true);
     setActionError(null);
     try {
-      if (scope === "all") {
-        await logoutAll();
-      } else {
-        await logout();
-      }
+      await logout();
     } catch {
       setActionError("The session could not be revoked. Try again.");
     } finally {
-      setPendingAction(null);
+      setPendingAction(false);
     }
   };
 
@@ -32,7 +28,7 @@ const HomeDash = () => {
         <section className="orbit-dashboard-hero" aria-labelledby="dashboard-title">
           <p className="orbit-eyebrow">Account</p>
           <h1 id="dashboard-title">
-            Welcome{session?.user?.displayName ? `, ${session.user.displayName}` : ""}
+            Welcome{user?.first_name ? `, ${user.first_name}` : ""}
           </h1>
           <p>
             Your account is protected by a same-origin server session. Browser JavaScript does not hold an access or refresh token.
@@ -43,26 +39,19 @@ const HomeDash = () => {
           <div>
             <p className="orbit-eyebrow">Security</p>
             <h2 id="session-title">Session controls</h2>
-            <p>Revoke this browser session or every active session connected to your account.</p>
+            <p>End the active session in this browser.</p>
           </div>
           {actionError ? <p className="orbit-action-error" role="alert">{actionError}</p> : null}
           <div className="orbit-action-row">
             <button
               className="orbit-button orbit-button--secondary"
-              disabled={pendingAction !== null}
-              onClick={() => void revoke("current")}
+              disabled={pendingAction}
+              onClick={() => void revoke()}
               type="button"
             >
-              {pendingAction === "current" ? "Signing out" : "Log out"}
+              {pendingAction ? "Signing out" : "Log out"}
             </button>
-            <button
-              className="orbit-button orbit-button--primary"
-              disabled={pendingAction !== null}
-              onClick={() => void revoke("all")}
-              type="button"
-            >
-              {pendingAction === "all" ? "Revoking sessions" : "Log out everywhere"}
-            </button>
+
           </div>
         </section>
       </main>

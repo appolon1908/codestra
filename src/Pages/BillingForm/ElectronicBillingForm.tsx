@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 
 import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
@@ -513,7 +514,8 @@ const ElectronicBillingForm = () => {
                         </div>
                         }
                     </div>
-                </form>
+                <FormLegalLinks />
+          </form>
             </div>
 
             <div className='mt-10'>

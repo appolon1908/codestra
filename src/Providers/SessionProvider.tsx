@@ -1,114 +1,88 @@
 import {
   createContext,
-  type PropsWithChildren,
-  useCallback,
   useContext,
   useEffect,
-  useMemo,
-  useState,
+  useRef,
+  type ReactNode,
 } from "react";
-import {
-  beginLogin,
-  beginSignup,
-  getBrowserSession,
-  logout,
-  logoutAll,
-  subscribeToAuthEvents,
-  type BrowserSession,
-} from "@/lib/browserSession";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { logoutPost, sessionGet, type SessionUser } from "@/lib/auth";
 
-type SessionStatus = "loading" | "authenticated" | "anonymous" | "error";
+const SESSION_QUERY_KEY = ["auth", "session"] as const;
 
 type SessionContextValue = {
-  session: BrowserSession | null;
-  status: SessionStatus;
-  error: string | null;
-  refreshSession: () => Promise<void>;
-  beginLogin: (returnTo?: string | null) => string;
-  beginSignup: (returnTo?: string | null) => string;
+  user: SessionUser | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  refreshSession: () => Promise<SessionUser | null>;
   logout: () => Promise<void>;
-  logoutAll: () => Promise<void>;
 };
 
 const SessionContext = createContext<SessionContextValue | null>(null);
 
-export const SessionProvider = ({ children }: PropsWithChildren) => {
-  const [session, setSession] = useState<BrowserSession | null>(null);
-  const [status, setStatus] = useState<SessionStatus>("loading");
-  const [error, setError] = useState<string | null>(null);
-
-  const refreshSession = useCallback(async () => {
-    setError(null);
-    try {
-      const next = await getBrowserSession();
-      setSession(next);
-      setStatus(next.authenticated ? "authenticated" : "anonymous");
-    } catch {
-      setSession(null);
-      setStatus("error");
-      setError("The account service is temporarily unavailable.");
-    }
-  }, []);
+export const SessionProvider = ({ children }: { children: ReactNode }) => {
+  const queryClient = useQueryClient();
+  const generation = useRef(0);
+  const session = useQuery({
+    queryKey: SESSION_QUERY_KEY,
+    queryFn: sessionGet,
+    retry: false,
+    staleTime: 30_000,
+  });
 
   useEffect(() => {
-    const controller = new AbortController();
-    let active = true;
-
-    getBrowserSession({ signal: controller.signal })
-      .then((next) => {
-        if (!active) return;
-        setSession(next);
-        setStatus(next.authenticated ? "authenticated" : "anonymous");
-      })
-      .catch(() => {
-        if (!active || controller.signal.aborted) return;
-        setStatus("error");
-        setError("The account service is temporarily unavailable.");
-      });
-
-    const unsubscribe = subscribeToAuthEvents((event) => {
-      if (event.type === "signed-out" || event.type === "signed-out-all") {
-        setSession({ authenticated: false, roles: [], capabilities: [] });
-        setStatus("anonymous");
-        setError(null);
-      }
-      if (event.type === "session-refreshed") {
-        void refreshSession();
-      }
-    });
-
-    return () => {
-      active = false;
-      controller.abort();
-      unsubscribe();
+    const expire = () => {
+      generation.current += 1;
+      void queryClient.cancelQueries({ queryKey: SESSION_QUERY_KEY });
+      queryClient.setQueryData(SESSION_QUERY_KEY, null);
     };
-  }, [refreshSession]);
+    window.addEventListener("codestra-auth-expired", expire);
+    return () => window.removeEventListener("codestra-auth-expired", expire);
+  }, [queryClient]);
 
-  const context = useMemo<SessionContextValue>(
-    () => ({
-      session,
-      status,
-      error,
-      refreshSession,
-      beginLogin,
-      beginSignup,
-      logout: async () => {
-        await logout();
-      },
-      logoutAll: async () => {
-        await logoutAll();
-      },
-    }),
-    [error, refreshSession, session, status],
+  const refreshSession = async () => {
+    const currentGeneration = generation.current;
+    try {
+      const user = await sessionGet();
+      if (generation.current !== currentGeneration) return null;
+      queryClient.setQueryData(SESSION_QUERY_KEY, user);
+      return user;
+    } catch {
+      if (generation.current === currentGeneration) {
+        queryClient.setQueryData(SESSION_QUERY_KEY, null);
+      }
+      return null;
+    }
+  };
+
+  const logout = async () => {
+    generation.current += 1;
+    await queryClient.cancelQueries({ queryKey: SESSION_QUERY_KEY });
+    try {
+      await logoutPost();
+    } finally {
+      await queryClient.cancelQueries({ queryKey: SESSION_QUERY_KEY });
+      queryClient.setQueryData(SESSION_QUERY_KEY, null);
+    }
+  };
+
+  return (
+    <SessionContext.Provider
+      value={{
+        user: session.data ?? null,
+        isLoading: session.isLoading,
+        isAuthenticated: Boolean(session.data),
+        refreshSession,
+        logout,
+      }}
+    >
+      {children}
+    </SessionContext.Provider>
   );
-
-  return <SessionContext.Provider value={context}>{children}</SessionContext.Provider>;
 };
 
 export const useSession = () => {
   const context = useContext(SessionContext);
-  if (!context) {
-    throw new Error("useSession must be used within SessionProvider");
-  }
+  if (!context) throw new Error("useSession must be used inside SessionProvider");
   return context;
 };

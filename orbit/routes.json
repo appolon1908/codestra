@@ -273,6 +273,70 @@
         "error",
         "success"
       ]
+    },
+    {
+      "path": "/terms",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "terms"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/sms",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "sms"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/sms-terms",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "sms-terms"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/contact-information",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "contact-information"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
     }
   ]
 }

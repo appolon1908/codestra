@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0.0",
-  "repository": "appolon1908-hue/codestra",
+  "repository": "appolon1908/codestra",
   "classification": "first-party-ui",
   "targetBranch": "codex/codestra-orbit-v2-codestra",
   "adoptionMode": "full-shell",
@@ -22,8 +22,9 @@
   },
   "status": "implementation-in-progress",
   "blockers": [
-    "The same-origin /auth browser-session contract must be implemented and certified by the Codestra backend before deployment.",
+    "The optional middleware /auth adapter and logout-all operation require backend certification before replacing the active cookie-session integration.",
     "SDK authority pull request 75 must merge before replacing the local reference adapter with pinned @corporate package artifacts.",
     "Legacy page-body color and visual-effect classes still require route-by-route remediation; this branch prevents new drift and replaces the global shell."
-  ]
+  ],
+  "activeAuthentication": "existing-cookie-session"
 }

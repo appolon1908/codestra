@@ -57,6 +57,13 @@ const Footer = ({ variant = "full" }: FooterProps) => {
       data-variant={variant}
     >
       <div className="orbit-footer-inner">
+        <nav className="orbit-footer-links" aria-label="Policies">
+          <Link className="orbit-footer-link" to="/privacy">Privacy</Link>
+          <Link className="orbit-footer-link" to="/terms">Terms &amp; Conditions</Link>
+          <Link className="orbit-footer-link" to="/sms">SMS Updates</Link>
+          <Link className="orbit-footer-link" to="/sms-terms">SMS Terms</Link>
+          <Link className="orbit-footer-link" to="/contact-information">Contact Information</Link>
+        </nav>
         {variant !== "legal-only" && (
           <div className="orbit-footer-grid">
             <section aria-labelledby="orbit-footer-company">
