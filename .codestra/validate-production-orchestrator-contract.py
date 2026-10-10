@@ -660,7 +660,7 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
     "appolon1908/codestra": {
-        '.github/workflows/ghcr-readonly-preflight.yml': '0034e54b9012e63967227c19ce60fa33c6f9480f6f5d20b8d6c4ed848c0825be',
+        '.github/workflows/ghcr-readonly-preflight.yml': '88e1789d8cb421a2a9d8be03e4c4e9525467c66d4853e55c090fe165dd6cacf9',
     },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
