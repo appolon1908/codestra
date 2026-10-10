@@ -1,0 +1,40 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "timestamp": "2026-10-10T16:32:57.846925+00:00",
+  "repository": "appolon1908/codestra",
+  "task_authority": "User: review all open PRs, resolve conflicts, push; full permission to continue until checks pass",
+  "pull_request": "https://github.com/appolon1908/codestra/pull/27",
+  "role": "Builder",
+  "worktree": "/workspace/pr-fixes/pr27",
+  "previous_head_sha": "0b8f1ec2990c7d6b9b254cdaea2f7c38a74cde5b",
+  "base_sha": "4015c35570b8890560d020840dc444c47c5db10e",
+  "scope": [
+    "PR merge conflict resolution",
+    "cookie logout query and refresh races",
+    "isolated release fixture credentials",
+    "strict reviewed CI source fingerprints"
+  ],
+  "tests": {
+    "unit_tests_passed": 63,
+    "lint_errors": 0,
+    "preexisting_lint_warnings": 1,
+    "build": "PASS",
+    "production_dependency_audit_vulnerabilities": 0,
+    "production_orchestrator_contract": "PASS"
+  },
+  "source_hashes": {
+    "src/Providers/SessionProvider.tsx": "de13e33a29536a7010b8bee3354e58e29add87f24ebae905d99d18a34776e481"
+  },
+  "independent_review": "Logout race fixes reviewed and targeted suite independently passed; no external approval submitted",
+  "remote_ci": "PENDING exact final-head readback",
+  "production_deployed": false,
+  "next_action": "Verify pushed exact head checks; protected approvals required before merge",
+  "ghcr_workflow_context_fix": {
+    "reason": "GitHub disallows runner.temp in job-level env; evaluate identical temporary paths at step scope",
+    "actionlint": "PASS",
+    "context_regression": "PASS",
+    "contract_and_release_selftest": "PASS",
+    "negative_workflow_hash_drift": "PASS",
+    "remote_ci": "pending new head"
+  }
+}
