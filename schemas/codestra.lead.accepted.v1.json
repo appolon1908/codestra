@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codestra.co/schemas/codestra.lead.accepted.v1.json",
+  "title": "Codestra lead accepted event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eventId",
+    "eventType",
+    "eventVersion",
+    "occurredAt",
+    "correlationId",
+    "lead"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "eventType": {
+      "const": "codestra.lead.accepted"
+    },
+    "eventVersion": {
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "lead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "leadId",
+        "odooLeadId",
+        "campaignCode",
+        "service",
+        "industry",
+        "marketingOptIn",
+        "attribution"
+      ],
+      "properties": {
+        "leadId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "odooLeadId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "campaignCode": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9_-]{2,63}$"
+        },
+        "service": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "industry": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]*$"
+        },
+        "marketingOptIn": {
+          "type": "boolean"
+        },
+        "attribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "landingPath",
+            "referrer",
+            "utmSource",
+            "utmMedium",
+            "utmCampaign",
+            "utmTerm",
+            "utmContent",
+            "clickId"
+          ],
+          "properties": {
+            "landingPath": { "type": "string", "maxLength": 2048 },
+            "referrer": { "type": "string", "maxLength": 2048 },
+            "utmSource": { "type": "string", "maxLength": 200 },
+            "utmMedium": { "type": "string", "maxLength": 200 },
+            "utmCampaign": { "type": "string", "maxLength": 200 },
+            "utmTerm": { "type": "string", "maxLength": 200 },
+            "utmContent": { "type": "string", "maxLength": 200 },
+            "clickId": { "type": "string", "maxLength": 512 }
+          }
+        }
+      }
+    }
+  }
+}

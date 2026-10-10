@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "environment": "production",
+  "expectedHost": "49.12.145.107",
+  "expectedDnsNames": [
+    "codestra.co",
+    "www.codestra.co"
+  ],
+  "runtimePathsVerified": false,
+  "hostKeyVerified": false,
+  "reverseProxyVerified": false,
+  "loopbackBindingVerified": false,
+  "rollbackVerified": false,
+  "activationEnabled": false,
+  "releaseRoot": "",
+  "releasesDir": "",
+  "currentSymlink": "",
+  "composeProject": "codestra",
+  "serviceName": "web",
+  "loopbackAddress": "127.0.0.1",
+  "loopbackPort": 0,
+  "healthPath": "/healthz",
+  "reverseProxy": "",
+  "verifiedAt": "",
+  "verifiedBy": "",
+  "evidenceSha256": ""
+}
