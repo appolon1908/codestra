@@ -26,10 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
       GHCR_REPOSITORY: ghcr.io/appolon1908-hue/codestra
       REPORT_PATH: ghcr-readonly-preflight.txt
-      INSPECT_WORKDIR: ${{ runner.temp }}/ghcr-readonly-inspect
 
     steps:
       - name: Check out reviewed main
@@ -85,6 +83,7 @@ jobs:
         if: ${{ steps.validate.outcome == 'success' }}
         continue-on-error: true
         env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
           GHCR_USER: ${{ github.actor }}
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -107,6 +106,8 @@ jobs:
         if: ${{ steps.auth.outcome == 'success' }}
         continue-on-error: true
         env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
+          INSPECT_WORKDIR: ${{ runner.temp }}/ghcr-readonly-inspect
           CANDIDATE_REFERENCE: ${{ steps.validate.outputs.reference }}
         run: |
           set -Eeuo pipefail
@@ -196,6 +197,9 @@ jobs:
 
       - name: Remove temporary registry credentials
         if: always()
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
+          INSPECT_WORKDIR: ${{ runner.temp }}/ghcr-readonly-inspect
         run: |
           set +e
           docker logout ghcr.io >/dev/null 2>&1
