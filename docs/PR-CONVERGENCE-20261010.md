@@ -15,3 +15,5 @@ Local evidence: /tmp/pr12-final-test.log, /tmp/pr12-adapter-tests3.log, /tmp/pr1
 Remote CI followup: execute the exact secret-scan shell wrapper, including checksum verification. Archive filename now matches the upstream checksum manifest; exact wrapper passes. The earlier restored wrapper used a shortened filename and failed verification before scanning.
 
 Two of seven identical remote browser jobs failed without publicly accessible logs; exact local twelve-test command passed. CI browser work is serialized to one worker for scheduling isolation, preserving all assertions and responsive widths. Always-uploaded retained traces provide actionable failure evidence; this is not a confirmed application defect repair.
+
+Hydration race reproduced with delayed lazy homepage JavaScript: static h1 exists while both language controls are absent. Navigation test now awaits the mounted canonical language control before viewport visibility branching; delayed lazy-asset coverage retains all original behavior assertions.

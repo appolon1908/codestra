@@ -4,9 +4,16 @@ import AxeBuilder from "@axe-core/playwright";
 test.describe("SEO remediation browser checks", () => {
   test.setTimeout(120_000);
   test("navigation, CTA, language switching, consent and unknown routes", async ({ page }) => {
+    // Exercise prerendered content before the lazy interactive homepage mounts.
+    await page.route("**/assets/Home-*.js", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await route.continue();
+    });
     await page.goto("/en/");
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.getByRole("link", { name: /get in touch|start a project/i })).toHaveAttribute("href", /\/en\/contact/);
+    // Static SEO content precedes the interactive navigation during hydration.
+    await page.locator("#header-language").waitFor({ state: "attached" });
     const menu = page.getByRole("button", { name: /open.*menu/i });
     let menuOpened = false;
     if (await menu.isVisible()) {
