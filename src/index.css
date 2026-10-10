@@ -273,3 +273,5 @@ html { scroll-behavior: smooth; }
 .codestra-language-prompt button { min-height:44px; padding:.55rem .85rem; color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:999px; }
 .codestra-language-prompt button:first-child { color:#000; background:#ffe500; border-color:#ffe500; }
 .codestra-language-prompt button:focus-visible { outline:2px solid #ffe500; outline-offset:3px; }
+
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }

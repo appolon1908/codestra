@@ -98,7 +98,7 @@ export default function Navbar() {
       <LocalizedLink to="/" className="w-20 lg:w-32" aria-label="Codestra"><img src={logo} alt="Codestra" /></LocalizedLink>
       <div className="hidden items-center gap-7 lg:flex">
         <LocalizedLink to="/">{t("home")}</LocalizedLink><LocalizedLink to="/about">{t("about")}</LocalizedLink>
-        <ServicesMenu /><IndustriesMenu /><LocalizedLink to="/case-studies">{t("caseStudies")}</LocalizedLink>
+        <LocalizedLink to="/systems">{t("systems", "AI systems")}</LocalizedLink><ServicesMenu /><IndustriesMenu /><LocalizedLink to="/case-studies">{t("caseStudies")}</LocalizedLink>
         <LocalizedLink to="/contact">{t("contact")}</LocalizedLink><LocalizedLink to="/hiring/positions">{t("joinTeam")}</LocalizedLink>
       </div>
       <div className="flex items-center gap-2">

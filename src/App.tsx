@@ -1,3 +1,4 @@
+import { featureRoutes } from "./features/FeatureRoutes";
 import AuthProvider from "./Providers/AuthProvider";
 import { SessionProvider } from "./Providers/SessionProvider";
 import ChatWidgetBoundary from "./Components/ChatWidgetBoundary";
@@ -10,6 +11,9 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { LocaleBoundary, LocalizedRedirect } from "./i18n/LocaleBoundary";
 
+const ModernHome = lazy(() => import("./Pages/Home/ModernHome"));
+const LandingPage = lazy(() => import("./Pages/Landing/LandingPage"));
+const LandingIndex = lazy(() => import("./Pages/Landing/LandingIndex"));
 const AboutUs = lazy(() => import("./Pages/About/AboutUs"));
 const ContactSales = lazy(() => import("./Pages/Contact/ContactSales"));
 const ContactSupport = lazy(() => import("./Pages/Contact/ContactSupport"));
@@ -82,6 +86,10 @@ function App() {
             }
           >
             <Routes>
+              {featureRoutes.map(({path, element}) => <Route key={path} path={path} element={element} />)}
+              <Route path="/services/:slug" element={<LandingPage kind="service" />} />
+              <Route path="/industries/:slug" element={<LandingPage kind="industry" />} />
+              <Route path="/solutions" element={<LandingIndex kind="service" />} />
               <Route path="/auth/*" element={<AuthProvider element={<AllRoutes />} />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
@@ -90,6 +98,8 @@ function App() {
               <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
               <Route path="/:locale" element={<LocaleBoundary />}>
                 <Route index element={<Home />} />
+                <Route path="systems" element={<ModernHome />} />
+                <Route path="solutions" element={<LandingIndex kind="service" />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<Signup />} />
                 <Route path="about" element={<AboutUs />} />

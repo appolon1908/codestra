@@ -115,7 +115,7 @@ const ContactUs = () => {
           {t("status")}
         </p>
       </div>
-      <Footer />
+      <FormLegalLinks /><Footer />
     </div>
   );
 };

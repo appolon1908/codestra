@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/prerender-localized-routes.mjs && node scripts/prerender-legal.mjs",
+    "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/generate-seo.mjs && node scripts/prerender-localized-routes.mjs && node scripts/prerender-legal.mjs",
     "serve:prerendered": "node scripts/serve-prerendered.mjs",
     "test:seo": "node scripts/validate-prerendered-seo.mjs",
     "generate:sitemap": "node scripts/generate-localized-sitemap.mjs",
@@ -18,7 +18,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:deployment": "node scripts/ci/check-deployment-scaffold.mjs",
+    "test:performance": "node scripts/check-performance.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",

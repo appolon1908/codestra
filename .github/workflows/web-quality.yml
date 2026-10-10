@@ -1,0 +1,111 @@
+name: Web quality
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'config/**'
+      - 'index.html'
+      - 'nginx.conf'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'lighthouserc.json'
+      - '.github/workflows/web-quality.yml'
+  push:
+    branches:
+      - 'feat/website-modern-shell'
+      - 'feat/ai-seo-landing-pages'
+      - 'feat/odoo-lead-integration'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deterministic-quality:
+    name: Build, test, SEO and asset budgets
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Production build and static route generation
+        run: npm run build
+        env:
+          SITE_URL: https://codestra.co
+
+      - name: Validate landing-page SEO
+        run: npm run test:seo
+
+      - name: Validate initial asset budgets
+        run: npm run test:performance
+
+      - name: Validate production dependencies
+        run: npm run audit:production
+
+      - name: Upload deterministic quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-quality-reports
+          path: |
+            dist/seo-manifest.json
+            dist/performance-budget.json
+          if-no-files-found: warn
+
+  lighthouse:
+    name: Lighthouse quality gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: deterministic-quality
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Build crawlable production output
+        run: npm run build
+        env:
+          SITE_URL: https://codestra.co
+
+      - name: Run Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.json
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          if-no-files-found: warn
