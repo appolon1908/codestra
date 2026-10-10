@@ -91,7 +91,7 @@ function App() {
             }
           >
             <Routes>
-              {featureRoutes.map(({path, element}) => <Route key={path} path={path} element={<MarketingRoute>element</MarketingRoute>} />)}
+              {featureRoutes.map(({path, element}) => <Route key={path} path={path} element={<MarketingRoute>{element}</MarketingRoute>} />)}
               <Route path="/services/:slug" element={<MarketingRoute><LandingPage kind="service" /></MarketingRoute>} />
               <Route path="/industries/:slug" element={<MarketingRoute><LandingPage kind="industry" /></MarketingRoute>} />
               <Route path="/solutions" element={<MarketingRoute><LandingIndex kind="service" /></MarketingRoute>} />
