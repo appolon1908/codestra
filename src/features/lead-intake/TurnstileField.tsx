@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 interface TurnstileOptions {
+  action: 'consultation'
   sitekey: string
   theme: 'dark'
   size: 'flexible'
@@ -29,7 +30,7 @@ const SCRIPT_SOURCE = 'https://challenges.cloudflare.com/turnstile/v0/api.js?ren
 
 const TurnstileField = ({ onTokenChange }: TurnstileFieldProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const widgetIdRef = useRef<string>()
+  const widgetIdRef = useRef<string | undefined>(undefined)
   const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY?.trim()
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const TurnstileField = ({ onTokenChange }: TurnstileFieldProps) => {
       if (!active || !containerRef.current || !window.turnstile || widgetIdRef.current) return
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
+        action: 'consultation',
         theme: 'dark',
         size: 'flexible',
         callback: onTokenChange,

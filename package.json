@@ -3,17 +3,22 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "engines": {
-    "node": ">=22.22.0"
-  },
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b && vite build && node scripts/generate-seo.mjs",
+    "build": "npm run generate:sitemap && tsc -b && vite build && node scripts/generate-seo.mjs && node scripts/prerender-localized-routes.mjs && node scripts/prerender-legal.mjs",
+    "serve:prerendered": "node scripts/serve-prerendered.mjs",
+    "test:seo": "node scripts/validate-prerendered-seo.mjs",
+    "generate:sitemap": "node scripts/generate-localized-sitemap.mjs",
+    "sync:i18n-industries": "node scripts/sync-industry-source-catalog.mjs",
+    "audit:i18n": "node scripts/audit-untranslated-ui.mjs",
+    "audit:i18n-coverage": "node scripts/audit-locale-coverage.mjs",
+    "report:i18n-review": "node scripts/audit-locale-coverage.mjs --summary",
     "audit:production": "npm audit --omit=dev --audit-level=high",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "test:deployment": "node scripts/ci/check-deployment-scaffold.mjs",
     "test:design": "node scripts/check-design-system.mjs",
     "test:seo": "node scripts/check-seo.mjs",
@@ -24,23 +29,30 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@tanstack/react-query": "^5.64.1",
     "aos": "^3.0.0-beta.6",
-    "axios": "^1.19.0",
+    "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^11.18.1",
+    "i18next": "26.3.6",
+    "i18next-browser-languagedetector": "8.2.1",
     "lucide-react": "^0.474.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "react-hook-form": "^7.54.2",
+    "react-i18next": "17.0.11",
     "react-icons": "^5.4.0",
     "react-router": "8.3.0",
     "react-toastify": "^11.0.3",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "echarts": "^6.1.0",
+    "lightweight-charts": "^5.0.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.62.1",
     "@types/aos": "^3.0.7",
     "@types/node": "^22.10.10",
     "@types/react": "19.2.14",
@@ -54,13 +66,20 @@
     "globals": "^15.14.0",
     "jsdom": "^30.0.1",
     "postcss": "^8.5.1",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^3.4.19",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "engines": {
+    "node": ">=22.22.0"
   },
   "overrides": {
-    "nanoid": "3.3.18"
+    "nanoid": "3.3.18",
+    "tailwindcss": {
+      "postcss-selector-parser": "7.1.6"
+    }
   }
 }

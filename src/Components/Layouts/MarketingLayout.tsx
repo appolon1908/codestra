@@ -1,3 +1,4 @@
+import '../../Pages/Home/modern-shell.css'
 import type { ReactNode } from 'react'
 import Footer from './Footer'
 import Navbar from './Navbar'

@@ -17,12 +17,12 @@ async def test_existing_external_lead_is_reconciled_without_create(
     settings,
     lead_command: LeadCommand,
 ) -> None:
-    search_route = respx.post(
-        "https://odoo.example.test/json/2/crm.lead/search_read"
-    ).mock(return_value=httpx.Response(200, json=[{"id": 42}]))
-    create_route = respx.post(
-        "https://odoo.example.test/json/2/crm.lead/create"
-    ).mock(return_value=httpx.Response(200, json=[43]))
+    search_route = respx.post("https://odoo.example.test/json/2/crm.lead/search_read").mock(
+        return_value=httpx.Response(200, json=[{"id": 42}])
+    )
+    create_route = respx.post("https://odoo.example.test/json/2/crm.lead/create").mock(
+        return_value=httpx.Response(200, json=[43])
+    )
 
     async with httpx.AsyncClient() as http_client:
         result = await OdooClient(settings, http_client).create_or_find_lead(lead_command)
@@ -42,9 +42,9 @@ async def test_new_lead_uses_allowlisted_campaign_and_external_id(
     respx.post("https://odoo.example.test/json/2/crm.lead/search_read").mock(
         return_value=httpx.Response(200, json=[])
     )
-    create_route = respx.post(
-        "https://odoo.example.test/json/2/crm.lead/create"
-    ).mock(return_value=httpx.Response(200, json=[77]))
+    create_route = respx.post("https://odoo.example.test/json/2/crm.lead/create").mock(
+        return_value=httpx.Response(200, json=[77])
+    )
 
     async with httpx.AsyncClient() as http_client:
         result = await OdooClient(settings, http_client).create_or_find_lead(lead_command)
@@ -74,9 +74,9 @@ async def test_unmapped_campaign_never_reaches_odoo_create(
     respx.post("https://odoo.example.test/json/2/crm.lead/search_read").mock(
         return_value=httpx.Response(200, json=[])
     )
-    create_route = respx.post(
-        "https://odoo.example.test/json/2/crm.lead/create"
-    ).mock(return_value=httpx.Response(200, json=[77]))
+    create_route = respx.post("https://odoo.example.test/json/2/crm.lead/create").mock(
+        return_value=httpx.Response(200, json=[77])
+    )
 
     async with httpx.AsyncClient() as http_client:
         with pytest.raises(CampaignNotAllowedError):

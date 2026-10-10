@@ -1,160 +1,347 @@
-import {
-  ArrowRight,
-  Bot,
-  Braces,
-  DatabaseZap,
-  Gauge,
-  Layers3,
-  LockKeyhole,
-  Network,
-  Sparkles,
-  Workflow,
-} from 'lucide-react'
-import { Link } from 'react-router'
-import Footer from '../../Components/Layouts/Footer'
-import Navbar from '../../Components/Layouts/Navbar'
+import Navbar from "../../Components/Layouts/Navbar";
+import imageWebp from "../../assets/Rectangle.webp";
+import { GoArrowRight } from "react-icons/go";
 
-const services = [
-  {
-    icon: Bot,
-    title: 'AI systems that do useful work',
-    description: 'Agents, copilots, retrieval systems and intelligent workflows designed around your data, approvals and operating rules.',
-  },
-  {
-    icon: Workflow,
-    title: 'Automation across the business',
-    description: 'Connect sales, support, operations and finance so information moves once, decisions happen faster and handoffs stay visible.',
-  },
-  {
-    icon: Braces,
-    title: 'Software built around your advantage',
-    description: 'Modern web, mobile and API products engineered for the way your company actually competes—not a generic template.',
-  },
-  {
-    icon: Network,
-    title: 'Integration without the fragile glue',
-    description: 'Secure API gateways, CRM connections, event-driven services and middleware that keep core systems isolated and dependable.',
-  },
-]
 
-const principles = [
-  { icon: LockKeyhole, title: 'Secure by design', text: 'Private services, bounded inputs, least privilege and auditable system boundaries.' },
-  { icon: Layers3, title: 'Built in reviewable layers', text: 'Clear branches, contracts, tests and rollout gates instead of one risky release.' },
-  { icon: Gauge, title: 'Performance is a feature', text: 'Lean interfaces, purposeful motion and measurable budgets for fast experiences.' },
-  { icon: DatabaseZap, title: 'Data stays operational', text: 'Structured events, reliable delivery and CRM-ready context—not disconnected demos.' },
-]
+import productOne from "../../assets/product (3).png";
+import productTwo from "../../assets/product (2).png";
+import productThree from "../../assets/product (1).png";
 
-const industries = [
-  'Healthcare', 'Financial services', 'Logistics', 'Insurance', 'Real estate', 'Retail',
-  'Manufacturing', 'Education', 'Telecommunications', 'Professional services', 'Hospitality', 'Call centers',
-]
+import ai from "../../assets/ai.png";
+import ai2 from "../../assets/ai2.png";
 
-const Home = () => (
-  <>
-    <Navbar />
-    <main id="main-content" className="home-page">
-      <section className="hero shell" aria-labelledby="hero-title">
-        <div className="hero__copy">
-          <p className="eyebrow"><Sparkles size={15} aria-hidden="true" /> AI that connects to the real business</p>
-          <h1 id="hero-title">Build the AI operating layer your business has been missing.</h1>
-          <p className="hero__lede">
-            Codestra combines AI development, automation, custom software and secure integration to turn fragmented work into one dependable system.
+import uidesign from "../../assets/uidesign.png";
+
+import { MdChevronRight } from "react-icons/md";
+import { RiFileList2Fill } from "react-icons/ri";
+
+import { TbMinusVertical } from "react-icons/tb";
+
+import { MdNetworkWifi2Bar } from "react-icons/md";
+import { IoLogoBuffer } from "react-icons/io";
+import { BsSuitDiamondFill } from "react-icons/bs";
+import { SiSimpleanalytics } from "react-icons/si";
+import { useEffect, useState } from "react";
+import Footer from "../../Components/Layouts/Footer";
+import { Products } from "./Products";
+import { useTranslation } from "react-i18next";
+import LocalizedLink from "../../i18n/LocalizedLink";
+
+const typingKeys = [
+  "typing.craftsmanship",
+  "typing.ideas",
+  "typing.excellence",
+] as const;
+
+const Home = () => {
+  const { t, i18n } = useTranslation("home");
+  const [displayText, setDisplayText] = useState<string>("");
+  const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
+  const [charIndex, setCharIndex] = useState<number>(0);
+  const backendPairs = t("development.backendPairs", {
+    returnObjects: true,
+  }) as Array<{ name: string; description: string }>;
+  const frontendTools = t("development.frontendTools", {
+    returnObjects: true,
+  }) as Array<{ name: string; description: string }>;
+  const marketingTools = t("marketing.tools", {
+    returnObjects: true,
+  }) as Array<{ name: string; description: string }>;
+  const marketingIcons = [
+    MdNetworkWifi2Bar,
+    IoLogoBuffer,
+    BsSuitDiamondFill,
+    SiSimpleanalytics,
+    MdNetworkWifi2Bar,
+    MdNetworkWifi2Bar,
+    MdNetworkWifi2Bar,
+    MdNetworkWifi2Bar,
+  ];
+
+  useEffect(() => {
+    const activeText = t(typingKeys[currentTextIndex]);
+    if (charIndex < activeText.length) {
+      const typingTimeout = setTimeout(() => {
+        setDisplayText((prev) => prev + activeText[charIndex]);
+        setCharIndex((prev) => prev + 1);
+      }, 100);
+      return () => clearTimeout(typingTimeout);
+    } else {
+      const pauseTimeout = setTimeout(() => {
+        setDisplayText("");
+        setCharIndex(0);
+        setCurrentTextIndex((prev) => (prev + 1) % typingKeys.length);
+      }, 2000); // Pause before switching to the next text
+      return () => clearTimeout(pauseTimeout);
+    }
+  }, [charIndex, currentTextIndex, i18n.resolvedLanguage, t]);
+
+  useEffect(() => {
+    setDisplayText("");
+    setCharIndex(0);
+  }, [i18n.resolvedLanguage]);
+
+  return (
+    <>
+      <Navbar />
+      <div className="px-5 lg:pt-[10rem] pt-[7rem] text-center">
+        <div
+          className="text-center space-y-5"
+          data-aos="fade-up"
+          data-aos-duration="700"
+        >
+          <h1 className="lg:text-4xl text-3xl font-semibold">
+            Custom AI, Software &amp; Automation Built for Real Operations
+          </h1>
+          <p className="sr-only" aria-live="polite">{t(typingKeys[currentTextIndex])}</p>
+          <p aria-hidden="true" className="text-lg text-neutral-300 min-h-7">
+            {displayText} <span className="animate-blink">|</span>
           </p>
-          <div className="hero__actions">
-            <Link className="button button--gold" to="/contact/sales">
-              Plan your first workflow <ArrowRight size={18} aria-hidden="true" />
-            </Link>
-            <Link className="button button--ghost" to="/services">Explore capabilities</Link>
+          <p className="lg:text-base text-base">{t("hero.body")}</p>
+          <LocalizedLink to={"/contact"}>
+            <button className="py-2.5 px-5 mt-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white">
+              {t("hero.cta")} <GoArrowRight className="text-xl" />
+            </button>
+          </LocalizedLink>
+        </div>
+        <div className="myDivImage lg:w-[80%] cursor-pointer w-[100%] mt-10 flex justify-center m-auto overflow-hidden">
+          <img src={imageWebp} alt="Codestra software platform preview" width="1600" height="621" fetchPriority="high" decoding="async" />
+        </div>
+
+        <div className="2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-3">
+          <div className="space-y-3 text-center lg:pt-[10rem] pt-[5rem]">
+            <h2 className="text-base">Built for teams that need dependable delivery</h2>
+            <p className="text-sm text-neutral-400">Customer logos and testimonials are shown only when documented permission and approved evidence are available.</p>
           </div>
-          <p className="hero__proof">Designed for Odoo, Kong, Caddy, n8n, modern APIs and the systems you already depend on.</p>
-        </div>
 
-        <div className="system-visual" aria-label="Illustration of a secure AI and automation architecture">
-          <div className="system-visual__glow" aria-hidden="true" />
-          <div className="system-node system-node--input">
-            <span>Customer & team</span>
-            <strong>Web · Voice · Email · CRM</strong>
+          <div className="text-center lg:pt-[10rem] pt-[5rem]">
+            <div data-aos="fade-up" data-aos-duration="500">
+              <h2 className="lg:text-3xl text-3xl font-semibold">
+                {t("teams.title")}
+              </h2>
+              <p className="text-base pt-3">{t("teams.body")}</p>
+            </div>
+
+            <div className="text-left grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1  gap-10 mt-10">
+              <div
+                data-aos="fade-up"
+                data-aos-duration="700"
+                className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
+              >
+                <img src={productOne} alt="" className="w-full" />
+                <div className="flex items-center mt-4">
+                  <h3 className="text-white font-semibold text-lg">
+                    {t("teams.development")}
+                  </h3>
+                  <p className="border-2 border-neutral-600 rounded-full p-2 cursor-pointer ml-auto text-xl">
+                    <MdChevronRight />
+                  </p>
+                </div>
+              </div>
+
+              <div
+                data-aos="fade-up"
+                data-aos-duration="700"
+                className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
+              >
+                <img src={productTwo} alt="" className="w-full" />
+                <div className="flex items-center mt-4">
+                  <h3 className="text-white font-semibold text-lg">
+                    {t("teams.design")}
+                  </h3>
+                  <p className="border-2 border-neutral-600 rounded-full p-2 cursor-pointer ml-auto text-xl">
+                    <MdChevronRight />
+                  </p>
+                </div>
+              </div>
+
+              <div
+                data-aos="fade-up"
+                data-aos-duration="500"
+                className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
+              >
+                <img src={productThree} alt="" className="w-full" />
+                <div className="flex items-center mt-4">
+                  <h3 className="text-white font-semibold text-lg">
+                    {t("teams.marketing")}
+                  </h3>
+                  <p className="border-2 border-neutral-600 rounded-full p-2 cursor-pointer ml-auto text-xl">
+                    <MdChevronRight />
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="system-connector" aria-hidden="true"><span /></div>
-          <div className="system-node system-node--core">
-            <span>Codestra intelligence layer</span>
-            <strong>AI · Rules · Workflow · APIs</strong>
-            <div className="system-pulse" aria-hidden="true" />
+
+          <div className="text-center lg:pt-[10rem] pt-[5rem]">
+            <div data-aos="fade-up" data-aos-duration="500">
+              <h2 className="lg:text-3xl text-3xl font-semibold">
+                {t("development.title")}
+              </h2>
+              <p className="lg:w-[60%] w-full m-auto text-base pt-3">
+                {t("development.body")}
+              </p>
+            </div>
+
+            <div className="my-14 flex lg:flex-row flex-col lg:gap-10 gap-5 text-left border-t border-neutral-800 ">
+              <div
+                data-aos="fade-up"
+                data-aos-duration="500"
+                className="lg:border-r border-neutral-800 lg:px-5 py-7"
+              >
+                <h3 className="text-2xl ">{t("development.backendTitle")}</h3>
+                <p className="text-sm pt-3">{t("development.backendBody")}</p>
+
+                <div className="space-y-5 bg-neutral-90 border border-neutral-800 mt-8 text-[12px] lg:p-5 p-3 rounded-3xl">
+                  {backendPairs.map((pair) => (
+                    <p
+                      key={pair.name}
+                      className="bg-neutral-900 eachImagea cursor-pointer hover:bg-neutral-800 transition-all ease-in-out delay-75 rounded-xl p-2"
+                    >
+                      <span className="text-white flex items-center gap-2 pb-2">
+                        <RiFileList2Fill className="text-base" />
+                        {pair.name}
+                      </span>
+                      {pair.description}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              <div
+                className="lg:pt-10"
+                data-aos="fade-up"
+                data-aos-duration="500"
+              >
+                <h3 className="text-2xl">{t("development.frontendTitle", "Frontend frameworks and tools")}</h3>
+                <p className="text-sm  pt-3">{t("development.frontendBody", "Interfaces and products designed for people and operations.")}</p>
+
+                <div className="mt-8 grid lg:grid-cols-2 grid-cols-1 gap-5 text-sm">
+                  {frontendTools.map((frontdata) => (
+                    <div
+                      key={frontdata.name}
+                      className="flex bg-neutral-900 hover:bg-neutral-800 eachImage rounded-xl lg:p-2 p-4 cursor-pointer"
+                    >
+                      <p>
+                        <TbMinusVertical
+                          className={
+                            frontdata.name !== "Next.js"
+                              ? "text-2xl text-white"
+                              : "text-2xl text-[#FFD700]"
+                          }
+                        />
+                      </p>
+                      <div>
+                        <h4 className="text-base">{frontdata.name}</h4>
+                        <p className="text-[13px] pt-2">
+                          {frontdata.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="system-connector" aria-hidden="true"><span /></div>
-          <div className="system-visual__outcomes">
-            <div><small>01</small><strong>Odoo CRM</strong><span>qualified context</span></div>
-            <div><small>02</small><strong>Automation</strong><span>reliable actions</span></div>
-            <div><small>03</small><strong>Operations</strong><span>clear ownership</span></div>
+
+          <div className="lg:pt-[8rem] pt-[3rem]">
+            <div data-aos="fade-up" data-aos-duration="500">
+              <h2 className="lg:text-3xl text-2xl font-semibold">
+                {t("design.title")}
+              </h2>
+              <p className="lg:w-[60%] w-full m-auto text-sm pt-3">
+                {t("design.body")}
+              </p>
+            </div>
+
+            <div
+              className="w-[100%] eachImage cursor-pointer mt-10"
+              data-aos="fade-up"
+              data-aos-duration="500"
+            >
+              <img src={uidesign} alt="" className="w-full" />
+            </div>
+          </div>
+
+          <div className="lg:pt-[8rem] pt-[5rem]">
+            <div data-aos="fade-up" data-aos-duration="700">
+              <h2 className="lg:text-3xl text-2xl font-semibold">
+                {t("marketing.title")}
+              </h2>
+              <p className="lg:w-[60%] w-full m-auto text-sm text-[#B4B5B5] pt-3">
+                {t("marketing.body")}
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-4 grid-cols-2 gap-6 text-left text-xs pt-10">
+              {marketingTools.map((tool, index) => {
+                const Icon = marketingIcons[index];
+                return (
+                  <div
+                    key={`${tool.name}-${index}`}
+                    data-aos="fade-up"
+                    data-aos-duration="700"
+                    className="bg-neutral-900 eachImage lg:p-5 p-3 cursor-pointer rounded-xl"
+                  >
+                    <h3 className="text-base flex items-center gap-2">
+                      <Icon aria-hidden="true" focusable="false" className="text-xl" />
+                      {tool.name}
+                    </h3>
+                    <p className="pt-2">{tool.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="lg:pt-[10rem] pt-[5rem] grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-20">
+            <div
+              className="text-left flex flex-col gap-4"
+              data-aos="fade-up"
+              data-aos-duration="700"
+            >
+              <div className="eachImage hover:bg-neutral-900 lg:p-5 p-3 cursor-pointer rounded-xl">
+                <h2 className="text-2xl font-semibold">
+                  {t("automation.title")}
+                </h2>
+                <p className="text-sm pt-5">{t("automation.body")}</p>
+              </div>
+              <div className="w-full eachImage">
+                <img src={ai} alt="" className="w-full" />
+              </div>
+            </div>
+
+            <div
+              className="text-left flex lg:flex-col flex-col-reverse gap-4"
+              data-aos="fade-up"
+              data-aos-duration="700"
+            >
+              <div className="w-[60%] flex m-auto eachImage">
+                <img src={ai2} alt="" className="w-full" />
+              </div>
+              <div className="eachImage hover:bg-neutral-900 lg:p-5 p-3 cursor-pointer rounded-xl">
+                <h2 className="text-2xl font-semibold">{t("crm.title")}</h2>
+                <p className="text-sm pt-5">{t("crm.body")}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:pt-[10rem] pt-[5rem]">
+            <h2 className="text-center lg:text-3xl text-2xl pb-5">
+              {t("products")}
+            </h2>
+            <Products />
+          </div>
+
+          <div className="lg:pt-[10rem] pt-[5rem]">
+            <h2 className="text-center lg:text-3xl text-2xl pb-5">{t("testimonials")}</h2>
+            <p className="text-center text-neutral-400">Approved customer stories will appear here after owner review.</p>
           </div>
         </div>
-      </section>
+      </div>
+      <Footer />
+    </>
+  );
+};
 
-      <section className="home-section shell" aria-labelledby="services-title">
-        <div className="section-heading">
-          <div><p className="eyebrow">From idea to production</p><h2 id="services-title">One engineering partner for the whole intelligent system.</h2></div>
-          <p>Strategy matters, but execution has to survive real users, real data and real operational pressure. We design the complete path.</p>
-        </div>
-        <div className="service-grid">
-          {services.map(({ icon: Icon, title, description }, index) => (
-            <article className="service-card" key={title}>
-              <div className="service-card__top"><span>0{index + 1}</span><Icon aria-hidden="true" /></div>
-              <h3>{title}</h3>
-              <p>{description}</p>
-              <Link to="/services">See how it works <ArrowRight size={16} aria-hidden="true" /></Link>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="home-section home-section--surface">
-        <div className="shell">
-          <div className="section-heading section-heading--center">
-            <div><p className="eyebrow">Production-minded by default</p><h2>Modern on the surface. Disciplined underneath.</h2></div>
-            <p>A beautiful product is only valuable when the architecture, security, data flow and operating model support it.</p>
-          </div>
-          <div className="principle-grid">
-            {principles.map(({ icon: Icon, title, text }) => (
-              <article key={title}><Icon aria-hidden="true" /><h3>{title}</h3><p>{text}</p></article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="home-section shell split-section" aria-labelledby="process-title">
-        <div className="split-section__copy">
-          <p className="eyebrow">A clearer way to build</p>
-          <h2 id="process-title">Start with one expensive problem. Prove the system. Scale what works.</h2>
-          <p>We focus the first release on a measurable workflow, connect it safely to the systems of record and create the foundation for the next automation.</p>
-          <Link className="text-link" to="/contact/sales">Discuss the best first use case <ArrowRight size={17} aria-hidden="true" /></Link>
-        </div>
-        <ol className="process-list">
-          <li><span>01</span><div><h3>Map the decision and the handoffs</h3><p>Define users, data, exceptions, approvals and the business result before choosing the technology.</p></div></li>
-          <li><span>02</span><div><h3>Build the narrow production path</h3><p>Deliver the interface, API, automation and CRM outcome as one testable vertical slice.</p></div></li>
-          <li><span>03</span><div><h3>Measure, harden and expand</h3><p>Use real usage, quality and operational signals to decide what earns the next investment.</p></div></li>
-        </ol>
-      </section>
-
-      <section className="home-section shell" aria-labelledby="industries-title">
-        <div className="section-heading">
-          <div><p className="eyebrow">Where automation creates leverage</p><h2 id="industries-title">Built for industries with complex work and valuable customer moments.</h2></div>
-          <p>We adapt the architecture to your terminology, controls, integrations and service model instead of forcing the same workflow everywhere.</p>
-        </div>
-        <div className="industry-cloud">
-          {industries.map((industry) => <span key={industry}>{industry}</span>)}
-        </div>
-        <div className="section-action"><Link className="button button--ghost" to="/case-studies">Explore our work <ArrowRight size={17} aria-hidden="true" /></Link></div>
-      </section>
-
-      <section className="home-section shell final-cta" aria-labelledby="final-cta-title">
-        <p className="eyebrow">The next release can be the one that changes the operating model</p>
-        <h2 id="final-cta-title">Bring us the workflow everyone complains about.</h2>
-        <p>We will help turn it into a secure, measurable AI and automation roadmap—with the first production step clearly defined.</p>
-        <Link className="button button--gold" to="/contact/sales">Start the conversation <ArrowRight size={18} aria-hidden="true" /></Link>
-      </section>
-    </main>
-    <Footer />
-  </>
-)
-
-export default Home
+export default Home;

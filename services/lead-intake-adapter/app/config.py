@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     ODOO_BASE_URL: HttpUrl
     ODOO_DATABASE: str = Field(min_length=1, max_length=128)
-    ODOO_API_KEY: str = Field(min_length=1)
+    ODOO_API_KEY: str = ""
     ODOO_EXTERNAL_ID_FIELD: str = Field(
         default="x_codestra_external_lead_id",
         pattern=r"^[a-z][a-z0-9_]{2,127}$",
@@ -65,6 +65,12 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_activation_dependencies(self) -> Settings:
+        campaign_map = self.campaign_map
+        self._positive_integer_map(self.ODOO_SOURCE_MAP_JSON, "ODOO_SOURCE_MAP_JSON")
+        if self.ODOO_WRITE_ENABLED and not self.ODOO_API_KEY.strip():
+            raise ValueError("ODOO_API_KEY is required while ODOO_WRITE_ENABLED=true")
+        if self.ODOO_WRITE_ENABLED and not campaign_map:
+            raise ValueError("An allowlisted campaign is required while ODOO_WRITE_ENABLED=true")
         if self.TURNSTILE_REQUIRED and not self.TURNSTILE_SECRET_KEY:
             raise ValueError("TURNSTILE_SECRET_KEY is required while TURNSTILE_REQUIRED=true")
         if self.N8N_DELIVERY_ENABLED and not self.N8N_WEBHOOK_URL:
@@ -75,11 +81,17 @@ class Settings(BaseSettings):
 
     @property
     def public_origins(self) -> frozenset[str]:
-        return frozenset(item.strip().rstrip("/") for item in self.PUBLIC_ORIGINS.split(",") if item.strip())
+        return frozenset(
+            item.strip().rstrip("/") for item in self.PUBLIC_ORIGINS.split(",") if item.strip()
+        )
 
     @property
     def turnstile_expected_hostnames(self) -> frozenset[str]:
-        return frozenset(item.strip().lower() for item in self.TURNSTILE_EXPECTED_HOSTNAMES.split(",") if item.strip())
+        return frozenset(
+            item.strip().lower()
+            for item in self.TURNSTILE_EXPECTED_HOSTNAMES.split(",")
+            if item.strip()
+        )
 
     @staticmethod
     def _positive_integer_map(raw: str, variable_name: str) -> dict[str, int]:

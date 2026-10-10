@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 import { useState } from 'react'
 import { HiEye, HiEyeOff } from "react-icons/hi"
 import { Link, useNavigate } from 'react-router'
@@ -5,7 +6,7 @@ import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
 import { ToastContainer, toast } from 'react-toastify';
 import logo from '../../assets/logo.png'
-import { setAccessToken } from '@/lib/auth'
+import { useSession } from '@/Providers/SessionProvider'
 
 type FormData = {
   email: string,
@@ -26,6 +27,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const {mutate, isPending} = useLogin()
   const navigate = useNavigate()
+  const { refreshSession } = useSession()
 
   const {
     register, 
@@ -36,8 +38,12 @@ const Login = () => {
 
   const onSubmit = (data:FormData) => {
     mutate(data, {
-      onSuccess: (details) => {
-        setAccessToken(details.data.token.access);
+      onSuccess: async () => {
+        const user = await refreshSession()
+        if (!user) {
+          toast("Unable to establish a secure session")
+          return
+        }
         reset()
         navigate('/auth/dashboard', { replace: true })
       },
@@ -53,7 +59,7 @@ const Login = () => {
     <div className="min-h-screen text-xs w-full flex flex-col gap-4 items-center justify-center m-auto bg-[#080808] px-3">
         <div className='pb-6'>
           <Link to={'/'}>
-            <img src={logo} alt="" className='w-40'/>
+            <img src={logo} alt="Codestra home" className='w-40'/>
           </Link>
         </div>
         <div className="2xl:w-[25%] xl:w-[60%] lg:w-[70%] w-[95%] relative bg-[#121212] border border-[#1b1b1b] rounded-xl p-8">
@@ -67,9 +73,9 @@ const Login = () => {
 
             <div className="space-y-4">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-white">Email</label>
+                <label htmlFor="login-email" className="text-sm text-white">Email</label>
                 <input 
-                  type="email"
+                  id="login-email" type="email" autoComplete="username"
                   placeholder="Write email address"
                   className="bg-[#262729] border-0 text-white p-3 rounded-lg"
                   {...register('email', { required: true })}
@@ -79,10 +85,10 @@ const Login = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-white">Password</label>
+                <label htmlFor="login-password" className="text-sm text-white">Password</label>
                 <div className="relative">
                   <input
-                    type={showPassword ? "text" : "password"}
+                    id="login-password" autoComplete="current-password" type={showPassword ? "text" : "password"}
                     placeholder="Write your password"
                     className="bg-[#262729] border-0 text-white p-3 rounded-lg w-full"
                     {...register('password', { required: true })}
@@ -91,6 +97,7 @@ const Login = () => {
                   <button 
                     type="button"
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-500"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
@@ -99,7 +106,7 @@ const Login = () => {
               </div>
 
               <div className="flex items-center space-x-2">
-                <input type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
+                <input id="remember" type="checkbox" defaultChecked className="checkbox border-gray-600 data-[state=checked]:bg-white data-[state=checked]:text-black" />
                 <label htmlFor="remember" className="text-sm text-gray-300">
                   Keep me logged in
                 </label>
@@ -126,6 +133,7 @@ const Login = () => {
                 </Link>
               </p>
             </div>
+          <FormLegalLinks />
           </form>
         </div>
     </div>

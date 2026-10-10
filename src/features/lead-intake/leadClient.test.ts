@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   LEAD_FORM_VERSION,
-  LeadApiError,
   submitLead,
   type LeadCommand,
 } from './leadClient'
@@ -108,7 +107,7 @@ describe('submitLead', () => {
     ))
     vi.stubGlobal('fetch', fetchMock)
 
-    await expect(submitLead(command)).rejects.toMatchObject<Partial<LeadApiError>>({
+    await expect(submitLead(command)).rejects.toMatchObject({
       name: 'LeadApiError',
       status: 422,
       code: 'CAMPAIGN_NOT_ALLOWED',

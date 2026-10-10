@@ -11,15 +11,17 @@ import pytest
 from app.database import Database, IdempotencyConflictError
 from app.models import LeadCommand
 
+MIGRATION = (Path(__file__).resolve().parents[1] / "migrations" / "001_init.sql").read_text(
+    encoding="utf-8"
+)
+
 
 @pytest.fixture
 async def database(settings):
     database_url = os.environ.get("TEST_DATABASE_URL", settings.DATABASE_URL)
     configured = settings.model_copy(update={"DATABASE_URL": database_url})
     connection = await asyncpg.connect(database_url)
-    migration = (
-        Path(__file__).resolve().parents[1] / "migrations" / "001_init.sql"
-    ).read_text(encoding="utf-8")
+    migration = MIGRATION
     try:
         await connection.execute(migration)
         await connection.execute("TRUNCATE lead_outbox, lead_intake_commands CASCADE")

@@ -4,7 +4,7 @@ import path from 'node:path'
 import process from 'node:process'
 
 const distDirectory = path.join(process.cwd(), 'dist')
-const indexPath = path.join(distDirectory, 'index.html')
+const indexPath = path.join(distDirectory, 'en', 'index.html')
 const html = await readFile(indexPath, 'utf8')
 
 const fail = (message) => {

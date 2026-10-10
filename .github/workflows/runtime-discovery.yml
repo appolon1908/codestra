@@ -1,0 +1,136 @@
+name: Read-only production runtime discovery
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type READ_ONLY_DISCOVERY
+        required: true
+        type: string
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/runtime-discovery.yml'
+      - 'scripts/deploy/read-only-runtime-discovery.sh'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codestra-production-runtime-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    # RUNTIME_MUTATION_DISABLED=true
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - name: Validate read-only execution context
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || {
+            echo "Runtime discovery is restricted to main." >&2
+            exit 1
+          }
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            [[ "$CONFIRMATION" == "READ_ONLY_DISCOVERY" ]] || {
+              echo "Manual confirmation is invalid." >&2
+              exit 1
+            }
+          elif [[ "$GITHUB_EVENT_NAME" != "push" ]]; then
+            echo "Unsupported event: $GITHUB_EVENT_NAME" >&2
+            exit 1
+          fi
+          [[ "$DEPLOY_HOST" == "49.12.145.107" ]] || {
+            echo "DEPLOY_HOST does not match the verified public site host." >&2
+            exit 1
+          }
+          [[ "$DEPLOY_USER" =~ ^[A-Za-z0-9_.-]+$ ]] || exit 1
+          [[ -n "$DEPLOY_KEY" ]] || { echo "DEPLOY_SSH_KEY is missing." >&2; exit 1; }
+          [[ -n "$KNOWN_HOSTS" ]] || { echo "DEPLOY_KNOWN_HOSTS is missing." >&2; exit 1; }
+
+      - name: Configure pinned SSH trust
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          set -Eeuo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -F "$DEPLOY_HOST" -f ~/.ssh/known_hosts >/dev/null
+
+      - id: discovery
+        name: Stream and run read-only discovery
+        continue-on-error: true
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            'bash -s' \
+            < scripts/deploy/read-only-runtime-discovery.sh \
+            | tee runtime-discovery.txt
+
+          grep -Fx 'DISCOVERY_MODE=READ_ONLY' runtime-discovery.txt
+          grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' runtime-discovery.txt
+          grep -Fx 'DISCOVERY_STATUS=PASS' runtime-discovery.txt
+
+      - name: Checksum evidence
+        if: always()
+        run: |
+          set -Eeuo pipefail
+          if [[ -f runtime-discovery.txt ]]; then
+            sha256sum runtime-discovery.txt > runtime-discovery.sha256
+          else
+            printf 'NO_DISCOVERY_REPORT\n' > runtime-discovery.error.txt
+          fi
+
+      - name: Upload discovery evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: production-runtime-discovery-${{ github.run_id }}
+          path: |
+            runtime-discovery.txt
+            runtime-discovery.sha256
+            runtime-discovery.error.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Fail after preserving evidence
+        if: ${{ steps.discovery.outcome == 'failure' }}
+        run: |
+          echo "Read-only discovery failed or was incomplete; evidence was preserved." >&2
+          exit 1

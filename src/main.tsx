@@ -4,6 +4,7 @@ import './index.css'
 import './styles/corporate-design-system.css'
 import './styles/legacy-marketing-normalization.css'
 import App from './App.tsx'
+import './i18n'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

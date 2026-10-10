@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface ButtonProps {
   text: string
@@ -7,12 +8,15 @@ interface ButtonProps {
   type?: 'button' | 'submit'
 }
 
-const PendingLabel = () => (
+const PendingLabel = () => {
+  const { t } = useTranslation("common");
+  return (
   <span className="inline-flex items-center gap-2">
     <span className="loadera" aria-hidden="true" />
-    Loading
+    {t("loading")}
   </span>
-)
+);
+}
 
 export const Button1 = ({ text, onClick, type = 'button' }: ButtonProps) => (
   <button type={type} className="button button--secondary button--compact" onClick={onClick}>

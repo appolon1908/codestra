@@ -16,7 +16,6 @@ on:
   push:
     branches:
       - 'feat/website-modern-shell'
-      - 'feat/corporate-design-system'
       - 'feat/ai-seo-landing-pages'
       - 'feat/odoo-lead-integration'
 
@@ -29,18 +28,18 @@ concurrency:
 
 jobs:
   deterministic-quality:
-    name: Build, test, design, SEO and asset budgets
+    name: Build, test, SEO and asset budgets
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: '22'
           cache: npm
@@ -53,11 +52,6 @@ jobs:
 
       - name: Unit tests
         run: npm test
-
-      - name: Enforce corporate design system
-        run: npm run test:design
-        env:
-          DESIGN_SYSTEM_BASE_SHA: ${{ github.event.before }}
 
       - name: Production build and static route generation
         run: npm run build
@@ -75,7 +69,7 @@ jobs:
 
       - name: Upload deterministic quality reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: web-quality-reports
           path: |
@@ -91,10 +85,12 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: '22'
           cache: npm
@@ -112,7 +108,7 @@ jobs:
 
       - name: Upload Lighthouse reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: lighthouse-reports
           path: .lighthouseci

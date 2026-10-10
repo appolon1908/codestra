@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import json
 import logging
 import sys
 import time
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import AsyncIterator
+from typing import Annotated
 from uuid import UUID, uuid4
 
 import httpx
@@ -162,7 +162,9 @@ async def request_controls(request: Request, call_next):  # type: ignore[no-unty
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
     correlation_id = getattr(request.state, "correlation_id", str(uuid4()))
     fields = sorted(
         {
@@ -207,9 +209,8 @@ async def health_ready(request: Request) -> JSONResponse:
     runtime: Runtime = request.app.state.runtime
     database_ready = await runtime.database.ping()
     campaign_map_ready = bool(runtime.settings.campaign_map)
-    turnstile_ready = (
-        not runtime.settings.TURNSTILE_REQUIRED
-        or bool(runtime.settings.TURNSTILE_SECRET_KEY)
+    turnstile_ready = not runtime.settings.TURNSTILE_REQUIRED or bool(
+        runtime.settings.TURNSTILE_SECRET_KEY
     )
     ready = all(
         [
@@ -243,8 +244,8 @@ async def health_ready(request: Request) -> JSONResponse:
 async def create_consultation_lead(
     request: Request,
     command: LeadCommand,
-    idempotency_key: UUID = Header(alias="Idempotency-Key"),
-    form_version: str = Header(alias="X-Codestra-Form-Version"),
+    idempotency_key: Annotated[UUID, Header(alias="Idempotency-Key")],
+    form_version: Annotated[str, Header(alias="X-Codestra-Form-Version")],
 ) -> JSONResponse:
     runtime: Runtime = request.app.state.runtime
     correlation_id = request.state.correlation_id
@@ -315,17 +316,14 @@ async def create_consultation_lead(
         )
 
     if claim.state == "processing":
-        receipt = LeadReceipt(
-            leadId=command.leadId,
-            status="accepted",
-            message="This request is already being processed.",
-            correlationId=correlation_id,
+        response = problem_response(
+            409,
+            "REQUEST_IN_PROGRESS",
+            "This request is already being processed. Retry after five seconds.",
+            correlation_id,
         )
-        return JSONResponse(
-            status_code=202,
-            content=receipt.model_dump(mode="json", exclude_none=True),
-            headers={"X-Correlation-ID": correlation_id, "Retry-After": "5"},
-        )
+        response.headers["Retry-After"] = "5"
+        return response
 
     try:
         odoo_result = await runtime.odoo.create_or_find_lead(command)

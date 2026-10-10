@@ -51,7 +51,7 @@ async def verify_turnstile(
         raise AntiAbuseRejectedError("The form was submitted too quickly")
 
     token = command.antiAbuse.turnstileToken.strip()
-    if not settings.TURNSTILE_REQUIRED and not token:
+    if not settings.TURNSTILE_REQUIRED:
         return None
     if not token:
         raise AntiAbuseRejectedError("The anti-abuse challenge is required")
@@ -82,8 +82,14 @@ async def verify_turnstile(
         raise AntiAbuseRejectedError("The anti-abuse challenge was not accepted")
 
     hostname = str(result.get("hostname") or "").lower()
-    if settings.turnstile_expected_hostnames and hostname not in settings.turnstile_expected_hostnames:
+    if (
+        settings.turnstile_expected_hostnames
+        and hostname not in settings.turnstile_expected_hostnames
+    ):
         raise AntiAbuseRejectedError("The anti-abuse challenge hostname did not match")
+
+    if result.get("action") != "consultation":
+        raise AntiAbuseRejectedError("The anti-abuse challenge action did not match")
 
     return TurnstileVerification(
         hostname=hostname,
