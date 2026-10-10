@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 
 import { useState } from 'react'
 import { HiEye } from "react-icons/hi";
@@ -151,7 +152,8 @@ interface ErrorResponse {
               </Link>
             </p>
           </div>
-        </form>
+        <FormLegalLinks />
+          </form>
       </div>
     </div>
   )

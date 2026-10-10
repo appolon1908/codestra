@@ -1,32 +1,22 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router";
-import {
-  hasUsableAccessToken,
-  logoutSession,
-  subscribeToAuthChanges,
-} from "@/lib/auth";
+import { useSession } from "@/Providers/SessionProvider";
 import { SITE } from "@/config/site";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(hasUsableAccessToken());
+  const { isAuthenticated, logout } = useSession();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsOpen(false);
-    setIsAuthenticated(hasUsableAccessToken());
   }, [location.pathname]);
-
-  useEffect(() => subscribeToAuthChanges(() => {
-    setIsAuthenticated(hasUsableAccessToken());
-  }), []);
 
   const handleLogout = async () => {
     setIsSigningOut(true);
-    await logoutSession();
-    setIsAuthenticated(false);
+    await logout();
     setIsOpen(false);
     navigate("/", { replace: true });
   };

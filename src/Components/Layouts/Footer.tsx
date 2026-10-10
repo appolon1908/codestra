@@ -60,6 +60,10 @@ const Footer = () => (
         <p>© {year} {SITE.legalName}. All rights reserved.</p>
         <div className="hz-footer-legal">
           <Link className="hz-site-footer__link" to="/privacy">Privacy</Link>
+          <Link className="hz-site-footer__link" to="/terms">Terms & Conditions</Link>
+          <Link className="hz-site-footer__link" to="/sms-terms">SMS Terms</Link>
+          <Link className="hz-site-footer__link" to="/sms">SMS Updates</Link>
+          <Link className="hz-site-footer__link" to="/contact-information">Business Contact</Link>
           <a className="hz-site-footer__link" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>
         </div>
       </div>

@@ -23,6 +23,8 @@ concurrency:
 
 jobs:
   discover:
+    # RUNTIME_MUTATION_DISABLED=true
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: production

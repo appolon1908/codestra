@@ -1,32 +1,26 @@
-import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router";
-import {
-  hasUsableAccessToken,
-  subscribeToAuthChanges,
-} from "@/lib/auth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useSession } from "./SessionProvider";
 
 interface AuthProps {
   element: React.ReactNode;
 }
 
 const AuthProvider = ({ element }: AuthProps) => {
-  const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(hasUsableAccessToken());
-
-  useEffect(() => subscribeToAuthChanges(() => {
-    setIsAuthenticated(hasUsableAccessToken());
-  }), []);
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useSession();
 
   useEffect(() => {
-    setIsAuthenticated(hasUsableAccessToken());
-  }, [location.pathname, location.search]);
+    if (!isLoading && !isAuthenticated) {
+      navigate("/login", { replace: true });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
-  if (!isAuthenticated) {
-    const requested = `${location.pathname}${location.search}`;
-    return <Navigate to={`/login?next=${encodeURIComponent(requested)}`} replace />;
+  if (isLoading) {
+    return <div className="min-h-screen bg-[#080808]" aria-label="Checking session" />;
   }
 
-  return element;
+  return isAuthenticated ? element : null;
 };
 
 export default AuthProvider;
