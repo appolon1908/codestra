@@ -1,3 +1,4 @@
+import ChatWidgetBoundary from './Components/ChatWidgetBoundary'
 import { lazy, Suspense, useEffect } from 'react'
 import AuthProvider from './Providers/AuthProvider'
 import QueryProvider from './Providers/QueryProvider'
@@ -20,6 +21,8 @@ const ElectronicBillingForm = lazy(() => import('./Pages/BillingForm/ElectronicB
 const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
 const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
 const Services = lazy(() => import('./Pages/Services/Services'))
+const LegalPage = lazy(() => import('./Pages/Legal/LegalPage'))
+const Terms = lazy(() => import('./Pages/Terms/Terms'))
 const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 
 function App() {
@@ -31,6 +34,7 @@ function App() {
     <>
     <QueryProvider> 
           <BrowserRouter>
+            <ChatWidgetBoundary>
             <SessionProvider>
             <Suspense fallback={<div className="min-h-screen bg-[#080808]" aria-label="Loading" />}>
             <Routes>
@@ -47,6 +51,10 @@ function App() {
               <Route path="/hiring/positions" element={<HiringPosition />} />
               <Route path="/services" element={<Services />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/sms" element={<LegalPage kind="sms" />} />
+              <Route path="/sms-terms" element={<LegalPage kind="smsTerms" />} />
+              <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
               
               <Route path="/*" element={<AuthProvider element={
                 <div>
@@ -56,6 +64,7 @@ function App() {
             </Routes>
             </Suspense>
             </SessionProvider>
+            </ChatWidgetBoundary>
           </BrowserRouter>
       </QueryProvider>
     </>
