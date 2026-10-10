@@ -788,7 +788,7 @@ APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256: dict[
     "appolon1908/codestra": {
         '.github/workflows/required-exact-sha-ci.yml': {
             'package.json': '74c0c929d2a12ea703464a8f181c6231de4233846a02e5e7c3140062f93ec05d',
-            'package-lock.json': 'ffc855cfeb0390b8fedb463185938607a5872258c432ee4bbd903b54d1a354f0',
+            'package-lock.json': '5cad52348cc2681a0a5c2db562ce86de7ddfbe096a7519b64e2bb7a063005c03',
         },
     },
     "appolon1908-hue/Middleware-": {

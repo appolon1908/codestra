@@ -6,15 +6,18 @@ RUN npm ci
 COPY . .
 ARG VITE_API_ENDPOINT
 ENV VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
+# Build-time browser URL only; never include API credentials here.
+ARG VITE_ODOO_WEB_URL
+ENV VITE_ODOO_WEB_URL=${VITE_ODOO_WEB_URL}
 RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:1.31.5-alpine3.24
 
 USER root
-# Require the patched TIFF package; a cached unconstrained upgrade retained
-# 4.7.1-r0 and failed the required CVE-2026-4775 container scan.
+# Static SPA delivery does not use nginx's optional image-processing module.
+# Removing that unused module also drops libgd/libtiff (upstream CVE).
 RUN apk upgrade --no-cache \
-    && apk add --no-cache "tiff>=4.7.2-r0"
+    && apk del --no-cache nginx-module-image-filter libgd tiff
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build --chown=101:101 /app/dist /usr/share/nginx/html
