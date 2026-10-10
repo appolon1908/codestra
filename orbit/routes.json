@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "2.0.0",
+  "application": "codestra-corporate",
+  "routes": [
+    {
+      "path": "/",
+      "template": "marketing-home",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "home"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "degraded",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/about",
+      "template": "marketing-content",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "about"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/services",
+      "template": "marketing-content",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "services"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/case-studies",
+      "template": "marketing-content",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "case-studies"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "empty",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/contact",
+      "template": "contact",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "contact"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/contact/sales",
+      "template": "contact",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "contact.sales"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/contact/support",
+      "template": "contact",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "contact.support"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/electronic-billing",
+      "template": "marketing-content",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "electronic-billing"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/electronic-billing/form",
+      "template": "form",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "electronic-billing.form"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "offline",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/hiring/positions",
+      "template": "listing",
+      "auth": "optional",
+      "shell": "public",
+      "footer": "full",
+      "contentKeys": [
+        "hiring.positions"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "empty",
+        "degraded",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/privacy",
+      "template": "legal",
+      "auth": "public",
+      "shell": "legal",
+      "footer": "legal-only",
+      "contentKeys": [
+        "legal.privacy"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/login",
+      "template": "auth-entry",
+      "auth": "public",
+      "shell": "auth",
+      "footer": "auth-compact",
+      "contentKeys": [
+        "auth.login"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/signup",
+      "template": "auth-entry",
+      "auth": "public",
+      "shell": "auth",
+      "footer": "auth-compact",
+      "contentKeys": [
+        "auth.signup"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/signed-out",
+      "template": "auth-status",
+      "auth": "public",
+      "shell": "auth",
+      "footer": "auth-compact",
+      "contentKeys": [
+        "auth.signed-out"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/auth/dashboard",
+      "template": "account-dashboard",
+      "auth": "required",
+      "shell": "account",
+      "footer": "compact",
+      "contentKeys": [
+        "account.dashboard"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "empty",
+        "offline",
+        "error",
+        "permission-denied",
+        "success"
+      ]
+    },
+    {
+      "path": "/*",
+      "template": "error",
+      "auth": "public",
+      "shell": "error",
+      "footer": "compact",
+      "contentKeys": [
+        "error.not-found"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/terms",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "terms"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/sms",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "sms"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/sms-terms",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "sms-terms"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    },
+    {
+      "path": "/contact-information",
+      "template": "legal-document",
+      "auth": "public",
+      "shell": "public",
+      "footer": "legal-only",
+      "contentKeys": [
+        "contact-information"
+      ],
+      "assetIds": [],
+      "states": [
+        "loading",
+        "error",
+        "success"
+      ]
+    }
+  ]
+}

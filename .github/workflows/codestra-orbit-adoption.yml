@@ -1,0 +1,63 @@
+name: Codestra Orbit adoption
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "orbit/**"
+      - "scripts/ci/check-orbit-adoption.mjs"
+      - "package.json"
+      - ".github/workflows/codestra-orbit-adoption.yml"
+  push:
+    branches:
+      - main
+      - development
+      - staging
+      - production
+    paths:
+      - "src/**"
+      - "orbit/**"
+      - "scripts/ci/check-orbit-adoption.mjs"
+      - "package.json"
+      - ".github/workflows/codestra-orbit-adoption.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codestra-orbit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Validate Orbit contracts and source policy
+        env:
+          ORBIT_BASE_REF: ${{ github.event.pull_request.base.sha || 'HEAD^' }}
+        run: npm run orbit:validate
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Lint source
+        run: npm run lint
+
+      - name: Build production bundle
+        run: npm run build

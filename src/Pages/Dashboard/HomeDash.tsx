@@ -1,25 +1,63 @@
-import { Link, useNavigate } from "react-router"
-import { useSession } from "@/Providers/SessionProvider"
-import { Button2 } from "../../Components/components/Button"
+import Footer from "@/Components/Layouts/Footer";
+import Navbar from "@/Components/Layouts/Navbar";
+import { useSession } from "@/Providers/SessionProvider";
+import { useState } from "react";
 
 const HomeDash = () => {
+  const { user, logout } = useSession();
+  const [pendingAction, setPendingAction] = useState<boolean>(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  const navigate = useNavigate()
-  const { logout } = useSession()
-  const handleLogout = async () => {
-       await logout()
-       navigate('/', { replace: true })
-   }  
+  const revoke = async () => {
+    if (pendingAction) return;
+    setPendingAction(true);
+    setActionError(null);
+    try {
+      await logout();
+    } catch {
+      setActionError("The session could not be revoked. Try again.");
+    } finally {
+      setPendingAction(false);
+    }
+  };
 
   return (
-    <div>
-      HomeDash
-      <Button2 text="Log out" onClick={handleLogout}/>
-      <Link to={'/'}>
-          <li>Home</li>
-      </Link>
-    </div>
-  )
-}
+    <div className="orbit-page">
+      <Navbar />
+      <main className="orbit-dashboard" id="main-content">
+        <section className="orbit-dashboard-hero" aria-labelledby="dashboard-title">
+          <p className="orbit-eyebrow">Account</p>
+          <h1 id="dashboard-title">
+            Welcome{user?.first_name ? `, ${user.first_name}` : ""}
+          </h1>
+          <p>
+            Your account is protected by a same-origin server session. Browser JavaScript does not hold an access or refresh token.
+          </p>
+        </section>
 
-export default HomeDash
+        <section className="orbit-account-card" aria-labelledby="session-title">
+          <div>
+            <p className="orbit-eyebrow">Security</p>
+            <h2 id="session-title">Session controls</h2>
+            <p>End the active session in this browser.</p>
+          </div>
+          {actionError ? <p className="orbit-action-error" role="alert">{actionError}</p> : null}
+          <div className="orbit-action-row">
+            <button
+              className="orbit-button orbit-button--secondary"
+              disabled={pendingAction}
+              onClick={() => void revoke()}
+              type="button"
+            >
+              {pendingAction ? "Signing out" : "Log out"}
+            </button>
+
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default HomeDash;

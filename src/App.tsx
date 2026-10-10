@@ -22,6 +22,7 @@ const HiringPosition = lazy(() => import('./Pages/Hiring/HiringPosition'))
 const CaseStudies = lazy(() => import('./Pages/CaseStudies/CaseStudies'))
 const Services = lazy(() => import('./Pages/Services/Services'))
 const LegalPage = lazy(() => import('./Pages/Legal/LegalPage'))
+const SignedOut = lazy(() => import('./Pages/SignedOut'))
 const Terms = lazy(() => import('./Pages/Terms/Terms'))
 const Privacy = lazy(() => import('./Pages/Privacy/Privacy'))
 
@@ -41,6 +42,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/signed-out" element={<SignedOut />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/case-studies" element={<CaseStudies />} />
               <Route path="/contact" element={<ContactUs />} />
