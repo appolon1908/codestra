@@ -5,3 +5,6 @@
 3b214d828624ccdee3d38b86930fa99cf96fe0c3:.codestra/validate-production-orchestrator-contract.py:generic-api-key:617
 3b214d828624ccdee3d38b86930fa99cf96fe0c3:.codestra/validate-production-orchestrator-contract.py:generic-api-key:620
 8f45907a1a3c605823c7ec87a30143a16072b0e8:.codestra/validate-production-orchestrator-contract.py:generic-api-key:786
+
+# Historical reviewed CI workflow SHA-256 trust binding, not a credential.
+88e95f4eaf67563a8c28d00ed7b05848ee5964be:.codestra/validate-production-orchestrator-contract.py:generic-api-key:452
