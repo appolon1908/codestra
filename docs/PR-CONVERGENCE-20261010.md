@@ -17,3 +17,5 @@ Remote CI followup: execute the exact secret-scan shell wrapper, including check
 Two of seven identical remote browser jobs failed without publicly accessible logs; exact local twelve-test command passed. CI browser work is serialized to one worker for scheduling isolation, preserving all assertions and responsive widths. Always-uploaded retained traces provide actionable failure evidence; this is not a confirmed application defect repair.
 
 Hydration race reproduced with delayed lazy homepage JavaScript: static h1 exists while both language controls are absent. Navigation test now awaits the mounted canonical language control before viewport visibility branching; delayed lazy-asset coverage retains all original behavior assertions.
+
+Inherited GHCR workflow parsing corrected: runner.temp expressions moved from unsupported job env context into auth/inspect/cleanup step env contexts. All active workflows pass actionlint; structural context regression, exact workflow hash drift rejection and full governance selftests pass. Read-only GHCR scope and cleanup behavior are retained.

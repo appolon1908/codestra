@@ -674,7 +674,7 @@ APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
         '.github/workflows/ci.yml': '5cb7fba8f564bf7871aea096adc31d8767977b07ff7317892bf61bf7b03e8b9b',
         '.github/workflows/web-quality.yml': '0621a046b218af14b2a0598944229fb9b3d1fdb0891cc97d002fd346386d2548',
         '.github/workflows/lead-intake-quality.yml': '25e07c2dce0afb2780818d7a0bbfcd442287f1d567d91ab007f92fdf1c0535eb',
-        '.github/workflows/ghcr-readonly-preflight.yml': '0034e54b9012e63967227c19ce60fa33c6f9480f6f5d20b8d6c4ed848c0825be',
+        '.github/workflows/ghcr-readonly-preflight.yml': '88e1789d8cb421a2a9d8be03e4c4e9525467c66d4853e55c090fe165dd6cacf9',
     },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
