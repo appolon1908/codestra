@@ -546,7 +546,7 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         'scripts/deploy/validate-runtime-manifest.mjs': 'c8f34d5b354b09c0344822784355e75cddc7693fd4df0dd2417b164cb35769be',
         'scripts/generate-localized-sitemap.mjs': 'c1846d2bd174781131d3d96da988a1f737facab786d4bcc80bf8f7cbbea0a747',
         'scripts/generate-seo.mjs': '5881c503355821f875b091bf175d54c8a67fbf81831a5051a8e23bb0b91c0495',
-        'scripts/prerender-localized-routes.mjs': 'd999b6c26e3b2a5710273c17f91e2a2a2b39102032dbae5368fd737dbc38cfbc',
+        'scripts/prerender-localized-routes.mjs': 'fe40d490cb1fc6e6ff5a1fa0000040fe341818af2294c7057b80f8f5e74e253c',
         'scripts/prerender-legal.mjs': '0e7374813021d811c1d60a2b8cbfd5409cfff7c80dd16ccb77cbcd33c9d6ba1c',
         'scripts/validate-prerendered-seo.mjs': 'efff6cbcc264e6e7368a55454b783104ad3bfdc581e46f0b3c161e03709943ff',
         'scripts/check-performance.mjs': '61d38c5ec567a6113fbe62b23f95993a648b39e11447236b652ba20e7099f3ae',
@@ -670,6 +670,7 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
     "appolon1908/codestra": {
+        '.github/workflows/ci.yml': '64032508087631f674952ba2f2e96da687f3bdf4b750c818e2ae5d00c76d9341',
         '.github/workflows/web-quality.yml': '21b28492ab57de9b10f7c468ecb4288397253eca27ca663d04f85e3d073c4e46',
         '.github/workflows/lead-intake-quality.yml': '25e07c2dce0afb2780818d7a0bbfcd442287f1d567d91ab007f92fdf1c0535eb',
         '.github/workflows/ghcr-readonly-preflight.yml': '0034e54b9012e63967227c19ce60fa33c6f9480f6f5d20b8d6c4ed848c0825be',

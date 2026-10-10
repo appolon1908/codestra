@@ -14,7 +14,7 @@ const template = existsSync(join(dist, "index.html")) ? readFileSync(join(dist, 
 writeFileSync(join(dist, ".app-shell.html"), template);
 const localizedSitemap = readFileSync(join(root, "..", "public", "sitemap.xml"), "utf8");
 const existingSitemap = readFileSync(join(dist, "sitemap.xml"), "utf8");
-const extraUrls = [...existingSitemap.matchAll(/<url>[\s\S]*?<\/url>/g)].map(([entry]) => entry).filter(entry => !localizedSitemap.includes(entry.match(/<loc>(.*?)<\/loc>/)?.[1]));
+const extraUrls = [...existingSitemap.matchAll(/<url>[\s\S]*?<\/url>/g)].map(([entry]) => entry).filter(entry => { const url = entry.match(/<loc>(.*?)<\/loc>/)?.[1]; if (!url) return false; const path = new URL(url).pathname.replace(/^\//, "").replace(/\/$/, ""); return path !== "" && !utilityRoutes.includes(path) && !localizedSitemap.includes(url); });
 writeFileSync(join(dist, "sitemap.xml"), localizedSitemap.replace("</urlset>", extraUrls.join("\n") + "\n</urlset>"));
 const productionAssetTags = [...template.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).join("");
 const productionScriptTag = template.match(/<script type="module"[^>]*><\/script>/)?.[0] ?? '<script type="module" src="/assets/index.js"></script>';
