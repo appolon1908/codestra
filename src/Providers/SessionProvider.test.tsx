@@ -65,4 +65,24 @@ describe("session logout races", () => {
     await act(async () => { request.resolve(user); await refresh; });
     expect(client.getQueryData(["auth", "session"])).toBeNull();
   });
+
+  it("invalidates a refresh started while the logout request is pending", async () => {
+    sessionGet.mockResolvedValueOnce(user);
+    await mount();
+    await act(async () => {
+      await vi.waitFor(() => expect(client.getQueryData(["auth", "session"])).toEqual(user));
+    });
+    const logoutRequest = deferred();
+    logoutPost.mockReturnValueOnce(logoutRequest.promise);
+    const loggingOut = session.logout();
+    await act(async () => {
+      await vi.waitFor(() => expect(logoutPost).toHaveBeenCalled());
+    });
+    const request = deferred();
+    sessionGet.mockReturnValueOnce(request.promise);
+    const refresh = session.refreshSession();
+    await act(async () => { logoutRequest.resolve(user); await loggingOut; });
+    await act(async () => { request.resolve(user); await refresh; });
+    expect(client.getQueryData(["auth", "session"])).toBeNull();
+  });
 });
