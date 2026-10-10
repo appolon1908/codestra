@@ -96,14 +96,14 @@ export default function Navbar() {
   const close = () => setOpen(false);
 
   return <><a className="skip-link" href="#main-content">Skip to main content</a><header className="site-header">
-    <nav aria-label={t("menu")} className="site-header__inner flex  items-center justify-between rounded-lg border corporate-border-line corporate-bg-canvas p-2 px-5 text-xs backdrop-blur-3xl lg: xl: 2xl:">
+    <nav aria-label={t("menu")} className="site-header__inner corporate-header">
       <LocalizedLink to="/" className="w-20 lg:w-32" aria-label="Codestra"><img src={logo} alt="Codestra" /></LocalizedLink>
       <div className="desktop-nav hidden items-center gap-7 lg:flex">
         <LocalizedLink to="/">{t("home")}</LocalizedLink><LocalizedLink to="/about">{t("about")}</LocalizedLink>
         <ServicesMenu /><IndustriesMenu /><LocalizedLink to="/case-studies">{t("caseStudies")}</LocalizedLink>
         <LocalizedLink to="/contact">{t("contact")}</LocalizedLink><LocalizedLink to="/hiring/positions">{t("joinTeam")}</LocalizedLink>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="site-header__actions flex items-center gap-2">
         <div className="hidden xl:block"><LanguageSelector id="header-language" /></div>
         {authenticated ? <><LocalizedLink className="button button--secondary button--compact" to="/auth/dashboard">{t("dashboard")}</LocalizedLink><Button2 text={t("logout")} onClick={logout} /></> : <><LocalizedLink className="button button--secondary button--compact" to="/login">{t("login")}</LocalizedLink><LocalizedLink className="button button--primary button--compact" to="/signup">{t("signup")}</LocalizedLink></>}
         <button ref={trigger} type="button" className="flex min-h-11 min-w-11 items-center justify-center text-lg lg:hidden" aria-label={open?t("closeMenu"):t("openMenu")} aria-expanded={open} aria-controls="global-mobile-menu" onClick={() => setOpen((value) => !value)}>{open?<IoMdClose/>:<RiMenu3Line/>}</button>

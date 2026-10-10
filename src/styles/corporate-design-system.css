@@ -1134,3 +1134,16 @@ body {
 .corporate-hover-text-accent:hover { color: var(--brand-accent); }
 .corporate-hover-bg-accent:hover { background-color: var(--brand-accent); }
 .corporate-hover-text-ink:hover { color: var(--brand-canvas); }
+
+.corporate-footer {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
+  gap: var(--space-10);
+  padding: var(--space-16) max(var(--space-6), calc((100vw - var(--container-width)) / 2));
+}
+.corporate-footer > .button { grid-column: 1 / -1; justify-self: start; }
+.corporate-header { font-size: var(--text-xs); gap: var(--space-6); }
+@media (max-width: 1023px) {
+  .corporate-footer { grid-template-columns: minmax(0, 1fr); }
+  .corporate-header { width: calc(100% - var(--space-6)); gap: var(--space-2); }
+}
