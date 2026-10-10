@@ -1,0 +1,182 @@
+[
+  {
+    "slug": "customer-service-automation",
+    "kind": "service",
+    "name": "Customer Service Automation",
+    "eyebrow": "Service operations",
+    "headline": "Customer service automation that resolves more without losing the customer",
+    "description": "Connect intake, identity, knowledge, triage, self-service, agent assistance, callbacks, and follow-up into a measurable support operation.",
+    "challenge": "Customers repeat information across channels while agents search multiple systems and manually update tickets. Poor automation creates dead ends, hides urgency, and measures deflection even when the customer remains unresolved.",
+    "approach": "Codestra designs around resolution. We unify context, classify intent and priority, surface approved knowledge, automate bounded actions, schedule callbacks, and transfer with history intact. Metrics follow resolution, effort, quality, and SLA—not message volume.",
+    "capabilities": ["Omnichannel intake and intelligent triage", "Knowledge-guided self-service and agent assistance", "Callback, escalation, and SLA orchestration", "CRM, ticketing, telephony, and quality integration"],
+    "outcomes": ["Shorter time to first useful response", "Higher first-contact resolution for supported cases", "Less repetitive lookup and after-call work", "Better continuity across automated and human service"],
+    "keywords": ["customer service automation", "AI customer support automation", "contact center workflow automation", "support chatbot integration", "agent assist development", "Odoo helpdesk automation", "callback automation", "customer support AI company"],
+    "faqs": [
+      {"question": "Which service interactions should be automated first?", "answer": "Start with high-volume, low-risk intents that have clear knowledge, stable identity requirements, bounded actions, and an obvious transfer path when the request falls outside policy."},
+      {"question": "Can the system create callbacks in Odoo and a dialer?", "answer": "Yes. A governed workflow can create the CRM task, schedule the callback, synchronize the dialer command, and record delivery and completion without exposing either system to the browser."},
+      {"question": "How should automation success be measured?", "answer": "Useful measures include first useful response, resolution rate, customer effort, transfer success, callback SLA, reopen rate, quality score, and cost per resolved interaction."}
+    ]
+  },
+  {
+    "slug": "finance-automation",
+    "kind": "service",
+    "name": "Finance Automation",
+    "eyebrow": "Controlled financial operations",
+    "headline": "Finance automation that accelerates work while preserving approvals and evidence",
+    "description": "Automate invoice intake, matching, approvals, reconciliation, collections, reporting preparation, and exception handling with finance-grade controls.",
+    "challenge": "Finance teams spend time moving data between documents, banks, ERPs, and spreadsheets, but errors and duplicate actions can have material consequences. Fast automation without segregation, idempotency, and evidence increases risk.",
+    "approach": "We separate extraction, validation, recommendation, approval, and posting. Commands are versioned and idempotent, duties remain segregated, exceptions are reviewable, and each approved change retains its source evidence and actor history.",
+    "capabilities": ["Invoice capture, matching, and approval workflows", "Reconciliation and exception preparation", "Collections prioritization and communication tasks", "Close, reporting, and audit-evidence automation"],
+    "outcomes": ["Shorter processing and approval cycles", "Reduced duplicate entry and preventable errors", "Clear evidence for financial changes", "Finance teams focused on exceptions and judgment"],
+    "keywords": ["finance automation services", "accounts payable automation", "invoice approval workflow", "AI finance operations", "Odoo accounting automation", "reconciliation automation", "collections workflow automation", "financial process automation"],
+    "faqs": [
+      {"question": "Can finance automation post entries automatically?", "answer": "It can for narrowly approved cases after validation and policy controls, but consequential posting should begin with review. Authority, thresholds, evidence, and rollback are defined before activation."},
+      {"question": "How are duplicate invoices prevented?", "answer": "The pipeline uses file hashes, supplier and invoice identifiers, normalized amounts and dates, tenant-specific matching, and idempotent commands before an ERP record is accepted."},
+      {"question": "Does Codestra replace the accounting system?", "answer": "Usually no. We improve intake, validation, orchestration, evidence, and user experience around the authoritative accounting or ERP platform."}
+    ]
+  },
+  {
+    "slug": "hr-automation",
+    "kind": "service",
+    "name": "HR Automation",
+    "eyebrow": "Employee operations",
+    "headline": "HR automation that gives people a clear path through every employee workflow",
+    "description": "Streamline recruiting operations, onboarding, document collection, requests, approvals, reminders, knowledge, and offboarding while protecting employee data.",
+    "challenge": "Employee processes cross HR, managers, IT, finance, facilities, and external providers. Manual checklists become inconsistent, private data is copied into insecure channels, and nobody has a complete view of readiness or outstanding work.",
+    "approach": "Codestra models each journey as a role-aware workflow with authoritative records, minimum necessary data, consent and retention rules, timed tasks, escalation, and employee-facing status. Sensitive decisions remain with authorized people.",
+    "capabilities": ["Candidate and onboarding workflow orchestration", "Employee document and request automation", "Manager approvals, reminders, and service tasks", "Offboarding, access-removal, and evidence workflows"],
+    "outcomes": ["Faster and more consistent onboarding", "Less manual coordination between departments", "Better protection and retention of employee information", "Visible completion and ownership for every employee task"],
+    "keywords": ["HR automation services", "employee onboarding automation", "human resources workflow automation", "HR document automation", "AI HR operations", "employee request portal", "offboarding automation", "Odoo HR integration"],
+    "faqs": [
+      {"question": "Can HR automation make hiring decisions?", "answer": "Codestra designs AI to assist with administrative work and structured evidence, not to make opaque employment decisions. Legal, bias, explainability, and human-review requirements are assessed before any scoring use."},
+      {"question": "Can onboarding trigger IT and facilities work?", "answer": "Yes. An accepted employee event can create least-privilege tasks for accounts, devices, access, training, payroll, and facilities with due dates and completion evidence."},
+      {"question": "How is employee data protected?", "answer": "Data collection is minimized, field and record access is role-based, secrets are excluded from workflow logs, retention is explicit, and every sensitive read or change can be audited."}
+    ]
+  },
+  {
+    "slug": "data-engineering",
+    "kind": "service",
+    "name": "Data Engineering",
+    "eyebrow": "Reliable data foundations",
+    "headline": "Data engineering that makes analytics and AI dependable",
+    "description": "Build governed pipelines, models, quality controls, event flows, warehouses, and operational data services that teams can understand and trust.",
+    "challenge": "AI and reporting fail when definitions conflict, source changes go unnoticed, transformations are hidden, and historical data cannot be reproduced. Moving data is easy; preserving meaning, quality, lineage, and access is the hard part.",
+    "approach": "We define authoritative sources and business semantics, build tested ingestion and transformation pipelines, track lineage and freshness, enforce access boundaries, and publish stable data products for analytics, applications, and models.",
+    "capabilities": ["Batch, streaming, and change-data-capture pipelines", "Warehouse, lakehouse, and semantic data modeling", "Data quality, lineage, and observability", "Secure data APIs and feature pipelines"],
+    "outcomes": ["Consistent business definitions across products and reports", "Earlier detection of missing or changed data", "Reproducible datasets for analytics and AI", "Secure reusable access to operational information"],
+    "keywords": ["data engineering services", "modern data pipeline development", "data warehouse consulting", "ETL development company", "data quality engineering", "event streaming architecture", "AI data infrastructure", "enterprise data platform"],
+    "faqs": [
+      {"question": "Can Codestra work with our current database and reporting tools?", "answer": "Yes. We assess the existing sources, ownership, scale, change patterns, queries, and operational constraints before recommending targeted improvements or a larger platform change."},
+      {"question": "What is a data quality contract?", "answer": "It defines the expected schema, meaning, completeness, uniqueness, freshness, volume, ownership, and response when a dataset violates the conditions that consumers rely on."},
+      {"question": "Can the same data foundation support AI and dashboards?", "answer": "Yes, but the serving patterns may differ. Shared governed semantics and lineage can feed analytical models, feature pipelines, search indexes, APIs, and business intelligence views."}
+    ]
+  },
+  {
+    "slug": "api-integration",
+    "kind": "service",
+    "name": "API Integration",
+    "eyebrow": "Durable system connectivity",
+    "headline": "API integration engineered for failure, replay, and change",
+    "description": "Connect applications and providers through versioned contracts, secure identities, idempotent commands, webhooks, queues, and observable delivery workflows.",
+    "challenge": "A happy-path API call can appear complete until a timeout creates duplicates, a provider retries a webhook, credentials expire, schemas drift, or one side succeeds while the other fails. Integration reliability requires explicit distributed-system behavior.",
+    "approach": "Codestra defines ownership and contracts, authenticates every boundary, separates commands from events, adds idempotency and durable outbox/inbox delivery, verifies webhook provenance, and makes failures visible and replayable without manual database edits.",
+    "capabilities": ["REST, webhook, event, and queue integration", "OAuth, mTLS, signing, and service identities", "Idempotency, outbox, inbox, and replay controls", "Contract testing, observability, and provider adapters"],
+    "outcomes": ["Reliable data and command movement between systems", "Fewer duplicates and silent integration failures", "Faster diagnosis with delivery-level evidence", "Provider changes isolated behind stable internal contracts"],
+    "keywords": ["API integration services", "enterprise systems integration", "webhook integration company", "Kong API development", "Caddy API gateway", "Odoo API integration", "reliable API architecture", "custom middleware development"],
+    "faqs": [
+      {"question": "Why are retries not enough for reliable integration?", "answer": "A retry can duplicate a side effect when the first request succeeded but the response was lost. Idempotency, durable state, delivery leases, deduplication, and replay evidence are needed around retries."},
+      {"question": "Can Codestra integrate an API with Kong and Caddy?", "answer": "Yes. Caddy can terminate and route the public edge, Kong can authenticate, rate-limit, transform, and observe API traffic, and a private service can implement the business contract."},
+      {"question": "How are provider webhooks secured?", "answer": "We verify signatures or mTLS, preserve the raw body, validate timestamp and replay windows, deduplicate provider event IDs, translate into an internal event, and process it durably."}
+    ]
+  },
+  {
+    "slug": "odoo-ai-integration",
+    "kind": "service",
+    "name": "Odoo AI Integration",
+    "eyebrow": "AI inside Odoo operations",
+    "headline": "Odoo AI integration that improves the workflow without bypassing the CRM",
+    "description": "Add AI assistance, knowledge, classification, extraction, recommendations, and automation around Odoo while preserving permissions and authoritative records.",
+    "challenge": "Direct model access to Odoo can expose broad data and create uncontrolled writes. Custom modules, external automation, and AI tools also drift when there is no stable command contract, tenant context, or ownership of which system is authoritative.",
+    "approach": "Codestra keeps Odoo as the operational record and places a controlled adapter at the boundary. AI receives minimum authorized context, proposes or issues allowlisted commands, and every mutation is validated, idempotent, permission-checked, and auditable.",
+    "capabilities": ["Odoo CRM, sales, helpdesk, and document AI", "Secure Odoo adapter and command APIs", "AI summaries, recommendations, and record preparation", "n8n event orchestration and callback workflows"],
+    "outcomes": ["AI assistance inside familiar Odoo workflows", "Less manual record preparation and follow-up", "Controlled external access to Odoo capabilities", "Traceable automation across CRM and downstream tools"],
+    "keywords": ["Odoo AI integration", "Odoo automation company", "Odoo CRM AI", "custom Odoo AI module", "Odoo n8n integration", "Odoo API middleware", "AI sales CRM integration", "Odoo 19 development"],
+    "faqs": [
+      {"question": "Should the website call Odoo directly?", "answer": "No. The browser should call a versioned public lead or workflow API. An authenticated private adapter then validates and maps the request to allowlisted Odoo models and fields."},
+      {"question": "Can AI write notes or create leads in Odoo?", "answer": "Yes, through scoped commands with validated inputs, actor and tenant context, campaign policy, idempotency, audit records, and clear separation between suggestions and approved mutations."},
+      {"question": "Can Odoo events trigger n8n workflows?", "answer": "Yes. Accepted domain events can enter a durable outbox and be delivered to n8n with signatures, retries, deduplication, and a recorded result instead of a fragile synchronous callback."}
+    ]
+  },
+  {
+    "slug": "erp-crm-automation",
+    "kind": "service",
+    "name": "ERP & CRM Automation",
+    "eyebrow": "Systems of record orchestration",
+    "headline": "ERP and CRM automation that keeps one authoritative version of the work",
+    "description": "Connect customer, sales, service, order, inventory, billing, and operational workflows across ERP and CRM platforms with explicit ownership.",
+    "challenge": "When the same customer, order, or status exists in several systems, teams manually reconcile records and integrations create update loops. Without field ownership and command direction, automation makes conflicts move faster.",
+    "approach": "We define the authoritative system for each entity and field, design one-way commands and domain events, establish identity matching, and build durable synchronization with version checks, exception queues, and reconciliation reporting.",
+    "capabilities": ["Entity and field ownership mapping", "CRM-to-ERP command and event workflows", "Identity resolution, deduplication, and merge policy", "Version conflict and reconciliation operations"],
+    "outcomes": ["Fewer conflicting customer and transaction records", "Less manual re-entry between commercial and operational teams", "Visible integration exceptions and ownership", "A stable foundation for reporting and automation"],
+    "keywords": ["ERP CRM integration services", "CRM ERP automation", "Odoo CRM integration", "customer data synchronization", "order to cash automation", "ERP middleware development", "CRM workflow integration", "enterprise application integration"],
+    "faqs": [
+      {"question": "Which system should own the customer record?", "answer": "Ownership may be split by field and lifecycle. The CRM can own commercial context while the ERP owns billing attributes, for example. The important part is documenting and enforcing the direction."},
+      {"question": "How are conflicting updates handled?", "answer": "Commands can require expected record versions, reject stale updates, and route conflicts to reconciliation. Silent last-write-wins behavior is avoided for important fields."},
+      {"question": "Can the integration migrate historical data too?", "answer": "Yes. Migration is handled as a separate, repeatable process with mapping, validation, deduplication, reconciliation totals, rejected-record reporting, and rollback planning."}
+    ]
+  },
+  {
+    "slug": "web-application-development",
+    "kind": "service",
+    "name": "Web Application Development",
+    "eyebrow": "Modern product engineering",
+    "headline": "Web applications that make complex work feel clear",
+    "description": "Design and build responsive customer portals, internal tools, marketplaces, dashboards, and SaaS products with secure APIs and production operations.",
+    "challenge": "Teams often inherit slow interfaces, duplicated business rules, brittle forms, and applications that look polished but cannot handle identity, permissions, concurrency, failures, or real operational volume.",
+    "approach": "Codestra aligns the product flow with the domain model and API contract. We build accessible interfaces, authoritative backend commands, testable components, observability, deployment automation, and progressive performance budgets from the first production slice.",
+    "capabilities": ["Product discovery and interaction design", "React or Vue responsive frontend engineering", "API, identity, permission, and workflow backend", "Testing, CI/CD, observability, and performance"],
+    "outcomes": ["A clear experience across mobile, tablet, and desktop", "Business rules enforced by authoritative APIs", "Faster iteration through reusable components and tests", "A deployable product with operational evidence"],
+    "keywords": ["web application development company", "custom web app development", "Vue development services", "React application development", "customer portal development", "internal tools development", "SaaS product engineering", "enterprise web development"],
+    "faqs": [
+      {"question": "Does Codestra design and build both frontend and backend?", "answer": "Yes. Product design, responsive frontend, APIs, identity, data, integrations, tests, containers, deployment, and operational documentation can be delivered as one coherent system."},
+      {"question": "Can Codestra improve an existing application?", "answer": "Yes. We can audit architecture, experience, performance, security, tests, and production operations, then create staged branches that improve the product without an uncontrolled rewrite."},
+      {"question": "How is web performance protected?", "answer": "We use route-level loading, asset and image budgets, system or self-hosted fonts, crawlable output, caching, compression, Lighthouse gates, and field monitoring after deployment."}
+    ]
+  },
+  {
+    "slug": "mobile-app-development",
+    "kind": "service",
+    "name": "Mobile App Development",
+    "eyebrow": "Mobile product delivery",
+    "headline": "Mobile applications designed for the real conditions of the work",
+    "description": "Build customer and workforce mobile apps with secure identity, offline-aware workflows, notifications, device capabilities, and synchronized backend operations.",
+    "challenge": "Mobile products must handle unreliable networks, interruptions, small screens, device permissions, background work, app-store releases, and sensitive local data. A desktop workflow simply compressed into a phone rarely succeeds.",
+    "approach": "We prioritize the moments that benefit from mobility, design for one-handed and interrupted use, define offline and conflict behavior, minimize local secrets, and build shared APIs so mobile, web, and operations stay consistent.",
+    "capabilities": ["iOS, Android, and cross-platform application development", "Offline queues, synchronization, and conflict handling", "Push notifications, camera, location, and device workflows", "Secure mobile identity, release, and observability"],
+    "outcomes": ["Critical workflows available where the work happens", "Reliable behavior through weak connectivity", "Consistent data across mobile and web experiences", "Controlled releases and actionable mobile diagnostics"],
+    "keywords": ["mobile app development company", "custom iOS Android development", "cross platform mobile app", "field service mobile application", "customer mobile portal", "offline mobile app development", "Ionic app development", "enterprise mobile software"],
+    "faqs": [
+      {"question": "Should we build native or cross-platform?", "answer": "The choice follows device capabilities, performance, team skills, release needs, and product complexity. Cross-platform is often effective, while specialized device or performance requirements may justify native work."},
+      {"question": "Can the app work offline?", "answer": "Yes, for explicitly designed tasks. Local data, queued commands, conflict resolution, expiry, encryption, and synchronization status must be defined rather than treating offline as a switch."},
+      {"question": "Can the mobile app share a backend with the website?", "answer": "Yes. Stable APIs, common identity, permissions, command semantics, and event contracts allow multiple clients to use the same authoritative business services."}
+    ]
+  },
+  {
+    "slug": "ai-product-development",
+    "kind": "service",
+    "name": "AI Product Development",
+    "eyebrow": "End-to-end AI product delivery",
+    "headline": "AI product development from validated problem to operated product",
+    "description": "Take an AI-enabled product through discovery, experience design, model and data engineering, software delivery, evaluation, launch, and continuous operation.",
+    "challenge": "AI products combine uncertain model behavior with normal product, security, integration, and adoption risk. Teams can overinvest in the model while underbuilding the workflow, feedback, fallback, economics, and operational ownership.",
+    "approach": "Codestra delivers a thin production slice around one valuable user outcome. Product, engineering, AI, data, evaluation, security, and operations work from one backlog, with quality and business evidence controlling each expansion.",
+    "capabilities": ["AI product discovery and value validation", "Experience, model, data, and system architecture", "Full-stack implementation and integration", "Evaluation, launch, monitoring, and iteration"],
+    "outcomes": ["A production product rather than an isolated model demo", "Early evidence before broad investment", "Aligned product, AI, security, and operational decisions", "A measured path from first workflow to platform capability"],
+    "keywords": ["AI product development company", "build AI SaaS product", "AI startup development", "enterprise AI product team", "AI MVP development", "generative AI product engineering", "end to end AI development", "production AI application"],
+    "faqs": [
+      {"question": "What is the first deliverable in an AI product engagement?", "answer": "The first deliverable is usually a validated workflow and thin-slice plan with target users, evidence, data, architecture, evaluation criteria, risks, and a milestone that can reach production safely."},
+      {"question": "Can Codestra join an existing product team?", "answer": "Yes. We can own a workstream, supply missing AI or platform capability, establish evaluation and integration foundations, or operate as the accountable cross-functional delivery team."},
+      {"question": "How do you control AI product cost?", "answer": "We track per-task model, retrieval, infrastructure, and human-review cost; use model routing and caching where appropriate; and compare unit economics to the business value of the completed workflow."}
+    ]
+  }
+]

@@ -1,7 +1,7 @@
 /** Static policy bodies from the same content used by React; no extra framework. */
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, unlink } from 'node:fs/promises';
 const content = JSON.parse(await readFile('src/Pages/Legal/legalContent.json', 'utf8'));
-const shell = await readFile('dist/index.html', 'utf8');
+const shell = await readFile('dist/.app-shell.html', 'utf8').catch(() => readFile('dist/index.html', 'utf8'));
 const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 if (!shell.includes('<div id="root"></div>')) throw new Error('Unexpected application root; policy generation stopped');
 for (const [kind, route] of Object.entries({privacy:'privacy', terms:'terms', sms:'sms', smsTerms:'sms-terms', contactInformation:'contact-information'})) {
@@ -13,3 +13,5 @@ for (const [kind, route] of Object.entries({privacy:'privacy', terms:'terms', sm
   await writeFile(`dist/${route}/index.html`, html);
   console.log(`Generated /${route}: accessible without JavaScript`);
 }
+
+await unlink('dist/.app-shell.html').catch(() => {});

@@ -1,0 +1,279 @@
+openapi: 3.1.0
+info:
+  title: Codestra Lead Intake API
+  version: 1.0.0
+  description: >-
+    Public, idempotent consultation intake. The browser submits to Caddy and
+    Kong; a private adapter validates anti-abuse evidence and maps an allowlisted
+    campaign code into Odoo. Odoo credentials and model identifiers never enter
+    the browser contract.
+servers:
+  - url: https://codestra.co
+    description: Production website edge
+paths:
+  /api/leads/v1/consultations:
+    post:
+      operationId: createConsultationLead
+      summary: Submit a qualified Codestra project request
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/FormVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeadCommand'
+      responses:
+        '202':
+          description: Accepted for CRM processing
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadReceipt'
+              examples:
+                accepted:
+                  value:
+                    leadId: 2b3fca51-f421-4e7e-bc3d-6a47fb54bcfa
+                    status: accepted
+                    message: Your request has been received. A Codestra specialist will follow up.
+        '200':
+          description: A previously accepted idempotent submission
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadReceipt'
+              examples:
+                duplicate:
+                  value:
+                    leadId: 2b3fca51-f421-4e7e-bc3d-6a47fb54bcfa
+                    status: duplicate
+                    message: This request was already received.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: The idempotency key was reused for a different command
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          description: The command failed field or policy validation
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '429':
+          description: Gateway rate limit exceeded
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '503':
+          description: CRM writes are disabled or an authoritative dependency is unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: UUID matching body leadId. Reuse only for the same semantic command.
+      schema:
+        type: string
+        format: uuid
+    FormVersion:
+      name: X-Codestra-Form-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        const: '1.0'
+  headers:
+    CorrelationId:
+      description: End-to-end request identifier generated at the gateway or adapter.
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Malformed request or anti-abuse validation failure
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    LeadCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - leadId
+        - submittedAt
+        - campaign
+        - contact
+        - company
+        - qualification
+        - consent
+        - attribution
+        - antiAbuse
+      properties:
+        schemaVersion:
+          type: string
+          const: '1.0'
+        leadId:
+          type: string
+          format: uuid
+        submittedAt:
+          type: string
+          format: date-time
+        campaign:
+          type: object
+          additionalProperties: false
+          required: [code]
+          properties:
+            code:
+              type: string
+              pattern: '^[A-Z0-9][A-Z0-9_-]{2,63}$'
+        contact:
+          type: object
+          additionalProperties: false
+          required: [fullName, workEmail, phone]
+          properties:
+            fullName:
+              type: string
+              minLength: 2
+              maxLength: 160
+            workEmail:
+              type: string
+              format: email
+              maxLength: 254
+            phone:
+              type: string
+              maxLength: 40
+        company:
+          type: object
+          additionalProperties: false
+          required: [name, jobTitle, companySize]
+          properties:
+            name:
+              type: string
+              minLength: 2
+              maxLength: 200
+            jobTitle:
+              type: string
+              maxLength: 160
+            companySize:
+              type: string
+              maxLength: 40
+        qualification:
+          type: object
+          additionalProperties: false
+          required: [service, industry, budget, timeline, message]
+          properties:
+            service:
+              type: string
+              minLength: 2
+              maxLength: 100
+            industry:
+              type: string
+              maxLength: 100
+            budget:
+              type: string
+              maxLength: 60
+            timeline:
+              type: string
+              maxLength: 60
+            message:
+              type: string
+              minLength: 20
+              maxLength: 5000
+        consent:
+          type: object
+          additionalProperties: false
+          required: [privacyAccepted, marketingOptIn, policyVersion]
+          properties:
+            privacyAccepted:
+              type: boolean
+              const: true
+            marketingOptIn:
+              type: boolean
+            policyVersion:
+              type: string
+              minLength: 1
+              maxLength: 40
+        attribution:
+          type: object
+          additionalProperties: false
+          required:
+            - landingPath
+            - referrer
+            - utmSource
+            - utmMedium
+            - utmCampaign
+            - utmTerm
+            - utmContent
+            - clickId
+          properties:
+            landingPath: { type: string, maxLength: 2048 }
+            referrer: { type: string, maxLength: 2048 }
+            utmSource: { type: string, maxLength: 200 }
+            utmMedium: { type: string, maxLength: 200 }
+            utmCampaign: { type: string, maxLength: 200 }
+            utmTerm: { type: string, maxLength: 200 }
+            utmContent: { type: string, maxLength: 200 }
+            clickId: { type: string, maxLength: 512 }
+        antiAbuse:
+          type: object
+          additionalProperties: false
+          required: [turnstileToken, honeypot, dwellMs]
+          properties:
+            turnstileToken:
+              type: string
+              maxLength: 4096
+            honeypot:
+              type: string
+              maxLength: 0
+            dwellMs:
+              type: integer
+              minimum: 0
+              maximum: 86400000
+    LeadReceipt:
+      type: object
+      additionalProperties: false
+      required: [leadId, status, message]
+      properties:
+        leadId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [accepted, duplicate]
+        message:
+          type: string
+        correlationId:
+          type: string
+    Problem:
+      type: object
+      additionalProperties: true
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        correlationId:
+          type: string

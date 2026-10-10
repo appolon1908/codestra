@@ -3,7 +3,8 @@ import React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { Button1, Button2 } from "./Button";
-import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
+import LocalizedLink from "../../i18n/LocalizedLink";
 
 interface SuccessModalProps{
     closeModal?: () => void;
@@ -13,7 +14,7 @@ interface SuccessModalProps{
   
 }
 export const SuccessModal:React.FC<SuccessModalProps> = ({closeModal, isOpen}: SuccessModalProps) => {
- 
+  const {t}=useTranslation("common");
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -37,14 +38,12 @@ export const SuccessModal:React.FC<SuccessModalProps> = ({closeModal, isOpen}: S
             >
               <div className="text-center">
                 <IoMdCheckmarkCircleOutline className="mx-auto h-12 w-12 text-[#FFD700]" />
-                <h3 className="mt-2 text-xl font-semibold">Message Sent!</h3>
-                <p className="mt-2 text-sm">Your message has been sent successfully.</p>
+                <h3 className="mt-2 text-xl font-semibold">{t("status.messageSent")}</h3>
+                <p className="mt-2 text-sm">{t("status.messageSentBody")}</p>
                 
                 <div className="flex justify-center gap-4 m-auto mt-4">
-                    <Button2 text="Close" onClick={closeModal}/>
-                    <Link to={'/contact'}>
-                        <Button1 text='Continue'/>
-                    </Link>
+                    <Button2 text={t("close")} onClick={closeModal}/>
+                    <LocalizedLink to={'/contact'}><Button1 text={t("continue")}/></LocalizedLink>
                 </div>
               </div>
             </motion.div>
@@ -56,7 +55,7 @@ export const SuccessModal:React.FC<SuccessModalProps> = ({closeModal, isOpen}: S
 }
 
 export const SuccessModal2:React.FC<SuccessModalProps> = ({closeModal, isOpen}: SuccessModalProps) => {
- 
+  const {t}=useTranslation("common");
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -80,14 +79,12 @@ export const SuccessModal2:React.FC<SuccessModalProps> = ({closeModal, isOpen}: 
             >
               <div className="text-center">
                 <IoMdCheckmarkCircleOutline className="mx-auto h-12 w-12 text-[#FFD700]" />
-                <h3 className="mt-2 lg:text-xl text-lg font-semibold">Sent Successfully! 🚀🎉</h3>
-                <p className="mt-2 lg:text-sm text-xs">Your message has been sent successfully.</p>
+                <h3 className="mt-2 lg:text-xl text-lg font-semibold">{t("status.sentSuccessfully")}</h3>
+                <p className="mt-2 lg:text-sm text-xs">{t("status.messageSentBody")}</p>
                 
                 <div className="flex justify-center gap-4 m-auto mt-4">
-                    <Button2 text="Close" onClick={closeModal}/>
-                    <Link to={'/'}>
-                        <Button1 text='Continue'/>
-                    </Link>
+                    <Button2 text={t("close")} onClick={closeModal}/>
+                    <LocalizedLink to={'/'}><Button1 text={t("continue")}/></LocalizedLink>
                 </div>
               </div>
             </motion.div>
