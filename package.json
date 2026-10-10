@@ -20,7 +20,9 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:deployment": "node scripts/ci/check-deployment-scaffold.mjs",
-    "test:performance": "node scripts/check-performance.mjs"
+    "test:design": "node scripts/check-design-system.mjs",
+    "test:performance": "node scripts/check-performance.mjs",
+    "verify": "npm run lint && npm test && npm run test:design && npm run test:deployment && npm run build && npm run test:seo && npm run test:performance && npm run audit:production"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",

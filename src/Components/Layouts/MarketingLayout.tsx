@@ -9,8 +9,7 @@ interface MarketingLayoutProps {
 }
 
 const MarketingLayout = ({ children, className = '' }: MarketingLayoutProps) => (
-  <div className={`modern-shell marketing-site ${className}`.trim()}>
-    <a className="skip-link" href="#main-content">Skip to content</a>
+  <div className={`marketing-site ${className}`.trim()}>
     <Navbar />
     <main lang="en" id="main-content">{children}</main>
     <Footer />
