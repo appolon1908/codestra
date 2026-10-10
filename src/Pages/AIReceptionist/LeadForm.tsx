@@ -115,12 +115,12 @@ export default function LeadForm({
     if (submissionInFlight.current) return;
     submissionInFlight.current = true;
     setServerState({ type: "loading", message: "" });
-    await trackEvent("lead_submitted", {
+    void trackEvent("lead_submitted", {
       ctaName: ctaClicked,
       section: "lead-form",
     });
     if (industrySelected) {
-      await trackEvent("industry_lead_submitted", {
+      void trackEvent("industry_lead_submitted", {
         ctaName: ctaClicked,
         section: "lead-form",
         industry: industrySelected,
@@ -177,7 +177,7 @@ export default function LeadForm({
       };
       if (response.ok) {
         try { window.sessionStorage.removeItem("codestra.lead_form_context"); } catch { /* optional storage */ }
-        await trackEvent("lead_delivery_succeeded", {
+        void trackEvent("lead_delivery_succeeded", {
           ctaName: ctaClicked,
           section: "lead-form",
         });
@@ -202,7 +202,7 @@ export default function LeadForm({
             : (body.message ??
               t("serverError"));
       setServerState({ type: "error", message });
-      await trackEvent("lead_delivery_failed", {
+      void trackEvent("lead_delivery_failed", {
         ctaName: ctaClicked,
         section: "lead-form",
       });
@@ -213,7 +213,7 @@ export default function LeadForm({
         message:
           t("networkError"),
       });
-      await trackEvent("lead_delivery_failed", {
+      void trackEvent("lead_delivery_failed", {
         ctaName: ctaClicked,
         section: "lead-form",
       });

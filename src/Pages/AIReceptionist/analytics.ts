@@ -56,26 +56,26 @@ export const trackEvent = async (
   eventName: AnalyticsEventName,
   details: { ctaName?: string; section?: string; industry?: string; solution?: string; ctaPosition?: string } = {},
 ) => {
-  if (!analyticsConsentGranted()) return;
-  const visit = captureAttribution();
-  const width = window.innerWidth;
-  const payload = {
-    event_name: eventName,
-    anonymous_session_id: getAnonymousSessionId(),
-    occurred_at: new Date().toISOString(),
-    page_path: window.location.pathname,
-    cta_name: details.ctaName ?? "",
-    section: details.section ?? "",
-    industry: details.industry ?? "",
-    solution: details.solution ?? "",
-    cta_position: details.ctaPosition ?? details.section ?? "",
-    attribution: visit.latest,
-    device_category:
-      width < 768 ? "mobile" : width < 1100 ? "tablet" : "desktop",
-    language: navigator.language.slice(0, 16),
-    consent_state: "granted",
-  };
   try {
+    if (!analyticsConsentGranted()) return;
+    const visit = captureAttribution();
+    const width = window.innerWidth;
+    const payload = {
+      event_name: eventName,
+      anonymous_session_id: getAnonymousSessionId(),
+      occurred_at: new Date().toISOString(),
+      page_path: window.location.pathname,
+      cta_name: details.ctaName ?? "",
+      section: details.section ?? "",
+      industry: details.industry ?? "",
+      solution: details.solution ?? "",
+      cta_position: details.ctaPosition ?? details.section ?? "",
+      attribution: visit.latest,
+      device_category:
+        width < 768 ? "mobile" : width < 1100 ? "tablet" : "desktop",
+      language: navigator.language.slice(0, 16),
+      consent_state: "granted",
+    };
     await fetch(
       `${import.meta.env.VITE_API_ENDPOINT ?? ""}/api/v1/analytics/events`,
       {
