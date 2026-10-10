@@ -17,6 +17,14 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Secret scan (full history)
+        run: |
+          curl --fail --silent --show-error --location --output /tmp/gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz
+          curl --fail --silent --show-error --location --output /tmp/gitleaks-checksums.txt https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_checksums.txt
+          cd /tmp && grep 'gitleaks_8.24.3_linux_x64.tar.gz' gitleaks-checksums.txt | sha256sum -c -
+          tar -xz -f /tmp/gitleaks.tar.gz -C /tmp
+          cd "$GITHUB_WORKSPACE"
+          /tmp/gitleaks detect --source . --log-opts='--all' --redact
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
