@@ -541,7 +541,7 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         ),
     },
     "appolon1908/codestra": {
-        'scripts/check-design-system.mjs': 'a43cd0d9a89054f3cda3910cbc571b732e3bef51974bf8b838af07d6ce3461c9',
+        'scripts/check-design-system.mjs': '383e0133f640cb6b7fe5e295b643ff99f06f1d7a4fb54ea05d0a7704b24bac27',
         'services/lead-intake-adapter/scripts/migrate.py': 'a002a23f08398b779f05ac416317ecf065bd3011a8372efc75ce0512c2401d71',
         'scripts/ci/check-deployment-scaffold.mjs': 'b9cfbea1cebea2ecba4da0c288a2f45440c28db88b8ed73449de0c1ce0b724cb',
         'scripts/deploy/validate-runtime-manifest.mjs': 'c8f34d5b354b09c0344822784355e75cddc7693fd4df0dd2417b164cb35769be',
@@ -671,7 +671,7 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
     "appolon1908/codestra": {
-        '.github/workflows/ci.yml': '408b2b2ccc9a1d604dbf94c235e3edc3b8fc7e64624cdfa460d741723fa98493',
+        '.github/workflows/ci.yml': '13e29e0c8b76dd840e5f6cf0c7e45d72cfa1ade4da327a7c7f56e48648d25381',
         '.github/workflows/web-quality.yml': '0621a046b218af14b2a0598944229fb9b3d1fdb0891cc97d002fd346386d2548',
         '.github/workflows/lead-intake-quality.yml': '25e07c2dce0afb2780818d7a0bbfcd442287f1d567d91ab007f92fdf1c0535eb',
         '.github/workflows/ghcr-readonly-preflight.yml': '0034e54b9012e63967227c19ce60fa33c6f9480f6f5d20b8d6c4ed848c0825be',
