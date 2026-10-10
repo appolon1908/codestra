@@ -83,7 +83,12 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run build
-      - run: npm run test:e2e -- --project=mobile --project=tablet --project=desktop tests/e2e/seo-remediation.spec.ts
+      - run: |
+          set -o pipefail
+          npm run test:e2e -- --project=mobile --project=tablet --project=desktop tests/e2e/seo-remediation.spec.ts 2>&1 | tee /tmp/codestra-browser.log
+      - name: Publish browser diagnostics
+        if: always()
+        run: node scripts/ci/summarize-web-check.mjs browser
       - name: Preserve browser failure diagnostics
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
