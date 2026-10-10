@@ -11,3 +11,5 @@ Dockerfile removes a duplicate obsolete repository source label that overwrote t
 Limitations: literal UI audit reports 333 inherited/original-English strings (including test literals); catalogue coverage passes and English design roots declare their language. Developer-only braces advisory has no supported npm fix; production audit is clean. Remote CI and review status must be evaluated at the pushed final SHA. No protected target merge or deployment was performed.
 
 Local evidence: /tmp/pr12-final-test.log, /tmp/pr12-adapter-tests3.log, /tmp/pr12-build12.log, /tmp/pr12-final-seo.log, /tmp/pr12-browser5.log, /tmp/pr12-final-lighthouse-isolated.log, /tmp/pr12-contract-final2.log, /tmp/pr12-gitleaks-clean.log. Performance is sensitive to concurrent CPU-heavy checks; final isolated run passes.
+
+Remote CI followup: execute the exact secret-scan shell wrapper, including checksum verification. Archive filename now matches the upstream checksum manifest; exact wrapper passes. The earlier restored wrapper used a shortened filename and failed verification before scanning.
