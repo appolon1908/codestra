@@ -59,9 +59,9 @@ CATALOG_REPOSITORIES = {
     "appolon1908-hue/Infustruction-repo",
     "appolon1908-hue/Keycloak",
     "appolon1908-hue/Middleware-",
-    "appolon1908-hue/codestra",
+    "appolon1908/codestra",
     "appolon1908-hue/beyvra-backend",
-    "appolon1908-hue/backend2",
+    "appolon1908/backend2",
     "appolon1908-hue/beyvra-frontend",
     "appolon1908-hue/scrapper",
     "appolon1908-hue/Breero.com",
@@ -103,7 +103,7 @@ EXPECTED_CHECK_WORKFLOWS = {
         "Temporal critical workflow integration": ".github/workflows/middleware-ci.yml",
         "Synthetic no-effect acceptance E2E": ".github/workflows/middleware-ci.yml",
     },
-    "appolon1908-hue/codestra": {
+    "appolon1908/codestra": {
         "orchestrator-contract": ".github/workflows/production-orchestrator-contract.yml",
         "verify": ".github/workflows/ci.yml",
         "container": ".github/workflows/ci.yml",
@@ -115,7 +115,7 @@ EXPECTED_CHECK_WORKFLOWS = {
         "secrets": ".github/workflows/ci.yml",
         "validate": ".github/workflows/ci.yml",
     },
-    "appolon1908-hue/backend2": {
+    "appolon1908/backend2": {
         "orchestrator-contract": ".github/workflows/production-orchestrator-contract.yml",
         "validate": ".github/workflows/ci.yml",
         "container": ".github/workflows/ci.yml",
@@ -173,7 +173,7 @@ EXPECTED_CHECK_WORKFLOW_SHA256 = {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/middleware-ci.yml": "385d1f652556de076cb26a480351ab6bb2c5f1d6200b9e7beae06add8ee75d42",
     },
-    "appolon1908-hue/codestra": {
+    "appolon1908/codestra": {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/ci.yml": "7b0a377343c86b1274ecb91c4cc2423d6c045c0197eae9eb1abe775d791a73d1",
     },
@@ -181,7 +181,7 @@ EXPECTED_CHECK_WORKFLOW_SHA256 = {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/ci.yml": "1c2e654ffd1011f662985d261411502c392789b882b6d089ba18e182e53248d1",
     },
-    "appolon1908-hue/backend2": {
+    "appolon1908/backend2": {
         ".github/workflows/production-orchestrator-contract.yml": ORCHESTRATOR_CONTRACT_WORKFLOW_SHA256,
         ".github/workflows/ci.yml": "e27367a06aa79f7adca93d148f7e9c88efe35e77a3893407ffc3988f1b36c217",
     },
@@ -228,6 +228,7 @@ BACKEND_PRODUCTION_VALIDATOR_SHA256 = (
     "6006bbc7850ce7666de926b6cad2585b"
     "83d2fce102104543b871530f11115f20"
 )
+APPLICATION_PRODUCTION_VALIDATOR_SHA256 = 'e1d08aac88f40c40644c0b59bcdfa71f9db9ed7ef68dbbc82cc4af02f6c14625'
 EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
     "appolon1908-hue/Infustruction-repo": {
         ".github/workflows/production-orchestrator-contract.yml": {
@@ -300,9 +301,9 @@ EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
             ),
         },
     },
-    "appolon1908-hue/codestra": {
+    "appolon1908/codestra": {
         ".github/workflows/production-orchestrator-contract.yml": {
-            ".codestra/validate-production-orchestrator-contract.py": SHARED_PRODUCTION_VALIDATOR_SHA256,
+            ".codestra/validate-production-orchestrator-contract.py": APPLICATION_PRODUCTION_VALIDATOR_SHA256,
         },
     },
     "appolon1908-hue/beyvra-backend": {
@@ -310,9 +311,9 @@ EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
             ".codestra/validate-production-orchestrator-contract.py": BACKEND_PRODUCTION_VALIDATOR_SHA256,
         },
     },
-    "appolon1908-hue/backend2": {
+    "appolon1908/backend2": {
         ".github/workflows/production-orchestrator-contract.yml": {
-            ".codestra/validate-production-orchestrator-contract.py": SHARED_PRODUCTION_VALIDATOR_SHA256,
+            ".codestra/validate-production-orchestrator-contract.py": APPLICATION_PRODUCTION_VALIDATOR_SHA256,
         },
     },
     "appolon1908-hue/beyvra-frontend": {
@@ -385,17 +386,15 @@ EXPECTED_REQUIRED_CHECK_SOURCE_CLOSURE_SHA256 = {
         "6c8f60985d114a88693e1f2214cecedd"
         "b3157ad80f52123abaf62bf1ffb4b494"
     ),
-    "appolon1908-hue/codestra": (
-        "4e3ea69c3ec2a4bd6e4b50395672f44d"
-        "ec4a75460ed8648186445f1e8793b016"
+    "appolon1908/codestra": (
+        '074c671fb8b6c3dbfc5765b4b9d12935c1f6e49c9185ae76eb72d4490771dd69'
     ),
     "appolon1908-hue/beyvra-backend": (
         "8a3a6eb731ece61cc83f8e0333689f70"
         "87be9db4f7e93698a37f860fdd453135"
     ),
-    "appolon1908-hue/backend2": (
-        "fa191e95756aec0a8987425eb697eb8e"
-        "2316d7b59ba77e6cd10bb52b10c2c43a"
+    "appolon1908/backend2": (
+        '3dd0a9a3893e7c495f09efccccbb4c96079712209565c1fb269439a943e2727e'
     ),
     "appolon1908-hue/beyvra-frontend": (
         "ce51e23c535871d23306264bb3806bb1"
@@ -2487,7 +2486,8 @@ def self_test() -> int:
 
     redirect_opener = RedirectTestOpener()
     NO_REDIRECT_OPENER = redirect_opener
-    os.environ.setdefault("GH_TOKEN", "test-token")
+    original_token = os.environ.get("GH_TOKEN")
+    os.environ["GH_TOKEN"] = "test-token"
     try:
         require(
             download_artifact_archive("repos/example/actions/artifacts/1/zip")
@@ -2497,6 +2497,10 @@ def self_test() -> int:
         require(len(redirect_opener.requests) == 2, "artifact redirect did not use two explicit requests")
     finally:
         NO_REDIRECT_OPENER = original_opener
+        if original_token is None:
+            del os.environ["GH_TOKEN"]
+        else:
+            os.environ["GH_TOKEN"] = original_token
     expected = {"phase": "plan", "candidate_sha256": "c" * 64, "production_changed": False}
     validate_prior(deepcopy(expected), expected)
     for key, value in (("phase", "staging"), ("candidate_sha256", "d" * 64), ("production_changed", True)):

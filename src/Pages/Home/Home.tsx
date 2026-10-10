@@ -68,7 +68,7 @@ const Home = () => {
           <p className='lg:text-base text-base'>Development used to be magical—an art that  inspired innovation 
             <br className='hidden lg:block'/> and transformed ideas into reality.
           </p>
-          <Link to={'/electronic-billing'}>
+          <Link to={'/contact/sales'}>
             <button className='py-2.5 px-5 mt-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white'>
               Get in touch <GoArrowRight className='text-xl'/>
             </button>
@@ -108,47 +108,53 @@ const Home = () => {
             </div>
 
             <div className="text-left grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1  gap-10 mt-10">
-              <div
+              <Link
+                to="/services"
+                aria-label="Explore frontend and backend development services"
                 data-aos="fade-up"
                 data-aos-duration="700"
-                className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
+                className="block bg-neutral-900 border border-neutral-800 p-5 rounded-2xl hover:bg-neutral-950 eachImage focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FFD700]"
               >
                 <img src={productOne} alt="" className="w-full" />
                 <div className="flex items-center mt-4">
                   <h3 className="text-white font-semibold text-lg">Frontend & Backend Dev</h3>
-                  <p className="border-2 border-neutral-600 rounded-full p-2 cursor-pointer ml-auto text-xl">
+                  <span className="border-2 border-neutral-600 rounded-full p-2 ml-auto text-xl" aria-hidden="true">
                     <MdChevronRight />
-                  </p>
+                  </span>
                 </div>
-              </div>
+              </Link>
 
-              <div
+              <Link
+                to="/services"
+                aria-label="Explore design system services"
                 data-aos="fade-up"
                 data-aos-duration="700"
-                className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
+                className="block bg-neutral-900 border border-neutral-800 p-5 rounded-2xl hover:bg-neutral-950 eachImage focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FFD700]"
               >
                 <img src={productTwo} alt="" className="w-full" />
                 <div className="flex items-center mt-4">
                   <h3 className="text-white font-semibold text-lg">Design System</h3>
-                  <p className="border-2 border-neutral-600 rounded-full p-2 cursor-pointer ml-auto text-xl">
+                  <span className="border-2 border-neutral-600 rounded-full p-2 ml-auto text-xl" aria-hidden="true">
                     <MdChevronRight />
-                  </p>
+                  </span>
                 </div>
-              </div>
+              </Link>
 
-              <div
+              <Link
+                to="/services"
+                aria-label="Explore social media marketing services"
                 data-aos="fade-up"
                 data-aos-duration="500"
-                className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
+                className="block bg-neutral-900 border border-neutral-800 p-5 rounded-2xl hover:bg-neutral-950 eachImage focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FFD700]"
               >
                 <img src={productThree} alt="" className="w-full" />
                 <div className="flex items-center mt-4">
                   <h3 className="text-white font-semibold text-lg">Social Media Marketing</h3>
-                  <p className="border-2 border-neutral-600 rounded-full p-2 cursor-pointer ml-auto text-xl">
+                  <span className="border-2 border-neutral-600 rounded-full p-2 ml-auto text-xl" aria-hidden="true">
                     <MdChevronRight />
-                  </p>
+                  </span>
                 </div>
-              </div>
+              </Link>
             </div>
 
           </div>
@@ -197,7 +203,7 @@ const Home = () => {
               </div>
 
               <div className='lg:pt-10' data-aos="fade-up" data-aos-duration="500">
-                <h2 className='text-2xl'>Backend Development Frameworks:</h2>
+                <h2 className='text-2xl'>Frontend Development Frameworks:</h2>
                 <p className='text-sm  pt-3'>
                   Backend Development Frameworks:
                   We build reliable and scalable solutions using modern 

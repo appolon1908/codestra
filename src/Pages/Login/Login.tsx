@@ -5,7 +5,7 @@ import { useLogin } from '../../hooks/mutations/useLogin'
 import { useForm } from 'react-hook-form'
 import { ToastContainer, toast } from 'react-toastify';
 import logo from '../../assets/logo.png'
-import { setAccessToken } from '@/lib/auth'
+import { useSession } from '@/Providers/SessionProvider'
 
 type FormData = {
   email: string,
@@ -26,6 +26,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const {mutate, isPending} = useLogin()
   const navigate = useNavigate()
+  const { refreshSession } = useSession()
 
   const {
     register, 
@@ -36,8 +37,12 @@ const Login = () => {
 
   const onSubmit = (data:FormData) => {
     mutate(data, {
-      onSuccess: (details) => {
-        setAccessToken(details.data.token.access);
+      onSuccess: async () => {
+        const user = await refreshSession()
+        if (!user) {
+          toast("Unable to establish a secure session")
+          return
+        }
         reset()
         navigate('/auth/dashboard', { replace: true })
       },
