@@ -1,0 +1,85 @@
+{
+  "language": "Idioma",
+  "continue": "Continuar",
+  "carousel": {
+    "previous": "Diapositiva anterior",
+    "next": "Diapositiva siguiente"
+  },
+  "status": {
+    "dataSent": "Los datos se enviaron correctamente.",
+    "messageSent": "¡Mensaje enviado!",
+    "messageSentBody": "Tu mensaje se envió correctamente.",
+    "sentSuccessfully": "¡Enviado correctamente!"
+  },
+  "languagePrompt": "Detectamos que quizá prefieras {{language}}. ¿Quieres ver esta página en {{language}}?",
+  "viewLanguage": "Ver en {{language}}",
+  "keepEnglish": "Mantener inglés",
+  "close": "Cerrar",
+  "loading": "Cargando",
+  "codestraHome": "Inicio de Codestra",
+  "copyright": "© {{year}} Codestra",
+  "office": "Oficinas",
+  "services": "Servicios",
+  "industries": "Industrias",
+  "company": "Empresa",
+  "dashboard": {
+    "title": "Panel",
+    "logout": "Cerrar sesión",
+    "home": "Inicio",
+    "webhooks": "Notificaciones webhook"
+  },
+  "footer": {
+    "craftsmanship": "Artesanía en cada línea de código.",
+    "reliableProducts": "Convertimos ideas en productos digitales confiables.",
+    "ourWork": "Nuestro trabajo",
+    "services": {
+      "softwareDevelopment": "Desarrollo de software",
+      "mobileDevelopment": "Desarrollo de aplicaciones móviles",
+      "aiDevelopment": "Desarrollo de IA",
+      "softwareConsulting": "Consultoría de software",
+      "uiUx": "Diseño UI/UX",
+      "webDesign": "Diseño web",
+      "branding": "Marca"
+    },
+    "industries": {
+      "finance": "Finanzas",
+      "healthcare": "Salud",
+      "gaming": "iGAMING",
+      "realEstate": "Bienes raíces",
+      "education": "Educación",
+      "web3": "Web3 y blockchain"
+    }
+  },
+  "webhooks": {
+    "eyebrow": "Operaciones autenticadas",
+    "title": "Suscripciones a webhooks",
+    "body": "Crea, controla, prueba y audita entregas firmadas de webhooks.",
+    "loadError": "No se pudieron cargar los datos de webhooks.",
+    "created": "Suscripción creada.",
+    "saveError": "No se pudo guardar la suscripción.",
+    "secretOnce": "Copia este secreto de firma ahora. No se volverá a mostrar:",
+    "add": "Añadir suscripción",
+    "name": "Nombre",
+    "url": "URL del receptor",
+    "events": "Eventos",
+    "create": "Crear suscripción",
+    "subscriptions": "Tus suscripciones",
+    "empty": "Aún no hay suscripciones a webhooks.",
+    "enabled": "Activada",
+    "disabled": "Desactivada",
+    "sendTest": "Enviar webhook de prueba",
+    "testQueued": "Entrega de prueba en cola.",
+    "testError": "No se pudo poner en cola la entrega de prueba.",
+    "disable": "Desactivar",
+    "enable": "Activar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar esta suscripción?",
+    "history": "Historial de entregas",
+    "event_type": "Evento",
+    "status": "Estado",
+    "attempts": "Intentos",
+    "response_code": "Código de respuesta",
+    "error": "Fallo",
+    "retryHistory": "Historial de reintentos"
+  }
+}
