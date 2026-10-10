@@ -64,6 +64,7 @@ const CookiePolicyPage = lazy(() => import("./Pages/Privacy/PrivacyControls").th
 const CookiePreferencesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.CookiePreferencesPage })));
 const PrivacyChoicesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.PrivacyChoicesPage })));
 const CommunicationsPreferencesPage = lazy(() => import("./Pages/Privacy/PrivacyControls").then((module) => ({ default: module.CommunicationsPreferencesPage })));
+const PlatformHub = lazy(() => import("./Pages/Platform/PlatformHub"));
 
 const AllRoutes = lazy(() => import("./Routes/AllRoutes"));
 const LegalPage = lazy(() => import("./Pages/Legal/LegalPage"));
@@ -126,6 +127,15 @@ function App() {
                 <Route path="contact-information" element={<LegalPage kind="contactInformation" />} />
                 <Route path="auth/*" element={<AuthProvider element={<AllRoutes />} />} />
                 <Route path="thank-you" element={<ThankYouPage />} />
+                <Route path="marketplace/*" element={<PlatformHub area="marketplace" />} />
+                <Route path="sales/*" element={<AuthProvider element={<PlatformHub area="sales" />} />} />
+                <Route path="portal/*" element={<AuthProvider element={<PlatformHub area="customer" />} />} />
+                <Route path="partners/*" element={<PlatformHub area="partner" />} />
+                <Route path="developers/*" element={<PlatformHub area="developer" />} />
+                <Route path="documentation/*" element={<PlatformHub area="documentation" />} />
+                <Route path="academy/*" element={<PlatformHub area="academy" />} />
+                <Route path="support/*" element={<PlatformHub area="support" />} />
+                <Route path="status" element={<PlatformHub area="status" />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="*" element={<LocalizedRedirect />} />
