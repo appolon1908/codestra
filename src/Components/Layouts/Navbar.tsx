@@ -12,7 +12,7 @@ import logo from "../../assets/logo.png";
 import { useSession } from "@/Providers/SessionProvider";
 import LanguageSelector from "../../i18n/LanguageSelector";
 import LocalizedLink from "../../i18n/LocalizedLink";
-import { Button1, Button2 } from "../components/Button";
+import { Button2 } from "../components/Button";
 
 const serviceItems = [
   { key: "systems", to: "/systems", icon: FaBrain },
@@ -42,13 +42,13 @@ function ServicesMenu({ mobile = false, close }: { mobile?: boolean; close?: () 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, close]);
-  return <div className="relative corporate-navigation-menu">
-    <button type="button" aria-expanded={open} className="nav-link flex min-h-11 items-center gap-2" onClick={() => setOpen((value) => !value)}>
+  return <div className="relative">
+    <button type="button" aria-expanded={open} className="flex min-h-11 items-center gap-2" onClick={() => setOpen((value) => !value)}>
       {t("services")}{open ? <IoIosArrowUp /> : <IoIosArrowDown />}
     </button>
-    {open && <ul className={`${mobile ? "relative mt-2 w-full" : "absolute top-12 w-60"} z-20 space-y-1 rounded-lg border corporate-color corporate-color p-3`}>
+    {open && <ul className={`${mobile ? "relative mt-2 w-full" : "absolute top-12 w-60"} z-20 space-y-1 rounded-lg border corporate-border-line corporate-bg-canvas p-3`}>
       {serviceItems.map(({key,to,icon:Icon}) => <li key={key}>
-        <LocalizedLink to={to} onClick={close} className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2 hover:corporate-color hover:corporate-color">
+        <LocalizedLink to={to} onClick={close} className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2 corporate-hover-bg-accent corporate-hover-text-ink">
           <Icon aria-hidden="true" />{t(`servicesMenu.${key}`)}
         </LocalizedLink>
       </li>)}
@@ -65,13 +65,13 @@ function IndustriesMenu({ mobile = false, close }: { mobile?: boolean; close?: (
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, close]);
-  return <div className="relative corporate-navigation-menu">
-    <button type="button" aria-expanded={open} className="nav-link flex min-h-11 items-center gap-2" onClick={() => setOpen((value) => !value)}>
+  return <div className="relative">
+    <button type="button" aria-expanded={open} className="flex min-h-11 items-center gap-2" onClick={() => setOpen((value) => !value)}>
       {t("industries", "Industries")}{open ? <IoIosArrowUp aria-hidden="true" /> : <IoIosArrowDown aria-hidden="true" />}
     </button>
-    {open && <ul className={`${mobile ? "relative mt-2 w-full" : "absolute top-12 w-64"} z-20 space-y-1 rounded-lg border corporate-color corporate-color p-3`}>
-      <li><LocalizedLink to="/industries" onClick={close} className="flex min-h-11 items-center rounded-lg px-4 py-2 font-semibold hover:corporate-color hover:corporate-color">{t("viewAllIndustries", "View all industries")}</LocalizedLink></li>
-      {industryItems.map(([slug, label]) => <li key={slug}><LocalizedLink to={`/industries/${slug}`} onClick={close} className="flex min-h-11 items-center rounded-lg px-4 py-2 hover:corporate-color hover:corporate-color">{label}</LocalizedLink></li>)}
+    {open && <ul className={`${mobile ? "relative mt-2 w-full" : "absolute top-12 w-64"} z-20 space-y-1 rounded-lg border corporate-border-line corporate-bg-canvas p-3`}>
+      <li><LocalizedLink to="/industries" onClick={close} className="flex min-h-11 items-center rounded-lg px-4 py-2 font-semibold corporate-hover-bg-accent corporate-hover-text-ink">{t("viewAllIndustries", "View all industries")}</LocalizedLink></li>
+      {industryItems.map(([slug, label]) => <li key={slug}><LocalizedLink to={`/industries/${slug}`} onClick={close} className="flex min-h-11 items-center rounded-lg px-4 py-2 corporate-hover-bg-accent corporate-hover-text-ink">{label}</LocalizedLink></li>)}
     </ul>}
   </div>;
 }
@@ -96,20 +96,20 @@ export default function Navbar() {
   const close = () => setOpen(false);
 
   return <><a className="skip-link" href="#main-content">Skip to main content</a><header className="site-header">
-    <nav data-corporate-action="button--primary" aria-label={t("menu")} className="site-header__inner flex  items-center justify-between rounded-lg border corporate-color corporate-color p-2 px-5 text-xs backdrop-blur-3xl lg: xl: 2xl:">
+    <nav aria-label={t("menu")} className="site-header__inner flex  items-center justify-between rounded-lg border corporate-border-line corporate-bg-canvas p-2 px-5 text-xs backdrop-blur-3xl lg: xl: 2xl:">
       <LocalizedLink to="/" className="w-20 lg:w-32" aria-label="Codestra"><img src={logo} alt="Codestra" /></LocalizedLink>
       <div className="desktop-nav hidden items-center gap-7 lg:flex">
         <LocalizedLink to="/">{t("home")}</LocalizedLink><LocalizedLink to="/about">{t("about")}</LocalizedLink>
         <ServicesMenu /><IndustriesMenu /><LocalizedLink to="/case-studies">{t("caseStudies")}</LocalizedLink>
         <LocalizedLink to="/contact">{t("contact")}</LocalizedLink><LocalizedLink to="/hiring/positions">{t("joinTeam")}</LocalizedLink>
       </div>
-      <div className="site-header__actions flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <div className="hidden xl:block"><LanguageSelector id="header-language" /></div>
-        {authenticated ? <><LocalizedLink to="/auth/dashboard"><Button1 text={t("dashboard")} /></LocalizedLink><Button2 text={t("logout")} onClick={logout} /></> : <><LocalizedLink to="/login"><Button1 text={t("login")} /></LocalizedLink><LocalizedLink to="/signup"><Button2 text={t("signup")} /></LocalizedLink></>}
+        {authenticated ? <><LocalizedLink className="button button--secondary button--compact" to="/auth/dashboard">{t("dashboard")}</LocalizedLink><Button2 text={t("logout")} onClick={logout} /></> : <><LocalizedLink className="button button--secondary button--compact" to="/login">{t("login")}</LocalizedLink><LocalizedLink className="button button--primary button--compact" to="/signup">{t("signup")}</LocalizedLink></>}
         <button ref={trigger} type="button" className="flex min-h-11 min-w-11 items-center justify-center text-lg lg:hidden" aria-label={open?t("closeMenu"):t("openMenu")} aria-expanded={open} aria-controls="global-mobile-menu" onClick={() => setOpen((value) => !value)}>{open?<IoMdClose/>:<RiMenu3Line/>}</button>
       </div>
     </nav>
-    {open && <div ref={menu} id="global-mobile-menu" role="dialog" aria-modal="true" aria-label={t("menu")} className="mobile-nav mobile-nav--open fixed inset-x-4 top-20 z-40 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-lg border corporate-color corporate-color p-5 text-lg backdrop-blur-3xl lg:hidden">
+    {open && <div ref={menu} id="global-mobile-menu" role="dialog" aria-modal="true" aria-label={t("menu")} className="mobile-nav mobile-nav--open fixed inset-x-4 top-20 z-40 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-lg border corporate-border-line corporate-bg-canvas p-5 text-lg backdrop-blur-3xl lg:hidden">
       <div className="flex flex-col gap-5"><LocalizedLink onClick={close} to="/">{t("home")}</LocalizedLink><LocalizedLink onClick={close} to="/about">{t("about")}</LocalizedLink><ServicesMenu mobile close={close}/><IndustriesMenu mobile close={close}/><LocalizedLink onClick={close} to="/case-studies">{t("caseStudies")}</LocalizedLink><LocalizedLink onClick={close} to="/contact">{t("contact")}</LocalizedLink><LocalizedLink onClick={close} to="/hiring/positions">{t("joinTeam")}</LocalizedLink><LanguageSelector id="mobile-language" /></div>
     </div>}
   </header></>;

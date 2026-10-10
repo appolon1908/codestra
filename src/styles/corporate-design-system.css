@@ -1124,3 +1124,13 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Shared localized shell uses the corporate semantic palette. */
+.corporate-bg-canvas { background-color: var(--brand-surface); }
+.corporate-bg-accent { background-color: var(--brand-accent); }
+.corporate-text-ink { color: var(--brand-ink); }
+.corporate-text-muted { color: var(--brand-ink-muted); }
+.corporate-border-line { border-color: var(--brand-line); }
+.corporate-hover-text-accent:hover { color: var(--brand-accent); }
+.corporate-hover-bg-accent:hover { background-color: var(--brand-accent); }
+.corporate-hover-text-ink:hover { color: var(--brand-canvas); }
