@@ -8,7 +8,7 @@ const HomeDash = () => {
   const handleLogout = () =>{
        clearAccessToken()
        navigate('/', { replace: true })
-   }  
+   }
 
   return (
     <div>
