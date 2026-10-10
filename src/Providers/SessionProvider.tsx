@@ -61,6 +61,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     try {
       await logoutPost();
     } finally {
+      generation.current += 1;
       await queryClient.cancelQueries({ queryKey: SESSION_QUERY_KEY });
       queryClient.setQueryData(SESSION_QUERY_KEY, null);
     }
