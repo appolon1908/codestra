@@ -1150,3 +1150,5 @@ body {
 
 /* Prevent the legacy universal font rule from overriding corporate typography. */
 .marketing-route :where(*) { font-family: var(--font-ui); }
+
+.site-footer .button--primary { color: var(--brand-canvas); }
