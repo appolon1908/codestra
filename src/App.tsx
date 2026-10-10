@@ -11,6 +11,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { LocaleBoundary, LocalizedRedirect } from "./i18n/LocaleBoundary";
 
+const ConnectedHome = lazy(() => import("./Pages/Home/ConnectedHome"));
 const ModernHome = lazy(() => import("./Pages/Home/ModernHome"));
 const LandingPage = lazy(() => import("./Pages/Landing/LandingPage"));
 const LandingIndex = lazy(() => import("./Pages/Landing/LandingIndex"));
@@ -98,6 +99,7 @@ function App() {
               <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
               <Route path="/:locale" element={<LocaleBoundary />}>
                 <Route index element={<Home />} />
+                <Route path="connected-systems" element={<ConnectedHome />} />
                 <Route path="systems" element={<ModernHome />} />
                 <Route path="solutions" element={<LandingIndex kind="service" />} />
                 <Route path="login" element={<Login />} />
