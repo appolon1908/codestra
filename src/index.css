@@ -277,3 +277,11 @@ html { scroll-behavior: smooth; }
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 
 .home-deferred-sections > div { content-visibility: auto; contain-intrinsic-size: auto 800px; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

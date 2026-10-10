@@ -18,3 +18,8 @@ const log = `/tmp/codestra-${mode}.log`;
 if (existsSync(log)) lines.push('```text', clean(readFileSync(log, 'utf8').split('\n').slice(-40).join('\n')), '```');
 const output = lines.join('\n\n') + '\n';
 if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, output); else process.stdout.write(output);
+
+if (process.argv[3] === 'failure') {
+  const annotation = clean(lines.slice(1).join(' | ')).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+  process.stdout.write(`::error title=${mode} diagnostics::${annotation}\n`);
+}

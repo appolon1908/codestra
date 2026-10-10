@@ -70,10 +70,20 @@ test.describe("SEO remediation browser checks", () => {
 
   test("responsive layout has no serious accessibility violations", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.route("**/assets/Home-*.js", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await route.continue();
+    });
     for (const width of [360, 390, 768, 1024, 1280, 1440]) {
       await page.setViewportSize({ width, height: width < 500 ? 812 : 900 });
       await page.goto("/en/");
       await expect(page.locator("h1")).toHaveCount(1);
+      await page.locator("#header-language").waitFor({ state: "attached" });
+      const motion = await page.locator("h1").evaluate((heading) => {
+        const style = getComputedStyle(heading.closest("[data-aos]")!);
+        return { opacity: style.opacity, transform: style.transform, transition: style.transitionDuration };
+      });
+      expect(motion).toEqual({ opacity: "1", transform: "none", transition: "0s" });
       await page.waitForTimeout(250);
       const results = await new AxeBuilder({ page }).analyze();
       const serious = results.violations.filter((item) => item.impact === "serious" || item.impact === "critical");
