@@ -102,6 +102,7 @@ function App() {
               <Route path="/sms-terms" element={<MarketingRoute><LegalPage kind="smsTerms" /></MarketingRoute>} />
               <Route path="/contact-information" element={<MarketingRoute><LegalPage kind="contactInformation" /></MarketingRoute>} />
               <Route path="/:locale" element={<MarketingRoute><LocaleBoundary /></MarketingRoute>}>
+                {featureRoutes.map(({path, element}) => <Route key={path} path={path.replace(/^\//, "")} element={<MarketingRoute>{element}</MarketingRoute>} />)}
                 <Route index element={<MarketingRoute><Home /></MarketingRoute>} />
                 <Route path="connected-systems" element={<MarketingRoute><ConnectedHome /></MarketingRoute>} />
                 <Route path="systems" element={<MarketingRoute><ModernHome /></MarketingRoute>} />
@@ -116,8 +117,6 @@ function App() {
                 <Route path="electronic-billing" element={<MarketingRoute><ElectronicBilling /></MarketingRoute>} />
                 <Route path="electronic-billing/form" element={<MarketingRoute><ElectronicBillingForm /></MarketingRoute>} />
                 <Route path="hiring/positions" element={<MarketingRoute><HiringPosition /></MarketingRoute>} />
-                <Route path="services/:slug" element={<MarketingRoute><LandingPage kind="service" /></MarketingRoute>} />
-                <Route path="industries/:slug" element={<MarketingRoute><LandingPage kind="industry" /></MarketingRoute>} />
                 <Route path="services" element={<MarketingRoute><Services /></MarketingRoute>} />
                 <Route path="services/software-development" element={<MarketingRoute><ServiceDetailPage kind="software-development" /></MarketingRoute>} />
                 <Route path="services/ai-automation" element={<MarketingRoute><ServiceDetailPage kind="ai-automation" /></MarketingRoute>} />
