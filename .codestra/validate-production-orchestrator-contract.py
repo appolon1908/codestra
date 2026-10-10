@@ -29,6 +29,7 @@ RELEASE_VALIDATOR_NON_SELF_REFERENTIAL_BINDINGS = frozenset(
         "KEYCLOAK_PRODUCTION_VALIDATOR_SHA256",
         "MIDDLEWARE_PRODUCTION_VALIDATOR_SHA256",
         "BACKEND_PRODUCTION_VALIDATOR_SHA256",
+        "CODESTRA_PRODUCTION_VALIDATOR_SHA256",
         "EXPECTED_REQUIRED_CHECK_SOURCE_CLOSURE_SHA256",
     }
 )
@@ -52,7 +53,7 @@ EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Infustruction-repo": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Keycloak": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Middleware-": MIDDLEWARE_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908/codestra": "0705c2b32dcd7b2d19e1a30bafa9f5448e41b344333e0da1542a0718bad939cb",
+    "appolon1908/codestra": '9e003fc287fb6ef5c664a8c57402b898f297dc680d56aa90d6a3588347980f09',
     "appolon1908-hue/beyvra-backend": BACKEND_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/backend2": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-frontend": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
@@ -540,6 +541,9 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         ),
     },
     "appolon1908/codestra": {
+        'scripts/registry/ghcr-readonly-preflight.sh': 'f6e6e52177b5a236de8d6677686f550881a81c85b33c05e637deaf3bda30e250',
+        'scripts/ci/check-ghcr-readonly-preflight.mjs': '52db936621493c9fd6bfd7acf445ec5d3eb74776917025dc47fc36b325d80721',
+        'scripts/ci/test-ghcr-readonly-preflight-fixture.sh': 'eb74b2dabaa533b543e7a70c4bff66668a36aeb4373005e8a3def59b6c22f6d4',
         "scripts/deploy/read-only-runtime-discovery.sh": "14cd8ce2653da1e284da480408ba071fd989279ba889a22d0b1f21ec887e1d13",
         "scripts/ci/check-runtime-discovery.mjs": "a0ccd39eb918093ba7715c9fc40fc9facaef6feef95210c46e9fead61323708f",
         "scripts/ci/test-runtime-discovery-fixture.sh": "a7b6557ed6dc927f6dc78a45440c3cf8deda6a2410a3bf94c70231be3bda751d",
@@ -655,6 +659,10 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
     ),
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
+    "appolon1908/codestra": {
+        '.github/workflows/ghcr-readonly-preflight.yml': '88e1789d8cb421a2a9d8be03e4c4e9525467c66d4853e55c090fe165dd6cacf9',
+        '.github/workflows/required-exact-sha-ci.yml': 'd7ce7d6bb13ef6c6d1364e763f79de4ee0138d3e2d6acd403582518ab3e16b36',
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
             "7cb2d9269f490623385689c712e520ae"
@@ -777,6 +785,12 @@ APPROVED_DEFAULT_TEST_DISCOVERY_SOURCE_SHA256 = {
 APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256: dict[
     str, dict[str, dict[str, str]]
 ] = {
+    "appolon1908/codestra": {
+        '.github/workflows/required-exact-sha-ci.yml': {
+            'package.json': '74c0c929d2a12ea703464a8f181c6231de4233846a02e5e7c3140062f93ec05d',
+            'package-lock.json': '5cad52348cc2681a0a5c2db562ce86de7ddfbe096a7519b64e2bb7a063005c03',
+        },
+    },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": {
             "config/ai-production-branch-ruleset.v1.json": "52db5e583b88edb069ba1d7b829d1f49ad820d0bb90e41bcf5b94e4074403ae1",

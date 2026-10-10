@@ -1,3 +1,4 @@
+import FormLegalLinks from '../../Components/FormLegalLinks';
 import Navbar from '../../Components/Layouts/Navbar'
 import Footer from '../../Components/Layouts/Footer'
 import { Button2, Button2b, Button3 } from '../../Components/components/Button'
@@ -38,7 +39,7 @@ const ElectronicBilling = () => {
     const faqData = data?.data as FAQ[] || []
     const billingInterest = useElectronicBillingInterest()
     const { register, handleSubmit, reset, formState: { errors } } = useForm<ElectronicBillingInterestPayload>({
-      defaultValues: { uses_erp: true, consent_to_contact: true },
+      defaultValues: { uses_erp: true, consent_to_contact: false },
     })
     const [submissionMessage, setSubmissionMessage] = useState('')
 
@@ -47,7 +48,7 @@ const ElectronicBilling = () => {
       billingInterest.mutate(values, {
         onSuccess: () => {
           setSubmissionMessage('Thank you. A Codestra specialist will contact you.')
-          reset({ uses_erp: true, consent_to_contact: true })
+          reset({ uses_erp: true, consent_to_contact: false })
         },
         onError: () => setSubmissionMessage('We could not submit your request. Please try again.'),
       })
@@ -115,7 +116,7 @@ const ElectronicBilling = () => {
 
                             <div className='flex items-center gap-2 mt-5'>
                                 <input type="checkbox" className="checkbox w-5 h-5" {...register('consent_to_contact', { required: true })} />
-                                <p>I agree to be contacted by Codestra Dominican Republic.</p>
+                                <p>I request a reply by email about this enquiry. This does not opt me into text messages.</p>
                             </div>
                         </div>
 
@@ -128,7 +129,8 @@ const ElectronicBilling = () => {
                           </p>
                         )}
                     </div>
-                </form>
+                <FormLegalLinks />
+          </form>
             </div>
 
             <div className='lg:pt-0 pt-[8rem] text-sm'>

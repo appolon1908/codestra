@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Building2, ChevronLeft, ChevronRight, CircleAlert, FilterX, Layers3, ListChecks, LoaderCircle, LogOut, RefreshCw, Search, ShieldCheck } from "lucide-react";
-import { clearAccessToken } from "@/lib/auth";
+import { useSession } from "@/Providers/SessionProvider";
 import { getCRMCampaigns, getCRMLeads, getCRMOverview } from "@/APIs/api/odooCrm";
 import type { Campaign, Lead } from "@/APIs/api/odooCrm";
 
@@ -79,7 +79,8 @@ export default function CRMWorkspace() {
       || ("code" in x && String(x.code).toLowerCase().includes(needle))) : raw;
   }, [tab, campaignQuery.data, leadQuery.data, term]);
   const reload = () => { void qc.invalidateQueries({ queryKey: ["odoo-crm"] }); };
-  const logout = () => { clearAccessToken(); navigate("/login", { replace: true }); };
+  const { logout: endSession } = useSession();
+  const logout = async () => { await endSession(); navigate("/login", { replace: true }); };
   const selectCampaign = (item: Campaign) => { setCampaign(item); setSelectedLeadId(null); setTerm(""); setLeadPage(1); setTab("leads"); };
   const setActiveTab = (newTab: "campaigns" | "leads") => { setTab(newTab); setSelectedLeadId(null); setTerm(""); };
   const configuredURL = String(import.meta.env.VITE_ODOO_WEB_URL || "");

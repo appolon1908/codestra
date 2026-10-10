@@ -1,0 +1,219 @@
+name: GHCR read-only preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type READ_ONLY_GHCR_PREFLIGHT
+        required: true
+        type: string
+      candidate_reference:
+        description: Optional tag or digest within ghcr.io/appolon1908-hue/codestra
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ghcr-readonly-preflight
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GHCR_REPOSITORY: ghcr.io/appolon1908-hue/codestra
+      REPORT_PATH: ghcr-readonly-preflight.txt
+
+    steps:
+      - name: Check out reviewed main
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - id: validate
+        name: Validate read-only execution context
+        continue-on-error: true
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+          CANDIDATE_INPUT: ${{ inputs.candidate_reference }}
+        run: |
+          set -Eeuo pipefail
+
+          printf 'reference=INVALID\n' >> "$GITHUB_OUTPUT"
+          printf 'validation=FAIL\n' >> "$GITHUB_OUTPUT"
+
+          [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]] || {
+            echo "Only workflow_dispatch is supported." >&2
+            exit 10
+          }
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || {
+            echo "GHCR preflight is restricted to main." >&2
+            exit 11
+          }
+          [[ "$CONFIRMATION" == "READ_ONLY_GHCR_PREFLIGHT" ]] || {
+            echo "Manual confirmation is invalid." >&2
+            exit 12
+          }
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "GITHUB_SHA is invalid." >&2
+            exit 13
+          }
+
+          candidate="$CANDIDATE_INPUT"
+          if [[ -z "$candidate" ]]; then
+            candidate="${GHCR_REPOSITORY}:${GITHUB_SHA}"
+          fi
+
+          reference_pattern='^ghcr\.io/appolon1908-hue/codestra(:[A-Za-z0-9_][A-Za-z0-9._-]{0,127}|@sha256:[0-9a-f]{64})$'
+          [[ "$candidate" =~ $reference_pattern ]] || {
+            echo "Candidate reference is outside the approved GHCR repository or has invalid syntax." >&2
+            exit 14
+          }
+
+          printf 'reference=%s\n' "$candidate" >> "$GITHUB_OUTPUT"
+          printf 'validation=PASS\n' >> "$GITHUB_OUTPUT"
+
+      - id: auth
+        name: Authenticate to GHCR with the job token
+        if: ${{ steps.validate.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          install -m 700 -d "$DOCKER_CONFIG"
+
+          printf 'status=FAIL\n' >> "$GITHUB_OUTPUT"
+          [[ -n "$GHCR_USER" && -n "$GHCR_TOKEN" ]] || exit 20
+
+          if printf '%s' "$GHCR_TOKEN" |
+            docker login ghcr.io --username "$GHCR_USER" --password-stdin >/dev/null 2>&1; then
+            printf 'status=PASS\n' >> "$GITHUB_OUTPUT"
+          else
+            exit 21
+          fi
+
+      - id: inspect
+        name: Inspect registry descriptor without pulling
+        if: ${{ steps.auth.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
+          INSPECT_WORKDIR: ${{ runner.temp }}/ghcr-readonly-inspect
+          CANDIDATE_REFERENCE: ${{ steps.validate.outputs.reference }}
+        run: |
+          set -Eeuo pipefail
+          bash scripts/registry/ghcr-readonly-preflight.sh \
+            "$CANDIDATE_REFERENCE" \
+            "$INSPECT_WORKDIR" \
+            "$GITHUB_OUTPUT"
+
+      - name: Write redacted preflight evidence
+        if: always()
+        env:
+          VALIDATION_OUTCOME: ${{ steps.validate.outcome }}
+          VALIDATED_REFERENCE: ${{ steps.validate.outputs.reference }}
+          AUTH_OUTCOME: ${{ steps.auth.outcome }}
+          AUTH_STATUS: ${{ steps.auth.outputs.status }}
+          INSPECT_OUTCOME: ${{ steps.inspect.outcome }}
+          PACKAGE_ACCESS: ${{ steps.inspect.outputs.package_access }}
+          RESOLVED_DIGEST: ${{ steps.inspect.outputs.resolved_digest }}
+          MANIFEST_MEDIA_TYPE: ${{ steps.inspect.outputs.manifest_media_type }}
+          SUPPORTED_PLATFORMS: ${{ steps.inspect.outputs.supported_platforms }}
+          DIGEST_VALIDATION: ${{ steps.inspect.outputs.digest_validation }}
+        run: |
+          set -Eeuo pipefail
+          umask 077
+
+          reference="${VALIDATED_REFERENCE:-INVALID}"
+          auth_status="${AUTH_STATUS:-FAIL}"
+          package_access="${PACKAGE_ACCESS:-DENIED}"
+          digest="${RESOLVED_DIGEST:-UNAVAILABLE}"
+          media_type="${MANIFEST_MEDIA_TYPE:-UNAVAILABLE}"
+          platforms="${SUPPORTED_PLATFORMS:-UNAVAILABLE}"
+          digest_validation="${DIGEST_VALIDATION:-NOT_RUN}"
+
+          if [[ "$VALIDATION_OUTCOME" != "success" ]]; then
+            reference="INVALID"
+            auth_status="NOT_RUN"
+            package_access="DENIED"
+            digest="UNAVAILABLE"
+            media_type="UNAVAILABLE"
+            platforms="UNAVAILABLE"
+            digest_validation="NOT_RUN"
+          elif [[ "$AUTH_OUTCOME" != "success" ]]; then
+            auth_status="FAIL"
+            package_access="DENIED"
+            digest="UNAVAILABLE"
+            media_type="UNAVAILABLE"
+            platforms="UNAVAILABLE"
+            digest_validation="NOT_RUN"
+          fi
+
+          cat > "$REPORT_PATH" <<EOF
+          REGISTRY=ghcr.io
+          REPOSITORY=appolon1908-hue/codestra
+          AUTHENTICATION_STATUS=${auth_status}
+          PACKAGE_ACCESS=${package_access}
+          INPUT_REFERENCE=${reference}
+          RESOLVED_DIGEST=${digest}
+          MANIFEST_MEDIA_TYPE=${media_type}
+          SUPPORTED_PLATFORMS=${platforms}
+          DIGEST_VALIDATION=${digest_validation}
+          PREFLIGHT_REMOTE_WRITE_COUNT=0
+          LIVE_SERVER_CONTACTED=NO
+          IMAGE_PUSHED=NO
+          IMAGE_PULLED=NO
+          IMAGE_RELEASED=NO
+          DEPLOYMENT_STARTED=NO
+          PRODUCTION_ACTIVATED=NO
+          EOF
+
+      - name: Checksum evidence
+        if: always()
+        run: |
+          set -Eeuo pipefail
+          test -f "$REPORT_PATH"
+          sha256sum "$REPORT_PATH" > "${REPORT_PATH}.sha256"
+
+      - name: Upload redacted evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ghcr-readonly-preflight-${{ github.run_id }}
+          path: |
+            ghcr-readonly-preflight.txt
+            ghcr-readonly-preflight.txt.sha256
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Remove temporary registry credentials
+        if: always()
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ghcr-readonly-docker
+          INSPECT_WORKDIR: ${{ runner.temp }}/ghcr-readonly-inspect
+        run: |
+          set +e
+          docker logout ghcr.io >/dev/null 2>&1
+          rm -rf "$DOCKER_CONFIG" "$INSPECT_WORKDIR"
+          set -e
+
+      - name: Fail after preserving evidence
+        if: always()
+        env:
+          VALIDATION_OUTCOME: ${{ steps.validate.outcome }}
+          AUTH_OUTCOME: ${{ steps.auth.outcome }}
+          INSPECT_OUTCOME: ${{ steps.inspect.outcome }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$VALIDATION_OUTCOME" == "success" ]] || exit 40
+          [[ "$AUTH_OUTCOME" == "success" ]] || exit 41
+          [[ "$INSPECT_OUTCOME" == "success" ]] || exit 42

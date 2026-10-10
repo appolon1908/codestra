@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router";
 import { ArrowRight, Building2, LogOut, ShieldCheck } from "lucide-react";
-import { clearAccessToken } from "@/lib/auth";
+import { useSession } from "@/Providers/SessionProvider";
 
 export default function HomeDash() {
   const navigate = useNavigate();
-  const logout = () => { clearAccessToken(); navigate("/login", { replace: true }); };
+  const { logout: endSession } = useSession();
+  const logout = async () => { await endSession(); navigate("/login", { replace: true }); };
   return (
     <main className="min-h-screen bg-[#080b13] text-slate-100">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-6 py-5 md:px-12">

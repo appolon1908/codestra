@@ -228,6 +228,7 @@ BACKEND_PRODUCTION_VALIDATOR_SHA256 = (
     "6006bbc7850ce7666de926b6cad2585b"
     "83d2fce102104543b871530f11115f20"
 )
+CODESTRA_PRODUCTION_VALIDATOR_SHA256 = '96b8403fcc0093f88fe89e2d9b7980ef6e3c50b758e800f73e5c1c225f6cda45'
 EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
     "appolon1908-hue/Infustruction-repo": {
         ".github/workflows/production-orchestrator-contract.yml": {
@@ -302,7 +303,7 @@ EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
     },
     "appolon1908/codestra": {
         ".github/workflows/production-orchestrator-contract.yml": {
-            ".codestra/validate-production-orchestrator-contract.py": SHARED_PRODUCTION_VALIDATOR_SHA256,
+            ".codestra/validate-production-orchestrator-contract.py": CODESTRA_PRODUCTION_VALIDATOR_SHA256,
         },
     },
     "appolon1908-hue/beyvra-backend": {
@@ -386,8 +387,8 @@ EXPECTED_REQUIRED_CHECK_SOURCE_CLOSURE_SHA256 = {
         "b3157ad80f52123abaf62bf1ffb4b494"
     ),
     "appolon1908/codestra": (
-        "1403619ef661b7599bdaea17a2ae4347"
-        "d4cecbf6143fdbca6ff0d96e45d347df"
+        "b07a836fbd47bf143cc27e9cb2409806"
+        "2a9cd8fbb70bc1b817ca3d9d45ec085b"
     ),
     "appolon1908-hue/beyvra-backend": (
         "8a3a6eb731ece61cc83f8e0333689f70"
@@ -2487,7 +2488,8 @@ def self_test() -> int:
 
     redirect_opener = RedirectTestOpener()
     NO_REDIRECT_OPENER = redirect_opener
-    os.environ.setdefault("GH_TOKEN", "test-token")
+    original_token = os.environ.get("GH_TOKEN")
+    os.environ["GH_TOKEN"] = "test-token"
     try:
         require(
             download_artifact_archive("repos/example/actions/artifacts/1/zip")
@@ -2497,6 +2499,10 @@ def self_test() -> int:
         require(len(redirect_opener.requests) == 2, "artifact redirect did not use two explicit requests")
     finally:
         NO_REDIRECT_OPENER = original_opener
+        if original_token is None:
+            del os.environ["GH_TOKEN"]
+        else:
+            os.environ["GH_TOKEN"] = original_token
     expected = {"phase": "plan", "candidate_sha256": "c" * 64, "production_changed": False}
     validate_prior(deepcopy(expected), expected)
     for key, value in (("phase", "staging"), ("candidate_sha256", "d" * 64), ("production_changed", True)):
