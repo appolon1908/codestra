@@ -1,7 +1,7 @@
 # codestra — Architecture Charts
 
-> Repository: `appolon1908/codestra`  
-> Baseline branch: `main`  
+> Repository: `appolon1908/codestra`
+> Baseline branch: `main`
 > Repository-local visual architecture. Update with code, contracts, ownership and deployment changes.
 
 ## 1. System context

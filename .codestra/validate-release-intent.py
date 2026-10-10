@@ -228,7 +228,7 @@ BACKEND_PRODUCTION_VALIDATOR_SHA256 = (
     "6006bbc7850ce7666de926b6cad2585b"
     "83d2fce102104543b871530f11115f20"
 )
-CODESTRA_PRODUCTION_VALIDATOR_SHA256 = "bb0333e8ca5ca726d97f570399c375cf231c28ec80e1954f06bbe19b1d5753ab"
+CODESTRA_PRODUCTION_VALIDATOR_SHA256 = '23d73875396701512e7f56f9edec7f2c333655955d9f7b152e3b201caaa6a234'
 EXPECTED_CHECK_WORKFLOW_EXECUTABLE_SHA256 = {
     "appolon1908-hue/Infustruction-repo": {
         ".github/workflows/production-orchestrator-contract.yml": {
@@ -2488,7 +2488,8 @@ def self_test() -> int:
 
     redirect_opener = RedirectTestOpener()
     NO_REDIRECT_OPENER = redirect_opener
-    os.environ.setdefault("GH_TOKEN", "test-token")
+    original_token = os.environ.get("GH_TOKEN")
+    os.environ["GH_TOKEN"] = "test-token"
     try:
         require(
             download_artifact_archive("repos/example/actions/artifacts/1/zip")
@@ -2498,6 +2499,10 @@ def self_test() -> int:
         require(len(redirect_opener.requests) == 2, "artifact redirect did not use two explicit requests")
     finally:
         NO_REDIRECT_OPENER = original_opener
+        if original_token is None:
+            del os.environ["GH_TOKEN"]
+        else:
+            os.environ["GH_TOKEN"] = original_token
     expected = {"phase": "plan", "candidate_sha256": "c" * 64, "production_changed": False}
     validate_prior(deepcopy(expected), expected)
     for key, value in (("phase", "staging"), ("candidate_sha256", "d" * 64), ("production_changed", True)):
