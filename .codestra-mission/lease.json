@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "issue": "https://github.com/appolon1908/codestra/issues/47",
+  "active_linear_issue": "NONE",
+  "linear_blocker": "workspace quota",
+  "worker_node": "crm",
+  "agent_role": "builder",
+  "builder": "/root/frontend_repairs",
+  "worktree": "/srv/codestra/verification/gh47-refresh-concurrency",
+  "branch": "mission/gh47-refresh-concurrency",
+  "base_sha": "0c1b43627b99ee8080cabd8dc027363350608a21",
+  "scope": [
+    "src/APIs/base.tsx",
+    "src/APIs/base.test.ts",
+    ".codestra-mission/lease.json",
+    ".codestra-mission/checkpoint.json"
+  ],
+  "status": "READY_FOR_REVIEW",
+  "notion": "https://app.notion.com/p/3ed7518c3e068161a766ef162e5d70cc",
+  "authority_transfer": {
+    "reason": "dev-desktop offline since 2026-10-07T14:55:33Z; coordinator authorized temporary CRM Builder path",
+    "original_worktree": "/srv/codestra/prs/codestra/gh47-refresh-concurrency",
+    "original_worker_node": "dev-desktop",
+    "original_state": "FROZEN_PRESERVED",
+    "primary_development_host_unchanged": true
+  }
+}
