@@ -12,7 +12,7 @@ const capabilities = [
   { icon: Network, title: 'Automation', copy: 'We connect systems to reduce manual work, improve accuracy, and unlock useful data.' },
 ]
 
-const Home = () => <div className="connected-shell"><Navbar /><main id="main-content">
+const Home = () => <div className="connected-shell"><Navbar /><main lang="en" id="main-content">
   <section className="home-hero">
     <div className="page-wrap hero-grid">
       <div className="codestra-hero-copy">

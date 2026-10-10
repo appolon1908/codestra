@@ -57,16 +57,22 @@ const legacyPaths = [
 for (const path of legacyPaths) {
   if (!path) continue;
   const target = join(dist, path, "index.html");
+  if (["consultation", "solutions", "auth/dashboard", "auth/webhooks"].includes(path)) {
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, template.replace("</head>", '<meta name="robots" content="noindex,follow"/></head>'));
+    continue;
+  }
   mkdirSync(dirname(target), { recursive: true });
   const destination = `/en/${path}`;
-  writeFileSync(target, `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>Redirecting to Codestra</title></head><body><p>Redirecting to Codestra.</p><script>window.location.replace(${JSON.stringify(destination)}+window.location.search);</script></body></html>`);
+  writeFileSync(target, `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>Redirecting to Codestra</title></head><body><p>Redirecting to Codestra.</p><a href="${destination}">Continue</a><script type="module" src="/assets/locale-redirect.js" data-destination="${destination}"></script></body></html>`);
 }
 for (const path of legacyPaths) {
   if (!path) continue;
   const target = join(dist, "ht", path, "index.html");
   mkdirSync(dirname(target), { recursive: true });
   const destination = `/en/${path}`;
-  writeFileSync(target, `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>Redirecting to Codestra</title></head><body><p>Redirecting to Codestra.</p><script>window.location.replace(${JSON.stringify(destination)}+window.location.search);</script></body></html>`);
+  writeFileSync(target, `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>Redirecting to Codestra</title></head><body><p>Redirecting to Codestra.</p><a href="${destination}">Continue</a><script type="module" src="/assets/locale-redirect.js" data-destination="${destination}"></script></body></html>`);
 }
-writeFileSync(join(dist, "index.html"), '<!doctype html><html lang="en"><head><meta http-equiv="refresh" content="0;url=/en/"><meta name="robots" content="noindex"><title>Redirecting to Codestra</title></head><body></body></html>');
+writeFileSync(join(dist, "assets", "locale-redirect.js"), 'const destination=document.querySelector("script[data-destination]").dataset.destination;window.location.replace(destination+window.location.search+window.location.hash);');
+writeFileSync(join(dist, "index.html"), '<!doctype html><html lang="en"><head><meta name="robots" content="noindex"><title>Redirecting to Codestra</title></head><body><a href="/en/">Continue to Codestra</a><script type="module" src="/assets/locale-redirect.js" data-destination="/en/"></script></body></html>');
 console.log(`Prerendered ${indexableRoutes.length * locales.length} indexable and ${noindexRoutes.length * locales.length} noindex localized routes.`);

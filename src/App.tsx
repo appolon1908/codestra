@@ -98,6 +98,7 @@ function App() {
               <Route path="/sms-terms" element={<LegalPage kind="smsTerms" />} />
               <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
               <Route path="/:locale" element={<LocaleBoundary />}>
+                {featureRoutes.map(({path, element}) => <Route key={path} path={path.replace(/^\//, "")} element={element} />)}
                 <Route index element={<Home />} />
                 <Route path="connected-systems" element={<ConnectedHome />} />
                 <Route path="systems" element={<ModernHome />} />

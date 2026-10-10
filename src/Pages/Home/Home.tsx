@@ -33,31 +33,11 @@ const typingKeys = [
   "typing.excellence",
 ] as const;
 
-const Home = () => {
+const HomeTypewriter = () => {
   const { t, i18n } = useTranslation("home");
   const [displayText, setDisplayText] = useState<string>("");
   const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
   const [charIndex, setCharIndex] = useState<number>(0);
-  const backendPairs = t("development.backendPairs", {
-    returnObjects: true,
-  }) as Array<{ name: string; description: string }>;
-  const frontendTools = t("development.frontendTools", {
-    returnObjects: true,
-  }) as Array<{ name: string; description: string }>;
-  const marketingTools = t("marketing.tools", {
-    returnObjects: true,
-  }) as Array<{ name: string; description: string }>;
-  const marketingIcons = [
-    MdNetworkWifi2Bar,
-    IoLogoBuffer,
-    BsSuitDiamondFill,
-    SiSimpleanalytics,
-    MdNetworkWifi2Bar,
-    MdNetworkWifi2Bar,
-    MdNetworkWifi2Bar,
-    MdNetworkWifi2Bar,
-  ];
-
   useEffect(() => {
     const activeText = t(typingKeys[currentTextIndex]);
     if (charIndex < activeText.length) {
@@ -81,6 +61,31 @@ const Home = () => {
     setCharIndex(0);
   }, [i18n.resolvedLanguage]);
 
+  return <><p className="sr-only" aria-live="polite">{t(typingKeys[currentTextIndex])}</p><p aria-hidden="true" className="text-lg text-neutral-300 min-h-7">{displayText} <span className="animate-blink">|</span></p></>;
+};
+
+const Home = () => {
+  const { t } = useTranslation("home");
+  const backendPairs = t("development.backendPairs", {
+    returnObjects: true,
+  }) as Array<{ name: string; description: string }>;
+  const frontendTools = t("development.frontendTools", {
+    returnObjects: true,
+  }) as Array<{ name: string; description: string }>;
+  const marketingTools = t("marketing.tools", {
+    returnObjects: true,
+  }) as Array<{ name: string; description: string }>;
+  const marketingIcons = [
+    MdNetworkWifi2Bar,
+    IoLogoBuffer,
+    BsSuitDiamondFill,
+    SiSimpleanalytics,
+    MdNetworkWifi2Bar,
+    MdNetworkWifi2Bar,
+    MdNetworkWifi2Bar,
+    MdNetworkWifi2Bar,
+  ];
+
   return (
     <>
       <Navbar />
@@ -93,10 +98,7 @@ const Home = () => {
           <h1 className="lg:text-4xl text-3xl font-semibold">
             Custom AI, Software &amp; Automation Built for Real Operations
           </h1>
-          <p className="sr-only" aria-live="polite">{t(typingKeys[currentTextIndex])}</p>
-          <p aria-hidden="true" className="text-lg text-neutral-300 min-h-7">
-            {displayText} <span className="animate-blink">|</span>
-          </p>
+          <HomeTypewriter />
           <p className="lg:text-base text-base">{t("hero.body")}</p>
           <LocalizedLink to={"/contact"}>
             <button className="py-2.5 px-5 mt-5 m-auto justify-center flex items-center gap-3 text-xs rounded-md text-black bg-white">
@@ -108,7 +110,7 @@ const Home = () => {
           <img src={imageWebp} alt="Codestra software platform preview" width="1600" height="621" fetchPriority="high" decoding="async" />
         </div>
 
-        <div className="2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-3">
+        <div className="home-deferred-sections 2xl:px-[25rem] xl:px-[10rem] lg:px-[5rem] px-3">
           <div className="space-y-3 text-center lg:pt-[10rem] pt-[5rem]">
             <h2 className="text-base">Built for teams that need dependable delivery</h2>
             <p className="text-sm text-neutral-400">Customer logos and testimonials are shown only when documented permission and approved evidence are available.</p>
@@ -128,7 +130,7 @@ const Home = () => {
                 data-aos-duration="700"
                 className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
               >
-                <img src={productOne} alt="" className="w-full" />
+                <img loading="lazy" decoding="async" src={productOne} alt="" className="w-full" />
                 <div className="flex items-center mt-4">
                   <h3 className="text-white font-semibold text-lg">
                     {t("teams.development")}
@@ -144,7 +146,7 @@ const Home = () => {
                 data-aos-duration="700"
                 className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
               >
-                <img src={productTwo} alt="" className="w-full" />
+                <img loading="lazy" decoding="async" src={productTwo} alt="" className="w-full" />
                 <div className="flex items-center mt-4">
                   <h3 className="text-white font-semibold text-lg">
                     {t("teams.design")}
@@ -160,7 +162,7 @@ const Home = () => {
                 data-aos-duration="500"
                 className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl cursor-pointer hover:bg-neutral-950 eachImage"
               >
-                <img src={productThree} alt="" className="w-full" />
+                <img loading="lazy" decoding="async" src={productThree} alt="" className="w-full" />
                 <div className="flex items-center mt-4">
                   <h3 className="text-white font-semibold text-lg">
                     {t("teams.marketing")}
@@ -259,7 +261,7 @@ const Home = () => {
               data-aos="fade-up"
               data-aos-duration="500"
             >
-              <img src={uidesign} alt="" className="w-full" />
+              <img loading="lazy" decoding="async" src={uidesign} alt="" className="w-full" />
             </div>
           </div>
 
@@ -307,7 +309,7 @@ const Home = () => {
                 <p className="text-sm pt-5">{t("automation.body")}</p>
               </div>
               <div className="w-full eachImage">
-                <img src={ai} alt="" className="w-full" />
+                <img loading="lazy" decoding="async" src={ai} alt="" className="w-full" />
               </div>
             </div>
 
@@ -317,7 +319,7 @@ const Home = () => {
               data-aos-duration="700"
             >
               <div className="w-[60%] flex m-auto eachImage">
-                <img src={ai2} alt="" className="w-full" />
+                <img loading="lazy" decoding="async" src={ai2} alt="" className="w-full" />
               </div>
               <div className="eachImage hover:bg-neutral-900 lg:p-5 p-3 cursor-pointer rounded-xl">
                 <h2 className="text-2xl font-semibold">{t("crm.title")}</h2>

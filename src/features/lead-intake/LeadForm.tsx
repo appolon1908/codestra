@@ -5,6 +5,7 @@ import { industryPages, servicePages } from '../../content/landingCatalog'
 import TurnstileField from './TurnstileField'
 import {
   createLeadId,
+  identifyLeadAttempt,
   LEAD_FORM_VERSION,
   LeadApiError,
   submitLead,
@@ -42,6 +43,7 @@ const LeadForm = () => {
   const initialQuery = new URLSearchParams(location.search)
   const startedAtRef = useRef(Date.now())
   const leadIdRef = useRef(createLeadId())
+  const attemptRef = useRef<LeadCommand | null>(null)
   const [turnstileToken, setTurnstileToken] = useState('')
   const [errors, setErrors] = useState<FieldErrors>({})
   const [submission, setSubmission] = useState<SubmissionState>({ phase: 'idle', message: '' })
@@ -149,11 +151,16 @@ const LeadForm = () => {
       },
     }
 
+    const attempt = identifyLeadAttempt(command, attemptRef.current)
+    attemptRef.current = attempt
+    leadIdRef.current = attempt.leadId
+
     setSubmission({ phase: 'submitting', message: 'Sending your request through the secure Codestra gateway…' })
 
     try {
-      const receipt = await submitLead(command)
+      const receipt = await submitLead(attempt)
       setSubmission({ phase: 'success', message: receipt.message })
+      attemptRef.current = null
       leadIdRef.current = createLeadId()
       startedAtRef.current = Date.now()
       setForm((current) => ({
