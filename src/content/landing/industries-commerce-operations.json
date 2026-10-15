@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "real-estate",
+    "kind": "industry",
+    "name": "Real Estate",
+    "eyebrow": "AI for property workflows",
+    "headline": "Real-estate AI that moves every lead, property, and transaction forward",
+    "description": "Automate lead response, property information, qualification, scheduling, document intake, transaction tasks, tenant service, and portfolio reporting.",
+    "challenge": "Real-estate teams manage urgent inquiries, fragmented listing data, appointments, documents, vendors, financing, and long transaction checklists. Slow response and missing follow-up lose opportunities while duplicated records hide the true pipeline.",
+    "approach": "Codestra creates an authoritative journey from inquiry to completed transaction or service case. We validate and deduplicate leads, enrich property context, automate bounded follow-up, schedule tasks, and preserve consent and agent ownership in the CRM.",
+    "capabilities": ["Property lead capture and qualification", "Listing knowledge and conversational search", "Viewing, transaction, and document workflows", "Tenant, maintenance, and portfolio automation"],
+    "outcomes": ["Faster response to qualified property demand", "Consistent follow-up and appointment preparation", "Fewer missing transaction documents and tasks", "Clear pipeline and service visibility across teams"],
+    "keywords": ["real estate AI solutions", "real estate lead automation", "property chatbot development", "real estate CRM automation", "listing search AI", "transaction coordination software", "tenant service automation", "proptech development company"],
+    "faqs": [
+      {"question": "Can AI qualify real-estate leads?", "answer": "It can capture goals, timing, property preferences, location, budget range, and financing status, then score against approved sales criteria without using protected characteristics."},
+      {"question": "Can the system schedule property viewings?", "answer": "Yes. It can check approved calendars and listing availability, confirm contact details, create reminders, and update the CRM while routing conflicts or special access needs to an agent."},
+      {"question": "Can AI answer questions about listings?", "answer": "Yes, when answers are grounded in current authorized listing and property documents. It should cite the source and defer legal, valuation, condition, and financing judgments to qualified professionals."}
+    ]
+  },
+  {
+    "slug": "construction",
+    "kind": "industry",
+    "name": "Construction",
+    "eyebrow": "AI for construction operations",
+    "headline": "Construction AI that connects field evidence, documents, and project decisions",
+    "description": "Improve estimating support, bid intake, document control, field reporting, inspections, RFIs, submittals, safety workflows, scheduling, and cost visibility.",
+    "challenge": "Construction information moves through plans, photos, emails, change orders, vendor documents, field notes, and multiple project systems. Delayed or missing evidence creates rework, disputes, schedule risk, and weak cost visibility.",
+    "approach": "Codestra links each workflow to project, location, trade, contract, and responsible party. Documents and field evidence remain attached to decisions, exceptions enter owner queues, and AI assists preparation without approving safety or contractual changes.",
+    "capabilities": ["Bid, estimate, and subcontractor intake", "RFI, submittal, and document-control automation", "Field report, photo, and inspection intelligence", "Schedule, change, task, and cost exception workflows"],
+    "outcomes": ["Faster routing of project questions and evidence", "Reduced manual document classification and re-entry", "Earlier visibility into schedule and cost exceptions", "Clear responsibility and history for project decisions"],
+    "keywords": ["construction AI solutions", "construction workflow automation", "RFI automation software", "construction document AI", "field report automation", "construction photo inspection AI", "contractor portal development", "construction operations software"],
+    "faqs": [
+      {"question": "Can AI read plans and construction documents?", "answer": "It can extract and compare defined information from supported documents, but outputs require source links, revision awareness, and professional verification before contractual, engineering, or safety use."},
+      {"question": "Can field photos be connected to project records?", "answer": "Yes. Mobile capture can attach time, project, location, task, and authorized metadata, run defined visual checks, and preserve the original image for review and evidence."},
+      {"question": "Can construction workflows work with existing project software?", "answer": "Yes. We integrate through supported APIs and file interfaces, define which platform owns each record, and avoid duplicate update loops between project, accounting, CRM, and document systems."}
+    ]
+  },
+  {
+    "slug": "ecommerce",
+    "kind": "industry",
+    "name": "E-commerce",
+    "eyebrow": "AI for digital commerce",
+    "headline": "E-commerce AI that improves discovery, service, and operating efficiency",
+    "description": "Build product discovery, merchandising, customer service, content operations, fraud review, order workflows, retention, and demand intelligence for online commerce.",
+    "challenge": "E-commerce teams manage changing catalogs, high-intent searches, promotions, customer questions, order exceptions, returns, and fragmented channel data. Poor AI can recommend unavailable products or create unsupported policy answers.",
+    "approach": "Codestra grounds experiences in current catalog, inventory, customer, order, and policy data. We design recommendation and support workflows with permissions, fallback, experimentation, and measures tied to conversion, resolution, return, and margin.",
+    "capabilities": ["Semantic product search and guided discovery", "Catalog enrichment and content operations", "Order, return, and customer-service automation", "Demand, retention, and merchandising intelligence"],
+    "outcomes": ["Faster product discovery for high-intent shoppers", "Reduced repetitive catalog and service work", "Better handling of order and return exceptions", "Experiments measured against conversion and margin"],
+    "keywords": ["ecommerce AI solutions", "AI product search development", "ecommerce chatbot development", "catalog automation", "personalization software development", "order support automation", "AI merchandising", "Shopify AI integration"],
+    "faqs": [
+      {"question": "Can AI improve product search without changing the commerce platform?", "answer": "Yes. A search and retrieval layer can index the authorized catalog, attributes, inventory, and content while the existing commerce platform remains authoritative for price, availability, cart, and order."},
+      {"question": "How are recommendations evaluated?", "answer": "We measure relevance, diversity, availability, conversion, average order value, margin, return rate, and customer feedback, with controlled experiments and merchandising constraints."},
+      {"question": "Can the support assistant access an order?", "answer": "After customer authentication, it can retrieve minimum order context and perform allowlisted actions such as status explanation or return initiation under policy and audit controls."}
+    ]
+  },
+  {
+    "slug": "retail",
+    "kind": "industry",
+    "name": "Retail",
+    "eyebrow": "AI for connected retail",
+    "headline": "Retail AI that connects stores, inventory, service, and demand",
+    "description": "Apply forecasting, task automation, visual intelligence, associate assistance, customer service, inventory workflows, and promotion operations across retail channels.",
+    "challenge": "Retail decisions depend on local demand, inventory accuracy, promotions, labor, supplier timing, returns, and customer behavior. Data arrives at different speeds, while store teams need simple actions rather than another dashboard.",
+    "approach": "Codestra turns signals into role-specific tasks and decisions. Forecasts and alerts are calibrated to the location and horizon, inventory and visual evidence is validated, and associates receive prioritized action with feedback captured at completion.",
+    "capabilities": ["Store and SKU demand forecasting", "Inventory, replenishment, and exception workflows", "Shelf, display, and loss-prevention vision assistance", "Associate copilots and customer-service automation"],
+    "outcomes": ["Earlier response to demand and inventory exceptions", "Less manual reporting and task coordination", "More consistent execution across locations", "Operational feedback connected to forecasts and plans"],
+    "keywords": ["retail AI solutions", "retail demand forecasting", "inventory automation AI", "store operations software", "retail computer vision", "associate AI copilot", "omnichannel service automation", "retail analytics development"],
+    "faqs": [
+      {"question": "Can AI forecast demand by store and product?", "answer": "Yes, when sufficient history and context exist. Models can include seasonality, promotions, holidays, local patterns, stockouts, and external signals with accuracy tracked by horizon and segment."},
+      {"question": "How can computer vision help stores?", "answer": "Defined visual checks can assist shelf availability, display compliance, queue or traffic insight, and asset inspection. Privacy, camera placement, false alarms, and human review are designed first."},
+      {"question": "Can store teams receive tasks on mobile devices?", "answer": "Yes. Prioritized tasks can include location, evidence, due time, instructions, and completion capture, with offline-aware behavior and escalation for unresolved exceptions."}
+    ]
+  },
+  {
+    "slug": "logistics",
+    "kind": "industry",
+    "name": "Logistics",
+    "eyebrow": "AI for logistics operations",
+    "headline": "Logistics AI that keeps orders, capacity, documents, and exceptions moving",
+    "description": "Build automation for quoting, order intake, carrier and vendor coordination, tracking, document processing, exception management, billing, and customer communication.",
+    "challenge": "Logistics teams reconstruct status from calls, emails, portals, EDI, telematics, and documents. Delayed updates and duplicated entry hide exceptions until service or margin has already been affected.",
+    "approach": "Codestra establishes an authoritative shipment or order timeline, normalizes external events, turns exceptions into owned tasks, and uses AI for extraction, classification, summaries, ETA assistance, and communication preparation.",
+    "capabilities": ["Order, quote, and carrier intake automation", "Tracking-event normalization and ETA workflows", "BOL, POD, invoice, and receipt processing", "Exception, SLA, billing, and customer communication"],
+    "outcomes": ["Faster order setup and document completion", "Earlier detection of service exceptions", "Less manual status gathering and re-entry", "Clearer service, cost, and margin visibility"],
+    "keywords": ["logistics AI solutions", "freight workflow automation", "shipment tracking integration", "POD document automation", "logistics customer portal", "carrier onboarding software", "freight brokerage AI", "logistics operations platform"],
+    "faqs": [
+      {"question": "Can Codestra connect telematics and carrier tracking providers?", "answer": "Yes. Provider events are verified, normalized into an internal tracking model, deduplicated, and linked to shipments, legs, stops, and exceptions without coupling operations to one provider schema."},
+      {"question": "Can AI extract data from BOL and POD documents?", "answer": "Yes. The pipeline can classify, extract, validate, attach source evidence, and route uncertain or conflicting fields to operations before billing or delivery completion."},
+      {"question": "How are late shipments detected?", "answer": "Planned milestones are compared with verified positions, events, ETA signals, geofences, and communication state. Thresholds create an exception with owner, severity, SLA, and response workflow."}
+    ]
+  },
+  {
+    "slug": "transportation",
+    "kind": "industry",
+    "name": "Transportation",
+    "eyebrow": "AI for transportation networks",
+    "headline": "Transportation AI for dispatch, visibility, service, and coordinated capacity",
+    "description": "Modernize dispatch, routing support, driver and carrier communication, trip visibility, safety administration, documents, billing, and customer workflows.",
+    "challenge": "Transportation operations make time-sensitive decisions across drivers, vehicles, stops, passengers or freight, providers, weather, traffic, compliance, and changing service conditions. Fragmented systems make recovery reactive.",
+    "approach": "Codestra models trips, loads, legs, stops, assignments, events, and exceptions explicitly. AI assists planning and communication, while dispatch authority, compliance, safety, and final assignment remain controlled and observable.",
+    "capabilities": ["Dispatch and assignment workflow assistance", "Route, ETA, stop, and geofence visibility", "Driver, carrier, and passenger communications", "Compliance, document, billing, and exception operations"],
+    "outcomes": ["Faster dispatch preparation and exception response", "Improved visibility across active transportation work", "Reduced repeated calls and status checks", "Traceable assignment, service, and compliance decisions"],
+    "keywords": ["transportation AI solutions", "dispatch automation software", "non emergency medical transportation software", "fleet workflow automation", "route optimization integration", "driver communication automation", "transportation management platform", "ETA prediction AI"],
+    "faqs": [
+      {"question": "Can AI dispatch vehicles or carriers automatically?", "answer": "AI can rank feasible assignments and prepare evidence, but live assignment should respect capacity, compliance, contracts, safety, geography, human authority, and rollback controls."},
+      {"question": "Can the system support passenger and freight workflows?", "answer": "Yes, with separate domain rules. Shared capabilities include identity, scheduling, stops, communications, tracking, documents, exceptions, and billing, while operational and compliance details remain distinct."},
+      {"question": "Can status events flow into Odoo and n8n?", "answer": "Yes. Verified internal events can update CRM or operations records through adapters and trigger governed n8n workflows through durable signed delivery."}
+    ]
+  },
+  {
+    "slug": "manufacturing",
+    "kind": "industry",
+    "name": "Manufacturing",
+    "eyebrow": "AI for manufacturing operations",
+    "headline": "Manufacturing AI that turns production signals into focused action",
+    "description": "Apply visual inspection, maintenance intelligence, production planning, document automation, knowledge, supplier workflows, and operational analytics.",
+    "challenge": "Manufacturing data spans machines, quality records, work instructions, ERP, maintenance, suppliers, and operator experience. Model outputs are ineffective when they do not fit line timing, safety, quality authority, or corrective-action workflows.",
+    "approach": "Codestra begins with a specific production or quality decision, validates the available signal, and integrates results into existing work orders, inspection, escalation, and root-cause processes with operator feedback and safe fallback.",
+    "capabilities": ["Visual quality inspection and evidence", "Predictive maintenance and anomaly workflows", "Production, demand, and material planning support", "Work instruction, supplier, and quality document AI"],
+    "outcomes": ["Earlier detection of quality and asset exceptions", "More focused maintenance and inspection effort", "Reduced manual production reporting", "Operational learning linked to corrective actions"],
+    "keywords": ["manufacturing AI solutions", "AI visual quality inspection", "predictive maintenance software", "factory workflow automation", "manufacturing document AI", "production planning AI", "industrial data platform", "smart manufacturing development"],
+    "faqs": [
+      {"question": "Can AI stop a production line automatically?", "answer": "Safety and production control require a validated control system and approved authority. AI normally begins as detection and recommendation with explicit operator or quality approval."},
+      {"question": "Can existing machine data be used?", "answer": "Yes, after assessing timestamp quality, sampling, maintenance history, operating modes, missing data, and whether the signal represents the target condition without leakage."},
+      {"question": "How does visual inspection handle new defects?", "answer": "The system needs an unknown or uncertain path. Low-confidence and out-of-distribution cases are preserved for quality review instead of being forced into a known class."}
+    ]
+  },
+  {
+    "slug": "automotive",
+    "kind": "industry",
+    "name": "Automotive",
+    "eyebrow": "AI for automotive operations",
+    "headline": "Automotive AI for sales, service, inspection, parts, and customer operations",
+    "description": "Improve dealership and service workflows with lead response, appointment automation, visual inspection, technician knowledge, parts intelligence, and customer communication.",
+    "challenge": "Automotive businesses coordinate customers, vehicles, inventory, parts, finance, technicians, inspections, warranties, and follow-up across dealership and manufacturer systems. Missing context creates delays and repeat visits.",
+    "approach": "Codestra links each interaction to the correct customer, vehicle, service, and evidence record. AI assists qualification, inspection, knowledge, summaries, and recommendations while certified staff approve mechanical and financial decisions.",
+    "capabilities": ["Vehicle sales lead and appointment automation", "Service intake, inspection, and estimate preparation", "Technician knowledge and repair-order assistance", "Parts, warranty, and customer follow-up workflows"],
+    "outcomes": ["Faster response to sales and service demand", "More complete service intake and evidence", "Reduced technician and advisor lookup time", "Consistent post-service communication and follow-up"],
+    "keywords": ["automotive AI solutions", "dealership CRM automation", "automotive service scheduling", "vehicle inspection AI", "technician AI copilot", "parts workflow automation", "car dealer chatbot", "automotive software development"],
+    "faqs": [
+      {"question": "Can AI inspect vehicle photos?", "answer": "It can assist with defined visible conditions and attach evidence to an inspection, but qualified professionals must verify safety, damage, mechanical, warranty, and valuation conclusions."},
+      {"question": "Can the system book service appointments?", "answer": "Yes. It can capture the vehicle and concern, check authorized capacity, prepare the appointment, send reminders, and route urgent or ambiguous cases to a service advisor."},
+      {"question": "Can this connect to a dealership management system?", "answer": "Yes where supported interfaces exist. We define customer and vehicle identity, record ownership, minimum data, command permissions, and reconciliation before enabling synchronization."}
+    ]
+  }
+]

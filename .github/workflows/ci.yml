@@ -14,6 +14,16 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+      - name: Secret scan (full history)
+        run: |
+          curl --fail --silent --show-error --location --output /tmp/gitleaks_8.24.3_linux_x64.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz
+          curl --fail --silent --show-error --location --output /tmp/gitleaks-checksums.txt https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_checksums.txt
+          cd /tmp && grep 'gitleaks_8.24.3_linux_x64.tar.gz' gitleaks-checksums.txt | sha256sum -c -
+          tar -xz -f /tmp/gitleaks_8.24.3_linux_x64.tar.gz -C /tmp
+          cd "$GITHUB_WORKSPACE"
+          /tmp/gitleaks detect --source . --log-opts='--all' --redact
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
@@ -21,9 +31,13 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+      - run: npm run test:deployment
       - run: npm run build
         env:
           VITE_API_ENDPOINT: https://api.example.com
+      - run: npm run test:seo
+      - run: node scripts/check-seo.mjs
+      - run: npm run test:performance
       - run: npm run audit:production
 
   container:
@@ -50,3 +64,33 @@ jobs:
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - id: browser
+        run: |
+          set -o pipefail
+          npm run test:e2e -- --project=mobile --project=tablet --project=desktop tests/e2e/seo-remediation.spec.ts 2>&1 | tee /tmp/codestra-browser.log
+      - name: Publish browser diagnostics
+        if: always()
+        run: node scripts/ci/summarize-web-check.mjs browser ${{ steps.browser.outcome }}
+      - name: Preserve browser failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: browser-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

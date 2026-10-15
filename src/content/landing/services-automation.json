@@ -1,0 +1,182 @@
+[
+  {
+    "slug": "predictive-analytics",
+    "kind": "service",
+    "name": "Predictive Analytics",
+    "eyebrow": "Forward-looking decisions",
+    "headline": "Predictive analytics that helps teams act before the result is obvious",
+    "description": "Turn historical and real-time data into forecasts, risk scores, demand signals, and next-best actions that fit directly into operational decisions.",
+    "challenge": "Dashboards explain what already happened but often leave teams to guess what comes next. Forecasts built in isolated spreadsheets are hard to reproduce, compare, monitor, or connect to the decisions that affect inventory, revenue, staffing, or risk.",
+    "approach": "Codestra defines the decision horizon, cost of error, available signals, and action threshold. We build an explainable baseline, test more advanced methods only when justified, and deliver predictions inside the tools where planning and intervention occur.",
+    "capabilities": ["Demand, revenue, and capacity forecasting", "Risk, churn, and propensity scoring", "Scenario modeling and sensitivity analysis", "Prediction APIs, dashboards, and alert workflows"],
+    "outcomes": ["Earlier visibility into demand and operational risk", "More consistent planning across teams", "Interventions focused on the highest-value cases", "Forecast performance tracked against real outcomes"],
+    "keywords": ["predictive analytics services", "AI forecasting company", "business forecasting software", "predictive modeling consulting", "customer churn prediction", "demand forecasting AI", "risk scoring development", "predictive analytics dashboard"],
+    "faqs": [
+      {"question": "What can predictive analytics forecast?", "answer": "Common targets include demand, revenue, inventory, workload, payment risk, churn, conversion, maintenance, delivery time, and staffing, as long as the historical data represents the decision context."},
+      {"question": "Will users understand why a prediction was made?", "answer": "We select explanation methods appropriate to the model and decision, expose the strongest contributing signals, and avoid presenting a score as certainty when uncertainty matters."},
+      {"question": "Can predictions appear inside our existing CRM or ERP?", "answer": "Yes. Scores, forecasts, and recommended actions can be delivered through APIs, scheduled jobs, dashboards, Odoo records, alerts, or task queues with controlled write permissions."}
+    ]
+  },
+  {
+    "slug": "computer-vision",
+    "kind": "service",
+    "name": "Computer Vision",
+    "eyebrow": "Visual intelligence",
+    "headline": "Computer vision that turns images and video into operational signals",
+    "description": "Build visual systems for inspection, detection, classification, counting, document capture, safety, and workflow verification with measurable accuracy.",
+    "challenge": "Visual review is slow and inconsistent when volume grows, but a vision model is only useful if camera conditions, privacy, edge latency, class imbalance, false alarms, and the downstream response are engineered together.",
+    "approach": "We start with the event the operation must detect, collect representative conditions, define annotation and privacy rules, establish human baselines, and integrate model output with review queues, alerts, devices, or business records.",
+    "capabilities": ["Object detection, classification, and segmentation", "Visual inspection and quality-control workflows", "OCR and image-to-record extraction", "Edge, cloud, and human-review deployment"],
+    "outcomes": ["Faster inspection across high-volume visual work", "Consistent detection criteria and evidence", "Reduced manual review for clear cases", "Traceable escalation for uncertain or high-risk results"],
+    "keywords": ["computer vision development company", "custom image recognition", "AI visual inspection", "object detection services", "video analytics development", "computer vision quality control", "OCR computer vision", "edge vision AI"],
+    "faqs": [
+      {"question": "Do we need a large labeled image dataset?", "answer": "Dataset needs depend on visual variation, target classes, available pretrained models, and accuracy requirements. We evaluate existing data and can design a staged collection and annotation process."},
+      {"question": "Can computer vision run near the camera?", "answer": "Yes. Edge inference can reduce latency and bandwidth or improve privacy. We compare device capability, update operations, connectivity, and model size before choosing edge, cloud, or hybrid deployment."},
+      {"question": "How are false detections handled?", "answer": "Thresholds follow the cost of each error type. Uncertain cases can enter a review queue, and reviewer decisions can become feedback for monitoring and future model improvement."}
+    ]
+  },
+  {
+    "slug": "natural-language-processing",
+    "kind": "service",
+    "name": "Natural Language Processing",
+    "eyebrow": "Language intelligence",
+    "headline": "NLP systems that turn unstructured language into usable business data",
+    "description": "Extract entities, classify intent, detect sentiment, route messages, compare text, and structure large language collections for search and automation.",
+    "challenge": "Critical information arrives in emails, notes, chats, tickets, contracts, and call summaries with inconsistent language. Keyword rules miss context, while unconstrained model output can be difficult to validate or use downstream.",
+    "approach": "Codestra defines a stable taxonomy and expected output schema, assembles representative examples, compares rules and model approaches, and validates confidence before connecting results to routing, reporting, search, or automated action.",
+    "capabilities": ["Text classification and intent detection", "Entity, topic, and relationship extraction", "Semantic similarity and duplicate detection", "Sentiment, urgency, and quality analysis"],
+    "outcomes": ["Structured data from high-volume text channels", "Faster and more accurate routing", "Better visibility into customer and operational themes", "Reduced manual tagging and repetitive review"],
+    "keywords": ["NLP development services", "natural language processing company", "text classification AI", "entity extraction software", "sentiment analysis development", "email intent classification", "semantic text analysis", "enterprise language AI"],
+    "faqs": [
+      {"question": "Can NLP work with industry-specific terminology?", "answer": "Yes. Taxonomies, examples, dictionaries, retrieval context, and evaluation sets can reflect your products, abbreviations, regulations, and internal language."},
+      {"question": "Can it analyze Spanish and other languages?", "answer": "Yes, provided the selected models and representative evaluation data support the target languages. We assess each language separately rather than assuming identical quality."},
+      {"question": "How is classification confidence used?", "answer": "High-confidence cases may be automated, medium-confidence cases can be assisted, and low-confidence or consequential cases can be routed to a reviewer. Thresholds are tuned to business error costs."}
+    ]
+  },
+  {
+    "slug": "speech-ai-voice-agents",
+    "kind": "service",
+    "name": "Speech AI & Voice Agents",
+    "eyebrow": "Conversational voice systems",
+    "headline": "Voice agents that understand the call, complete the task, and know when to transfer",
+    "description": "Design voice AI for inbound service, qualification, scheduling, reminders, collections, and internal call support with controlled telephony integration.",
+    "challenge": "Voice automation fails when latency, accents, interruptions, background noise, identity verification, disclosure, call-state recovery, and human transfer are treated as model features instead of a complete contact-center workflow.",
+    "approach": "We engineer the conversation, telephony events, speech recognition, synthesis, business tools, compliance prompts, transfer context, and failure recovery together. Launch begins with bounded call types and explicit escalation rules.",
+    "capabilities": ["Inbound and outbound voice workflow design", "Real-time speech recognition and synthesis", "CRM, scheduling, payment, and ticket actions", "Warm transfer, call summary, and quality monitoring"],
+    "outcomes": ["Faster handling of repetitive call types", "Consistent qualification and appointment capture", "Complete context when a person takes over", "Measured containment, latency, transfer, and resolution quality"],
+    "keywords": ["AI voice agent development", "voice AI company", "conversational AI phone system", "AI call center automation", "automated appointment voice agent", "speech AI integration", "CRM voice agent", "multilingual voice bot"],
+    "faqs": [
+      {"question": "Can a voice agent transfer to a live contact-center agent?", "answer": "Yes. A warm transfer can include the caller identity, reason, completed verification, captured details, transcript, summary, and recommended next step."},
+      {"question": "How do you handle disclosure and call recording rules?", "answer": "The call flow supports jurisdiction-appropriate disclosures, consent events, recording controls, retention, and policy routing. Legal requirements must be approved for each operating region before activation."},
+      {"question": "Can the agent work with existing SIP or contact-center infrastructure?", "answer": "Often yes. We integrate through supported SIP, telephony, event, and CRM interfaces while preserving clear boundaries between the voice provider, orchestration layer, and systems of record."}
+    ]
+  },
+  {
+    "slug": "intelligent-document-processing",
+    "kind": "service",
+    "name": "Intelligent Document Processing",
+    "eyebrow": "Document intelligence",
+    "headline": "Document automation that converts messy files into verified business records",
+    "description": "Classify documents, extract fields and tables, validate evidence, route exceptions, and create structured records from PDFs, images, email attachments, and forms.",
+    "challenge": "Traditional templates break when layouts vary, while pure AI extraction can confidently return incorrect values. Documents also carry sensitive information, duplicate submissions, version conflicts, and evidence that must remain linked to the final record.",
+    "approach": "Codestra builds a secure ingestion pipeline with file validation, classification, extraction, confidence scoring, business-rule checks, duplicate detection, human review, and an immutable link between source evidence and approved data.",
+    "capabilities": ["Document classification and secure ingestion", "Field, table, and entity extraction", "Validation rules, confidence, and review queues", "CRM, ERP, storage, and workflow integration"],
+    "outcomes": ["Less manual keying from documents", "Faster turnaround for complete submissions", "Clear exception handling for uncertain data", "Traceable source evidence for every approved record"],
+    "keywords": ["intelligent document processing", "AI document extraction", "invoice document automation", "PDF data extraction service", "document classification AI", "OCR workflow automation", "forms processing automation", "enterprise document AI"],
+    "faqs": [
+      {"question": "What document formats can be processed?", "answer": "Common inputs include native PDFs, scanned PDFs, images, office exports, email attachments, and photographed forms. File type, quality, size, malware, and encryption checks occur before extraction."},
+      {"question": "What happens when a field is uncertain?", "answer": "Confidence and business validation determine whether the document proceeds, requests missing evidence, or enters a reviewer queue with the source region highlighted."},
+      {"question": "Can extracted data be written to Odoo?", "answer": "Yes. An adapter can map approved fields to allowlisted Odoo models after validation, idempotency, tenant checks, and evidence storage have succeeded."}
+    ]
+  },
+  {
+    "slug": "workflow-automation",
+    "kind": "service",
+    "name": "Workflow Automation",
+    "eyebrow": "Connected work orchestration",
+    "headline": "Workflow automation that removes handoff friction without losing control",
+    "description": "Automate triggers, assignments, approvals, notifications, data movement, and follow-up across the applications and teams that complete a business process.",
+    "challenge": "Work often depends on inboxes, spreadsheets, memory, and manual copying between systems. Simple automations then multiply without ownership, error handling, auditability, or a reliable way to recover when a dependency fails.",
+    "approach": "We map the current state, define authoritative records and commands, separate human decisions from mechanical steps, and build observable workflows with idempotency, retries, timeouts, exception queues, and operating ownership.",
+    "capabilities": ["Trigger, state, and handoff design", "Cross-application data and task orchestration", "Approvals, reminders, and SLA escalation", "Retries, exception queues, and audit logs"],
+    "outcomes": ["Fewer manual transfers and status checks", "Shorter cycle time across teams", "Visible ownership for stalled work", "Reliable recovery from failed integrations"],
+    "keywords": ["workflow automation services", "business workflow automation", "n8n automation company", "enterprise workflow integration", "approval workflow automation", "CRM workflow automation", "process orchestration services", "custom automation development"],
+    "faqs": [
+      {"question": "Which workflows should be automated first?", "answer": "Good first candidates are frequent, rule-bounded, measurable, and currently delayed by repetitive transfer or checking. We avoid automating unstable processes before roles and decisions are clear."},
+      {"question": "Can n8n be used for production automation?", "answer": "Yes, when workflows use version control, environment separation, credential management, idempotency, error handling, observability, and clear ownership rather than ad hoc visual scripts."},
+      {"question": "How do you prevent duplicate actions?", "answer": "Commands carry idempotency keys, integrations record delivery state, consumers deduplicate events, and retries are designed so a timeout does not create a second record or payment."}
+    ]
+  },
+  {
+    "slug": "business-process-automation",
+    "kind": "service",
+    "name": "Business Process Automation",
+    "eyebrow": "End-to-end process redesign",
+    "headline": "Business process automation that improves the whole cycle, not one task",
+    "description": "Redesign and automate multi-team processes from intake to completion, combining software, AI, rules, integrations, and human decisions around one measurable outcome.",
+    "challenge": "Automating one task can move the bottleneck downstream or make a broken process run faster. End-to-end work crosses policies, roles, exceptions, legacy tools, and customer touchpoints that must be redesigned as a system.",
+    "approach": "Codestra maps value, wait time, rework, decision rights, data ownership, and exceptions across the full process. We simplify before automating, then deliver staged capabilities with process metrics and operational adoption built in.",
+    "capabilities": ["Current-state and value-stream mapping", "Policy, role, and exception redesign", "Automation and application implementation", "Process analytics and continuous improvement"],
+    "outcomes": ["Lower end-to-end cycle time", "Reduced rework and preventable exceptions", "Consistent execution across teams and locations", "Process performance visible from intake to completion"],
+    "keywords": ["business process automation company", "end to end process automation", "digital process transformation", "enterprise automation consulting", "operational workflow redesign", "BPA development services", "process digitization company", "intelligent automation services"],
+    "faqs": [
+      {"question": "How is business process automation different from task automation?", "answer": "Task automation accelerates one activity. Business process automation redesigns the full outcome across roles, systems, decisions, waiting time, exceptions, and customer experience."},
+      {"question": "Do we need to replace our existing systems?", "answer": "Not always. A process can often be improved through an orchestration layer, targeted interfaces, APIs, and stronger records. Replacement is considered when the system itself blocks control or scale."},
+      {"question": "How is process improvement measured?", "answer": "Measures can include total cycle time, touch time, first-pass completion, exception rate, rework, SLA performance, cost per case, customer effort, and business outcome."}
+    ]
+  },
+  {
+    "slug": "robotic-process-automation",
+    "kind": "service",
+    "name": "Robotic Process Automation",
+    "eyebrow": "Controlled legacy automation",
+    "headline": "RPA for repetitive system work—with a plan beyond fragile scripts",
+    "description": "Automate stable desktop and browser tasks when APIs are unavailable, while adding credential controls, exception handling, monitoring, and a migration path.",
+    "challenge": "UI bots can deliver quick savings but become brittle when screens, timing, data, or authentication changes. Unmanaged bots also hide credentials, duplicate actions, and create a new layer of operational dependency.",
+    "approach": "We verify that RPA is the right boundary, stabilize inputs, isolate bot identities, design deterministic steps and checkpoints, and route exceptions to people. Every automation has monitoring, recovery instructions, and an API replacement assessment.",
+    "capabilities": ["RPA candidate and stability assessment", "Desktop and browser automation", "Credential vault and service-identity design", "Bot monitoring, recovery, and API migration plan"],
+    "outcomes": ["Reduced repetitive work in legacy applications", "Controlled bot access and evidence", "Faster detection and recovery from UI changes", "A documented path toward more durable integration"],
+    "keywords": ["robotic process automation services", "RPA development company", "desktop automation business", "legacy system automation", "browser task automation", "RPA integration services", "attended automation", "unattended bot development"],
+    "faqs": [
+      {"question": "When should RPA be used instead of an API?", "answer": "RPA is appropriate when a stable application has no safe integration interface and the task is deterministic. A supported API is usually preferable for durability, observability, and transaction control."},
+      {"question": "Can RPA handle exceptions?", "answer": "Yes, but exceptions must be designed explicitly. The bot should stop safely, preserve state and evidence, notify an owner, and support a controlled resume rather than attempting unpredictable recovery."},
+      {"question": "How are bot credentials protected?", "answer": "Bots use dedicated least-privilege identities with secrets stored outside scripts, controlled rotation, environment separation, access logging, and no shared employee passwords."}
+    ]
+  },
+  {
+    "slug": "sales-automation",
+    "kind": "service",
+    "name": "Sales Automation",
+    "eyebrow": "Revenue workflow automation",
+    "headline": "Sales automation that improves speed without turning outreach into noise",
+    "description": "Connect lead capture, enrichment, qualification, routing, follow-up, proposals, CRM hygiene, and pipeline signals into a disciplined revenue workflow.",
+    "challenge": "Sales teams lose qualified demand through slow response, duplicate records, unclear ownership, inconsistent follow-up, and poor CRM data. Adding more automated messages without consent and prioritization can damage trust and deliverability.",
+    "approach": "Codestra designs the revenue command path from source to accepted CRM record. We add deduplication, attribution, scoring, routing, SLA tasks, approved sequences, opt-out controls, and visibility into each handoff and conversion stage.",
+    "capabilities": ["Lead capture, validation, and deduplication", "Qualification, scoring, and territory routing", "CRM tasks, sequences, and proposal workflows", "Pipeline attribution and response-time analytics"],
+    "outcomes": ["Faster response to qualified demand", "Cleaner CRM records and ownership", "Consistent follow-up with consent controls", "Better visibility into source-to-revenue conversion"],
+    "keywords": ["sales automation services", "CRM sales automation", "lead routing automation", "AI lead qualification", "Odoo sales automation", "sales pipeline automation", "automated lead follow up", "revenue operations automation"],
+    "faqs": [
+      {"question": "Can sales automation send leads to a specific Odoo campaign?", "answer": "Yes. The intake command can carry an allowlisted campaign code, attribution, consent, and qualification fields. A private adapter validates and maps them before creating or updating the CRM record."},
+      {"question": "How are duplicate leads handled?", "answer": "We normalize contact and company identifiers, apply tenant-specific matching rules, use idempotency for repeated submissions, and choose an explicit merge, update, or review policy."},
+      {"question": "Can AI qualify leads automatically?", "answer": "AI can extract and score signals, but qualification rules, evidence, confidence, protected attributes, and human review must be designed around your sales policy and legal requirements."}
+    ]
+  },
+  {
+    "slug": "marketing-automation",
+    "kind": "service",
+    "name": "Marketing Automation",
+    "eyebrow": "Connected demand operations",
+    "headline": "Marketing automation built around consent, attribution, and useful journeys",
+    "description": "Orchestrate audiences, content, lifecycle messages, lead capture, scoring, handoff, and measurement across marketing and CRM systems without losing governance.",
+    "challenge": "Marketing stacks accumulate disconnected forms, lists, pixels, campaigns, and automation rules. Identity fragments across tools, consent becomes ambiguous, attribution conflicts, and teams optimize activity rather than qualified business outcomes.",
+    "approach": "We define the event and identity model, consent source, campaign taxonomy, lifecycle states, and CRM handoff first. Automation then uses reliable triggers, suppression rules, reusable content, and measurement tied to accepted demand and revenue.",
+    "capabilities": ["Lifecycle and audience automation", "Consent, preference, and suppression workflows", "Campaign attribution and CRM synchronization", "AI-assisted content operations and experimentation"],
+    "outcomes": ["Consistent journeys across channels", "Cleaner consent and audience records", "Faster marketing-to-sales handoff", "Attribution connected to qualified pipeline outcomes"],
+    "keywords": ["marketing automation services", "CRM marketing integration", "AI marketing automation", "lead nurturing automation", "campaign attribution system", "Odoo marketing automation", "customer journey automation", "marketing operations consulting"],
+    "faqs": [
+      {"question": "Can marketing forms use the same secure intake as sales forms?", "answer": "Yes. Different landing pages can submit the same versioned command with campaign, source, UTM, consent, and intent fields, while Kong and the CRM adapter enforce one controlled policy."},
+      {"question": "How do you preserve consent across tools?", "answer": "Consent is captured as evidence with purpose, timestamp, source, policy version, and channel. Downstream systems receive explicit states rather than inferring permission from list membership."},
+      {"question": "Can AI help create campaign content?", "answer": "Yes, within a governed review workflow. AI can draft variants from approved claims and brand context, while people approve sensitive statements, audience targeting, and final activation."}
+    ]
+  }
+]

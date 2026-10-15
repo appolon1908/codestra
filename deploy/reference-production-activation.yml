@@ -1,0 +1,494 @@
+name: Plan or activate verified production release
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Plan is non-invasive; activate requires verified runtime evidence
+        required: true
+        default: plan
+        type: choice
+        options:
+          - plan
+          - activate
+      source_sha:
+        description: Exact released main SHA used to build the image
+        required: true
+        type: string
+      image_digest:
+        description: Registry digest in sha256:<64 lowercase hex> form
+        required: true
+        type: string
+      runtime_manifest_sha256:
+        description: SHA-256 of deploy/runtime-paths.production.json
+        required: true
+        type: string
+      release_manifest_path:
+        description: Reviewed deploy/releases/<source-sha>.json path
+        required: true
+        type: string
+      release_manifest_sha256:
+        description: SHA-256 of the reviewed release manifest
+        required: true
+        type: string
+      confirmation:
+        description: Use PLAN_ONLY or DEPLOY_VERIFIED_RUNTIME
+        required: true
+        default: PLAN_ONLY
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codestra-production-deployment
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: read
+    outputs:
+      image_ref: ${{ steps.gate.outputs.image_ref }}
+      release_root: ${{ steps.gate.outputs.release_root }}
+      releases_dir: ${{ steps.gate.outputs.releases_dir }}
+      current_symlink: ${{ steps.gate.outputs.current_symlink }}
+      compose_project: ${{ steps.gate.outputs.compose_project }}
+      service_name: ${{ steps.gate.outputs.service_name }}
+      loopback_port: ${{ steps.gate.outputs.loopback_port }}
+      health_path: ${{ steps.gate.outputs.health_path }}
+      reverse_proxy: ${{ steps.gate.outputs.reverse_proxy }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - id: gate
+        name: Validate source, digest and runtime evidence
+        env:
+          MODE: ${{ inputs.mode }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          IMAGE_DIGEST: ${{ inputs.image_digest }}
+          MANIFEST_SHA256: ${{ inputs.runtime_manifest_sha256 }}
+          RELEASE_MANIFEST_PATH: ${{ inputs.release_manifest_path }}
+          RELEASE_MANIFEST_SHA256: ${{ inputs.release_manifest_sha256 }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || {
+            echo "Deployment workflow must be dispatched from main." >&2
+            exit 1
+          }
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+          [[ "$IMAGE_DIGEST" =~ ^sha256:[a-f0-9]{64}$ ]] || exit 1
+          [[ "$MANIFEST_SHA256" =~ ^[a-f0-9]{64}$ ]] || exit 1
+          [[ "$RELEASE_MANIFEST_PATH" =~ ^deploy/releases/[a-f0-9]{40}\.json$ ]] || exit 1
+          [[ "$RELEASE_MANIFEST_SHA256" =~ ^[a-f0-9]{64}$ ]] || exit 1
+          [[ "$RELEASE_MANIFEST_PATH" == "deploy/releases/${SOURCE_SHA}.json" ]] || {
+            echo "Release manifest path must match source_sha." >&2
+            exit 1
+          }
+
+          git fetch --no-tags origin \
+            +refs/heads/main:refs/remotes/origin/main
+          git cat-file -e "${SOURCE_SHA}^{commit}"
+          git merge-base --is-ancestor "$SOURCE_SHA" origin/main || {
+            echo "source_sha must remain in the reviewed main lineage." >&2
+            exit 1
+          }
+
+          actual_manifest_sha="$(
+            sha256sum deploy/runtime-paths.production.json | awk '{print $1}'
+          )"
+          [[ "$actual_manifest_sha" == "$MANIFEST_SHA256" ]] || {
+            echo "Runtime manifest digest mismatch." >&2
+            exit 1
+          }
+
+          actual_release_manifest_sha="$(
+            sha256sum "$RELEASE_MANIFEST_PATH" | awk '{print $1}'
+          )"
+          [[ "$actual_release_manifest_sha" == "$RELEASE_MANIFEST_SHA256" ]] || {
+            echo "Release manifest digest mismatch." >&2
+            exit 1
+          }
+
+          node scripts/deploy/validate-release-manifest.mjs \
+            --file "$RELEASE_MANIFEST_PATH" \
+            --source-sha "$SOURCE_SHA" \
+            --image-digest "$IMAGE_DIGEST"
+          node scripts/deploy/validate-runtime-manifest.mjs --mode scaffold
+          if [[ "$MODE" == "activate" ]]; then
+            [[ "$CONFIRMATION" == "DEPLOY_VERIFIED_RUNTIME" ]] || {
+              echo "Activation confirmation is invalid." >&2
+              exit 1
+            }
+            node scripts/deploy/validate-runtime-manifest.mjs --mode deploy
+          else
+            [[ "$CONFIRMATION" == "PLAN_ONLY" ]] || {
+              echo "Plan confirmation is invalid." >&2
+              exit 1
+            }
+          fi
+
+          image_ref="ghcr.io/${GITHUB_REPOSITORY,,}@${IMAGE_DIGEST}"
+          echo "image_ref=$image_ref" >> "$GITHUB_OUTPUT"
+          echo "release_root=$(jq -r '.releaseRoot' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "releases_dir=$(jq -r '.releasesDir' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "current_symlink=$(jq -r '.currentSymlink' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "compose_project=$(jq -r '.composeProject' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "service_name=$(jq -r '.serviceName' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "loopback_port=$(jq -r '.loopbackPort' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "health_path=$(jq -r '.healthPath' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+          echo "reverse_proxy=$(jq -r '.reverseProxy' deploy/runtime-paths.production.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6
+        with:
+          cosign-release: v3.0.6
+
+      - name: Log in to GHCR for signature verification
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify immutable image signature and signer workflow
+        env:
+          IMAGE_REF: ${{ steps.gate.outputs.image_ref }}
+          SIGNATURE_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/release-image.yml@refs/heads/main
+          SIGNATURE_ISSUER: https://token.actions.githubusercontent.com
+        run: |
+          set -Eeuo pipefail
+          cosign verify \
+            --certificate-identity "$SIGNATURE_IDENTITY" \
+            --certificate-oidc-issuer "$SIGNATURE_ISSUER" \
+            "$IMAGE_REF" > deployment-signature-verification.json
+          test -s deployment-signature-verification.json
+
+      - name: Upload signature verification evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: deployment-signature-verification-${{ github.run_id }}
+          path: deployment-signature-verification.json
+          if-no-files-found: error
+          retention-days: 30
+
+  plan:
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - name: Write non-invasive deployment plan
+        env:
+          MODE: ${{ inputs.mode }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          IMAGE_REF: ${{ needs.gate.outputs.image_ref }}
+          RUNTIME_MANIFEST_SHA256: ${{ inputs.runtime_manifest_sha256 }}
+          RELEASE_MANIFEST_PATH: ${{ inputs.release_manifest_path }}
+          RELEASE_MANIFEST_SHA256: ${{ inputs.release_manifest_sha256 }}
+        run: |
+          set -Eeuo pipefail
+          node - <<'NODE'
+          const { writeFileSync } = require('node:fs')
+          const plan = {
+            schemaVersion: 1,
+            mode: process.env.MODE,
+            sourceSha: process.env.SOURCE_SHA,
+            imageRef: process.env.IMAGE_REF,
+            runtimeManifestSha256: process.env.RUNTIME_MANIFEST_SHA256,
+            releaseManifestPath: process.env.RELEASE_MANIFEST_PATH,
+            releaseManifestSha256: process.env.RELEASE_MANIFEST_SHA256,
+            createdAt: new Date().toISOString(),
+            remoteWritesPerformed: false,
+            activationRequested: process.env.MODE === 'activate',
+          }
+          writeFileSync('deployment-plan.json', `${JSON.stringify(plan, null, 2)}\n`)
+          NODE
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: deployment-plan-${{ github.run_id }}
+          path: deployment-plan.json
+          if-no-files-found: error
+          retention-days: 30
+
+  activate:
+    if: ${{ inputs.mode == 'activate' }}
+    needs: [gate, plan]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - name: Validate production secrets and SSH identity
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          GHCR_USER: ${{ secrets.GHCR_USER }}
+          GHCR_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$DEPLOY_HOST" == "49.12.145.107" ]] || exit 1
+          [[ "$DEPLOY_USER" =~ ^[A-Za-z0-9_.-]+$ ]] || exit 1
+          [[ "$GHCR_USER" =~ ^[A-Za-z0-9_.-]+$ ]] || exit 1
+          [[ -n "$GHCR_TOKEN" ]] || exit 1
+
+      - name: Configure pinned SSH trust
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          set -Eeuo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -F "$DEPLOY_HOST" -f ~/.ssh/known_hosts >/dev/null
+
+      - name: Repeat strict read-only runtime preflight
+        env:
+          RELEASE_ROOT: ${{ needs.gate.outputs.release_root }}
+          RELEASES_DIR: ${{ needs.gate.outputs.releases_dir }}
+          CURRENT_SYMLINK: ${{ needs.gate.outputs.current_symlink }}
+          COMPOSE_PROJECT: ${{ needs.gate.outputs.compose_project }}
+          SERVICE_NAME: ${{ needs.gate.outputs.service_name }}
+          LOOPBACK_PORT: ${{ needs.gate.outputs.loopback_port }}
+          REVERSE_PROXY: ${{ needs.gate.outputs.reverse_proxy }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+          printf -v remote_command \
+            'bash -s -- %q %q %q %q %q %q %q %q' \
+            "$RELEASE_ROOT" \
+            "$RELEASES_DIR" \
+            "$CURRENT_SYMLINK" \
+            "$COMPOSE_PROJECT" \
+            "$SERVICE_NAME" \
+            "$LOOPBACK_PORT" \
+            "$REVERSE_PROXY" \
+            "activation"
+
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$remote_command" \
+            < scripts/deploy/read-only-preflight.sh \
+            | tee activation-preflight.txt
+
+          grep -Fx 'PREFLIGHT_READINESS=PASS' activation-preflight.txt
+          grep -Fx 'PREFLIGHT_REMOTE_WRITE_COUNT=0' activation-preflight.txt
+
+      - name: Stage versioned activation files
+        env:
+          RELEASE_ROOT: ${{ needs.gate.outputs.release_root }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          staging_dir="${RELEASE_ROOT}/.incoming/${SOURCE_SHA}-${GITHUB_RUN_ID}"
+          printf '%s\n' "$staging_dir" > staging-dir.txt
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+          printf -v create_command 'install -d -m 0750 %q' "$staging_dir"
+
+          compose_sha="$(sha256sum deploy/compose.production.yaml | awk '{print $1}')"
+          activate_sha="$(sha256sum scripts/deploy/activate-release.sh | awk '{print $1}')"
+          rollback_sha="$(sha256sum scripts/deploy/rollback-release.sh | awk '{print $1}')"
+          {
+            printf '%s  compose.production.yaml\n' "$compose_sha"
+            printf '%s  activate-release.sh\n' "$activate_sha"
+            printf '%s  rollback-release.sh\n' "$rollback_sha"
+          } > staging-checksums.txt
+
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$create_command"
+          scp "${ssh_options[@]}" \
+            deploy/compose.production.yaml \
+            scripts/deploy/activate-release.sh \
+            scripts/deploy/rollback-release.sh \
+            staging-checksums.txt \
+            "${DEPLOY_USER}@${DEPLOY_HOST}:${staging_dir}/"
+
+          printf -v verify_command 'cd %q && sha256sum --check --strict staging-checksums.txt' "$staging_dir"
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$verify_command"
+
+      - name: Activate digest with automatic rollback
+        env:
+          RELEASE_ROOT: ${{ needs.gate.outputs.release_root }}
+          RELEASES_DIR: ${{ needs.gate.outputs.releases_dir }}
+          CURRENT_SYMLINK: ${{ needs.gate.outputs.current_symlink }}
+          COMPOSE_PROJECT: ${{ needs.gate.outputs.compose_project }}
+          SERVICE_NAME: ${{ needs.gate.outputs.service_name }}
+          LOOPBACK_PORT: ${{ needs.gate.outputs.loopback_port }}
+          HEALTH_PATH: ${{ needs.gate.outputs.health_path }}
+          IMAGE_REF: ${{ needs.gate.outputs.image_ref }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          GHCR_USER: ${{ secrets.GHCR_USER }}
+          GHCR_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+        run: |
+          set -Eeuo pipefail
+          staging_dir="$(cat staging-dir.txt)"
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+          printf -v activate_command \
+            'bash %q %q %q %q %q %q %q %q %q %q %q %q' \
+            "${staging_dir}/activate-release.sh" \
+            "$RELEASE_ROOT" \
+            "$RELEASES_DIR" \
+            "$CURRENT_SYMLINK" \
+            "$COMPOSE_PROJECT" \
+            "$SERVICE_NAME" \
+            "$LOOPBACK_PORT" \
+            "$HEALTH_PATH" \
+            "$IMAGE_REF" \
+            "$SOURCE_SHA" \
+            "$GHCR_USER" \
+            "$staging_dir"
+
+          printf '%s\n' "$GHCR_TOKEN" \
+            | ssh "${ssh_options[@]}" \
+                "${DEPLOY_USER}@${DEPLOY_HOST}" \
+                "$activate_command" \
+            | tee activation-report.txt
+
+          grep -Fx 'ACTIVATION_STATUS=PASS' activation-report.txt
+          release_dir="$(
+            awk -F= '$1 == "RELEASE_DIR" { print substr($0, index($0, "=") + 1) }' \
+              activation-report.txt
+          )"
+          [[ "$release_dir" == "$RELEASES_DIR/"* ]] || {
+            echo "Activation report returned an unsafe release path." >&2
+            exit 1
+          }
+          printf '%s\n' "$release_dir" > release-dir.txt
+
+      - id: public_smoke
+        name: Verify public HTTPS routes
+        continue-on-error: true
+        run: |
+          set -Eeuo pipefail
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-all-errors \
+            https://codestra.co/en/ >/dev/null
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-all-errors \
+            https://www.codestra.co/en/ >/dev/null
+
+      - name: Roll back after public smoke failure
+        if: ${{ steps.public_smoke.outcome == 'failure' }}
+        continue-on-error: true
+        env:
+          RELEASE_ROOT: ${{ needs.gate.outputs.release_root }}
+          RELEASES_DIR: ${{ needs.gate.outputs.releases_dir }}
+          CURRENT_SYMLINK: ${{ needs.gate.outputs.current_symlink }}
+          COMPOSE_PROJECT: ${{ needs.gate.outputs.compose_project }}
+          SERVICE_NAME: ${{ needs.gate.outputs.service_name }}
+          LOOPBACK_PORT: ${{ needs.gate.outputs.loopback_port }}
+          HEALTH_PATH: ${{ needs.gate.outputs.health_path }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -Eeuo pipefail
+          release_dir="$(cat release-dir.txt)"
+          [[ "$release_dir" == "$RELEASES_DIR/"* ]] || exit 1
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o ForwardAgent=no
+            -o ClearAllForwardings=yes
+            -o RequestTTY=no
+            -o ConnectTimeout=10
+          )
+          printf -v rollback_command \
+            'bash %q %q %q %q %q %q %q %q %q' \
+            "${release_dir}/rollback-release.sh" \
+            "$RELEASE_ROOT" \
+            "$RELEASES_DIR" \
+            "$CURRENT_SYMLINK" \
+            "$COMPOSE_PROJECT" \
+            "$SERVICE_NAME" \
+            "$LOOPBACK_PORT" \
+            "$HEALTH_PATH" \
+            "$release_dir"
+
+          ssh "${ssh_options[@]}" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "$rollback_command" \
+            | tee public-smoke-rollback.txt
+
+          grep -Fx 'ROLLBACK_STATUS=PASS' public-smoke-rollback.txt
+
+      - name: Fail activation after public smoke rollback
+        if: ${{ steps.public_smoke.outcome == 'failure' }}
+        run: |
+          echo "Public HTTPS verification failed; rollback was requested." >&2
+          exit 1
+
+      - name: Upload activation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: production-activation-${{ github.run_id }}
+          path: |
+            activation-preflight.txt
+            activation-report.txt
+            staging-checksums.txt
+            release-dir.txt
+            public-smoke-rollback.txt
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,0 +1,12 @@
+{
+  "expectedServicePages": 30,
+  "expectedIndustryPages": 25,
+  "strategy": "Data-driven pages with unique workflow language, capabilities, outcomes, keywords, FAQs, structured data, crawlable HTML, internal linking, and sitemap coverage.",
+  "reviewRules": [
+    "No duplicate slug or headline",
+    "At least four capabilities and four outcomes per page",
+    "At least six intent-relevant keywords per page",
+    "At least three useful FAQs per page",
+    "Every page must have generated HTML and a sitemap entry"
+  ]
+}
