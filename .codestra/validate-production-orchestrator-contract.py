@@ -541,6 +541,7 @@ APPROVED_COMPLEX_SCRIPT_SHA256: dict[str, dict[str, str]] = {
         ),
     },
     "appolon1908/codestra": {
+        'scripts/check-design-system.mjs': '383e0133f640cb6b7fe5e295b643ff99f06f1d7a4fb54ea05d0a7704b24bac27',
         'scripts/ci/summarize-web-check.mjs': '836724810d1e64ca62b180f675ae505ec068a0340d8591000fae87ee3460b527',
         'services/lead-intake-adapter/scripts/migrate.py': 'a002a23f08398b779f05ac416317ecf065bd3011a8372efc75ce0512c2401d71',
         'scripts/ci/check-deployment-scaffold.mjs': 'b9cfbea1cebea2ecba4da0c288a2f45440c28db88b8ed73449de0c1ce0b724cb',
@@ -671,8 +672,8 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
     "appolon1908/codestra": {
-        '.github/workflows/ci.yml': 'a9615f56dec568343b967b19fd161928258ee1b1e88f290486768db68375ebe8',
-        '.github/workflows/web-quality.yml': 'ef53fcfcf47d6b7c1c88fa5901e5c15ebd97232458693b10c8a83af46b60ae2d',
+        '.github/workflows/ci.yml': '1d55c321b78584fa491c45e8791e92f6d2931fd4227adf25d2f3c4295aa40ec0',
+        '.github/workflows/web-quality.yml': '9635ab0df5cdbfe6832512b824f07f43b218ba5160863d3d38c7dae5586e8e9d',
         '.github/workflows/lead-intake-quality.yml': '25e07c2dce0afb2780818d7a0bbfcd442287f1d567d91ab007f92fdf1c0535eb',
         '.github/workflows/ghcr-readonly-preflight.yml': '88e1789d8cb421a2a9d8be03e4c4e9525467c66d4853e55c090fe165dd6cacf9',
     },

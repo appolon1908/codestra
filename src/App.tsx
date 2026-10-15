@@ -2,7 +2,7 @@ import { featureRoutes } from "./features/FeatureRoutes";
 import AuthProvider from "./Providers/AuthProvider";
 import { SessionProvider } from "./Providers/SessionProvider";
 import ChatWidgetBoundary from "./Components/ChatWidgetBoundary";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, type PropsWithChildren } from "react";
 import QueryProvider from "./Providers/QueryProvider";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -74,6 +74,10 @@ const PlatformHub = lazy(() => import("./Pages/Platform/PlatformHub"));
 const AllRoutes = lazy(() => import("./Routes/AllRoutes"));
 const LegalPage = lazy(() => import("./Pages/Legal/LegalPage"));
 const Terms = lazy(() => import("./Pages/Terms/Terms"));
+const MarketingRoute = ({ children }: PropsWithChildren) => (
+  <div className="marketing-route">{children}</div>
+);
+
 function App() {
   const { t } = useTranslation("common");
   useEffect(() => { AOS.init(); }, []);
@@ -83,75 +87,75 @@ function App() {
         <BrowserRouter>
           <ChatWidgetBoundary><SessionProvider><Suspense
             fallback={
-              <div className="min-h-screen bg-[#080808]" aria-label={t("loading")} />
+              <div className="route-loader route-loader--corporate" aria-label={t("loading")} />
             }
           >
             <Routes>
-              {featureRoutes.map(({path, element}) => <Route key={path} path={path} element={element} />)}
-              <Route path="/services/:slug" element={<LandingPage kind="service" />} />
-              <Route path="/industries/:slug" element={<LandingPage kind="industry" />} />
-              <Route path="/solutions" element={<LandingIndex kind="service" />} />
+              {featureRoutes.map(({path, element}) => <Route key={path} path={path} element={<MarketingRoute>{element}</MarketingRoute>} />)}
+              <Route path="/services/:slug" element={<MarketingRoute><LandingPage kind="service" /></MarketingRoute>} />
+              <Route path="/industries/:slug" element={<MarketingRoute><LandingPage kind="industry" /></MarketingRoute>} />
+              <Route path="/solutions" element={<MarketingRoute><LandingIndex kind="service" /></MarketingRoute>} />
               <Route path="/auth/*" element={<AuthProvider element={<AllRoutes />} />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/sms" element={<LegalPage kind="sms" />} />
-              <Route path="/sms-terms" element={<LegalPage kind="smsTerms" />} />
-              <Route path="/contact-information" element={<LegalPage kind="contactInformation" />} />
-              <Route path="/:locale" element={<LocaleBoundary />}>
-                {featureRoutes.map(({path, element}) => <Route key={path} path={path.replace(/^\//, "")} element={element} />)}
-                <Route index element={<Home />} />
-                <Route path="connected-systems" element={<ConnectedHome />} />
-                <Route path="systems" element={<ModernHome />} />
-                <Route path="solutions" element={<LandingIndex kind="service" />} />
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
-                <Route path="about" element={<AboutUs />} />
-                <Route path="case-studies" element={<CaseStudies />} />
-                <Route path="contact" element={<ContactUs />} />
-                <Route path="contact/sales" element={<ContactSales />} />
-                <Route path="contact/support" element={<ContactSupport />} />
-                <Route path="electronic-billing" element={<ElectronicBilling />} />
-                <Route path="electronic-billing/form" element={<ElectronicBillingForm />} />
-                <Route path="hiring/positions" element={<HiringPosition />} />
-                <Route path="services" element={<Services />} />
-                <Route path="services/software-development" element={<ServiceDetailPage kind="software-development" />} />
-                <Route path="services/ai-automation" element={<ServiceDetailPage kind="ai-automation" />} />
-                <Route path="services/odoo-crm" element={<ServiceDetailPage kind="odoo-crm" />} />
-                <Route path="services/contact-center" element={<ServiceDetailPage kind="contact-center" />} />
-                <Route path="how-it-works" element={<HowItWorksPage />} />
-                <Route path="support" element={<SupportPage />} />
-                <Route path="accessibility" element={<AccessibilityPage />} />
-                <Route path="company-profile" element={<CorporateProfilePage />} />
-                <Route path="privacy" element={<Privacy />} />
-                <Route path="cookies" element={<CookiePolicyPage />} />
-                <Route path="cookie-preferences" element={<CookiePreferencesPage />} />
-                <Route path="privacy-choices" element={<PrivacyChoicesPage />} />
-                <Route path="communications-preferences" element={<CommunicationsPreferencesPage />} />
-                <Route path="ai-receptionist" element={<AIReceptionist />} />
-                <Route path="pricing" element={<AIReceptionist />} />
-                <Route path="book-demo" element={<BookDemoPage />} />
-                <Route path="request-pricing" element={<RequestPricingPage />} />
-                <Route path="industries" element={<IndustriesDirectory />} />
-                <Route path="industries/:industrySlug" element={<IndustryPage />} />
-                <Route path="security" element={<SecurityPage />} />
-                <Route path="terms" element={<Terms />} />
-                <Route path="sms" element={<LegalPage kind="sms" />} />
-                <Route path="sms-terms" element={<LegalPage kind="smsTerms" />} />
-                <Route path="contact-information" element={<LegalPage kind="contactInformation" />} />
+              <Route path="/privacy" element={<MarketingRoute><Privacy /></MarketingRoute>} />
+              <Route path="/terms" element={<MarketingRoute><Terms /></MarketingRoute>} />
+              <Route path="/sms" element={<MarketingRoute><LegalPage kind="sms" /></MarketingRoute>} />
+              <Route path="/sms-terms" element={<MarketingRoute><LegalPage kind="smsTerms" /></MarketingRoute>} />
+              <Route path="/contact-information" element={<MarketingRoute><LegalPage kind="contactInformation" /></MarketingRoute>} />
+              <Route path="/:locale" element={<MarketingRoute><LocaleBoundary /></MarketingRoute>}>
+                {featureRoutes.map(({path, element}) => <Route key={path} path={path.replace(/^\//, "")} element={<MarketingRoute>{element}</MarketingRoute>} />)}
+                <Route index element={<MarketingRoute><Home /></MarketingRoute>} />
+                <Route path="connected-systems" element={<MarketingRoute><ConnectedHome /></MarketingRoute>} />
+                <Route path="systems" element={<MarketingRoute><ModernHome /></MarketingRoute>} />
+                <Route path="solutions" element={<MarketingRoute><LandingIndex kind="service" /></MarketingRoute>} />
+                <Route path="login" element={<MarketingRoute><Login /></MarketingRoute>} />
+                <Route path="signup" element={<MarketingRoute><Signup /></MarketingRoute>} />
+                <Route path="about" element={<MarketingRoute><AboutUs /></MarketingRoute>} />
+                <Route path="case-studies" element={<MarketingRoute><CaseStudies /></MarketingRoute>} />
+                <Route path="contact" element={<MarketingRoute><ContactUs /></MarketingRoute>} />
+                <Route path="contact/sales" element={<MarketingRoute><ContactSales /></MarketingRoute>} />
+                <Route path="contact/support" element={<MarketingRoute><ContactSupport /></MarketingRoute>} />
+                <Route path="electronic-billing" element={<MarketingRoute><ElectronicBilling /></MarketingRoute>} />
+                <Route path="electronic-billing/form" element={<MarketingRoute><ElectronicBillingForm /></MarketingRoute>} />
+                <Route path="hiring/positions" element={<MarketingRoute><HiringPosition /></MarketingRoute>} />
+                <Route path="services" element={<MarketingRoute><Services /></MarketingRoute>} />
+                <Route path="services/software-development" element={<MarketingRoute><ServiceDetailPage kind="software-development" /></MarketingRoute>} />
+                <Route path="services/ai-automation" element={<MarketingRoute><ServiceDetailPage kind="ai-automation" /></MarketingRoute>} />
+                <Route path="services/odoo-crm" element={<MarketingRoute><ServiceDetailPage kind="odoo-crm" /></MarketingRoute>} />
+                <Route path="services/contact-center" element={<MarketingRoute><ServiceDetailPage kind="contact-center" /></MarketingRoute>} />
+                <Route path="how-it-works" element={<MarketingRoute><HowItWorksPage /></MarketingRoute>} />
+                <Route path="support" element={<MarketingRoute><SupportPage /></MarketingRoute>} />
+                <Route path="accessibility" element={<MarketingRoute><AccessibilityPage /></MarketingRoute>} />
+                <Route path="company-profile" element={<MarketingRoute><CorporateProfilePage /></MarketingRoute>} />
+                <Route path="privacy" element={<MarketingRoute><Privacy /></MarketingRoute>} />
+                <Route path="cookies" element={<MarketingRoute><CookiePolicyPage /></MarketingRoute>} />
+                <Route path="cookie-preferences" element={<MarketingRoute><CookiePreferencesPage /></MarketingRoute>} />
+                <Route path="privacy-choices" element={<MarketingRoute><PrivacyChoicesPage /></MarketingRoute>} />
+                <Route path="communications-preferences" element={<MarketingRoute><CommunicationsPreferencesPage /></MarketingRoute>} />
+                <Route path="ai-receptionist" element={<MarketingRoute><AIReceptionist /></MarketingRoute>} />
+                <Route path="pricing" element={<MarketingRoute><AIReceptionist /></MarketingRoute>} />
+                <Route path="book-demo" element={<MarketingRoute><BookDemoPage /></MarketingRoute>} />
+                <Route path="request-pricing" element={<MarketingRoute><RequestPricingPage /></MarketingRoute>} />
+                <Route path="industries" element={<MarketingRoute><IndustriesDirectory /></MarketingRoute>} />
+                <Route path="industries/:industrySlug" element={<MarketingRoute><IndustryPage /></MarketingRoute>} />
+                <Route path="security" element={<MarketingRoute><SecurityPage /></MarketingRoute>} />
+                <Route path="terms" element={<MarketingRoute><Terms /></MarketingRoute>} />
+                <Route path="sms" element={<MarketingRoute><LegalPage kind="sms" /></MarketingRoute>} />
+                <Route path="sms-terms" element={<MarketingRoute><LegalPage kind="smsTerms" /></MarketingRoute>} />
+                <Route path="contact-information" element={<MarketingRoute><LegalPage kind="contactInformation" /></MarketingRoute>} />
                 <Route path="auth/*" element={<AuthProvider element={<AllRoutes />} />} />
-                <Route path="thank-you" element={<ThankYouPage />} />
-                <Route path="marketplace/*" element={<PlatformHub area="marketplace" />} />
+                <Route path="thank-you" element={<MarketingRoute><ThankYouPage /></MarketingRoute>} />
+                <Route path="marketplace/*" element={<MarketingRoute><PlatformHub area="marketplace" /></MarketingRoute>} />
                 <Route path="sales/*" element={<AuthProvider element={<PlatformHub area="sales" />} />} />
                 <Route path="portal/*" element={<AuthProvider element={<PlatformHub area="customer" />} />} />
-                <Route path="partners/*" element={<PlatformHub area="partner" />} />
-                <Route path="developers/*" element={<PlatformHub area="developer" />} />
-                <Route path="documentation/*" element={<PlatformHub area="documentation" />} />
-                <Route path="academy/*" element={<PlatformHub area="academy" />} />
-                <Route path="support/*" element={<PlatformHub area="support" />} />
-                <Route path="status" element={<PlatformHub area="status" />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="partners/*" element={<MarketingRoute><PlatformHub area="partner" /></MarketingRoute>} />
+                <Route path="developers/*" element={<MarketingRoute><PlatformHub area="developer" /></MarketingRoute>} />
+                <Route path="documentation/*" element={<MarketingRoute><PlatformHub area="documentation" /></MarketingRoute>} />
+                <Route path="academy/*" element={<MarketingRoute><PlatformHub area="academy" /></MarketingRoute>} />
+                <Route path="support/*" element={<MarketingRoute><PlatformHub area="support" /></MarketingRoute>} />
+                <Route path="status" element={<MarketingRoute><PlatformHub area="status" /></MarketingRoute>} />
+                <Route path="*" element={<MarketingRoute><NotFound /></MarketingRoute>} />
               </Route>
-              <Route path="*" element={<LocalizedRedirect />} />
+              <Route path="*" element={<MarketingRoute><LocalizedRedirect /></MarketingRoute>} />
             </Routes>
           </Suspense></SessionProvider></ChatWidgetBoundary>
         </BrowserRouter>
