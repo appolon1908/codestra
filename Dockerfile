@@ -18,7 +18,7 @@ ENV VITE_PUBLIC_SALES_PHONE=${VITE_PUBLIC_SALES_PHONE}
 ENV VITE_PUBLIC_SITE_URL=${VITE_PUBLIC_SITE_URL}
 RUN npm run build
 
-FROM nginxinc/nginx-unprivileged:1.31.5-alpine3.24
+FROM nginxinc/nginx-unprivileged:1.31.6-alpine3.24
 
 ARG SOURCE_REVISION=unknown
 ARG APP_VERSION=development
