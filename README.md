@@ -73,3 +73,7 @@ See `docs/deployment-security.md` for the complete gate, evidence requirements, 
 ## License
 
 Proprietary. See `LICENSE`.
+
+## Governance Git hooks
+
+Enable the shared pre-push checks from your approved workstation using the [hook setup and lease instructions](docs/governance-git-hooks.md). Activation is explicit for each clone; existing CI and publication requirements still apply.
