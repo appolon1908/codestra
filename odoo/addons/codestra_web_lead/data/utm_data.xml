@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="utm_campaign_codestra_web_ai" model="utm.campaign">
+        <field name="name">Codestra Website — AI &amp; Development</field>
+    </record>
+
+    <record id="utm_source_codestra_website" model="utm.source">
+        <field name="name">Codestra Website</field>
+    </record>
+</odoo>

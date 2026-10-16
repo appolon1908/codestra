@@ -1,0 +1,164 @@
+[
+  {
+    "slug": "healthcare",
+    "kind": "industry",
+    "name": "Healthcare",
+    "eyebrow": "AI for healthcare operations",
+    "headline": "Healthcare AI that improves access, coordination, and administrative work",
+    "description": "Design secure AI and automation for patient access, scheduling, referral intake, transportation, documentation, service operations, and staff knowledge workflows.",
+    "challenge": "Healthcare work crosses patients, caregivers, clinicians, payers, transportation, contact centers, and fragmented systems. Delays and re-entry consume staff time, while sensitive data and consequential decisions demand strict access and review.",
+    "approach": "Codestra focuses on administrative and operational workflows with clear authority. We minimize protected data, enforce role and record access, preserve human clinical judgment, document integrations, and measure access, completion, quality, and staff effort.",
+    "capabilities": ["Patient access, scheduling, and reminder workflows", "Referral and document intake automation", "Healthcare transportation and callback orchestration", "Staff knowledge, summaries, and administrative copilots"],
+    "outcomes": ["Shorter patient intake and scheduling cycles", "Fewer incomplete referrals and missed handoffs", "Reduced repetitive administrative work", "Secure evidence across automated and human actions"],
+    "keywords": ["healthcare AI development", "healthcare workflow automation", "patient scheduling automation", "medical transportation software", "healthcare chatbot development", "referral intake automation", "HIPAA aware AI architecture", "healthcare operations software"],
+    "faqs": [
+      {"question": "Does Codestra build AI that makes clinical decisions?", "answer": "Our default focus is administrative and operational improvement. Any clinical decision support requires separate evidence, regulatory, safety, validation, and licensed professional oversight beyond a normal automation engagement."},
+      {"question": "Can healthcare workflows connect to an existing CRM or EHR?", "answer": "Yes, through supported interfaces and a minimum-necessary data contract. Identity, consent, purpose, field access, audit, and error recovery are designed before integration is activated."},
+      {"question": "How is sensitive health information protected?", "answer": "Protection includes data minimization, encryption, private service identities, tenant and record permissions, redacted logs, retention controls, access evidence, and approved hosting and provider agreements."}
+    ]
+  },
+  {
+    "slug": "financial-services",
+    "kind": "industry",
+    "name": "Financial Services",
+    "eyebrow": "AI for financial operations",
+    "headline": "Financial-services AI built for evidence, controls, and accountable decisions",
+    "description": "Modernize onboarding, servicing, document review, fraud operations, collections, support, and internal analysis without bypassing financial controls.",
+    "challenge": "Financial workflows combine sensitive identity data, complex products, regulated communications, money movement, and high costs for incorrect or unexplained decisions. Prototype speed cannot replace authorization and evidence.",
+    "approach": "Codestra separates assistance, recommendation, approval, and execution. We establish authoritative identities and records, versioned commands, segregation of duties, idempotency, explainability, audit trails, and capability flags before live financial actions.",
+    "capabilities": ["Application and document intake workflows", "Servicing, support, and collections assistance", "Risk and fraud case prioritization", "Controlled financial integration and audit evidence"],
+    "outcomes": ["Faster processing of complete applications", "More consistent servicing and case preparation", "Lower manual effort around documents and follow-up", "Traceable controls for every consequential action"],
+    "keywords": ["financial services AI", "fintech software development", "loan workflow automation", "banking AI integration", "financial document automation", "collections automation software", "fraud operations AI", "regulated AI development"],
+    "faqs": [
+      {"question": "Can AI approve a loan or financial application automatically?", "answer": "Consequential eligibility and pricing require approved policy, legal review, explainability, monitoring, adverse-action handling, and appropriate human governance. We do not enable live decisions before those controls exist."},
+      {"question": "How are financial side effects protected from duplicates?", "answer": "Every command uses idempotency, expected state or version, transaction boundaries, durable delivery, reconciliation, and an immutable result so retries cannot silently repeat a financial action."},
+      {"question": "Can Codestra integrate lenders or banking providers?", "answer": "Yes, behind provider adapters with authenticated requests, normalized internal contracts, webhook provenance, durable inbox and outbox processing, capability flags, and sandbox-to-production release gates."}
+    ]
+  },
+  {
+    "slug": "insurance",
+    "kind": "industry",
+    "name": "Insurance",
+    "eyebrow": "AI for insurance workflows",
+    "headline": "Insurance AI that helps teams process evidence and serve policyholders faster",
+    "description": "Improve submission intake, policy service, claims documents, triage, correspondence, knowledge, and broker operations with controlled AI and automation.",
+    "challenge": "Insurance work arrives through varied forms, emails, photos, documents, and conversations. Teams reconstruct context across policy, claimant, broker, provider, and claim systems while maintaining fairness and detailed evidence.",
+    "approach": "We automate classification, extraction, completeness, routing, and preparation while preserving adjuster and underwriting authority. Every recommendation links to source evidence, policy context, confidence, and the person responsible for the decision.",
+    "capabilities": ["Submission and first-notice intake automation", "Policy and claims document intelligence", "Service chatbot and agent-assist workflows", "Case triage, tasking, and evidence summaries"],
+    "outcomes": ["Faster intake and completeness review", "Reduced manual document and correspondence handling", "Consistent case preparation for specialists", "Clear source evidence and decision ownership"],
+    "keywords": ["insurance AI development", "claims automation software", "insurance document processing", "policy servicing automation", "underwriting workflow AI", "FNOL automation", "insurance chatbot development", "insurtech software company"],
+    "faqs": [
+      {"question": "Can AI decide whether to approve a claim?", "answer": "AI can organize evidence and flag policy-relevant information, but claim decisions require approved rules, fairness controls, explanation, appeal handling, and authorized human ownership appropriate to the jurisdiction."},
+      {"question": "Can the system process photos and scanned claim documents?", "answer": "Yes. A secure document and vision pipeline can classify evidence, extract structured fields, detect missing items, retain source links, and route uncertain results to a reviewer."},
+      {"question": "How can AI help insurance service agents?", "answer": "A copilot can assemble policy and interaction context, retrieve approved guidance, draft responses, suggest next tasks, and summarize calls while the agent approves communications and record changes."}
+    ]
+  },
+  {
+    "slug": "legal",
+    "kind": "industry",
+    "name": "Legal Services",
+    "eyebrow": "AI for legal operations",
+    "headline": "Legal AI that accelerates review while preserving professional judgment",
+    "description": "Build secure tools for intake, matter preparation, document review, knowledge retrieval, chronology, drafting support, and legal-service operations.",
+    "challenge": "Legal teams work with confidential, high-volume material where missing a detail matters. Generic AI tools can expose client information, fabricate authority, ignore privilege boundaries, and produce text without traceable sources.",
+    "approach": "Codestra scopes AI to a defined legal workflow, isolates matters and permissions, grounds output in authorized sources, requires citations, preserves original evidence, and keeps licensed professionals responsible for advice and consequential decisions.",
+    "capabilities": ["Client and matter intake automation", "Permission-aware legal knowledge retrieval", "Document comparison, extraction, and chronology", "Draft preparation and quality-check workflows"],
+    "outcomes": ["Less time spent organizing matter information", "Faster discovery of relevant source material", "Consistent intake and document preparation", "Clear human review and source traceability"],
+    "keywords": ["legal AI development", "law firm workflow automation", "legal document AI", "contract review software development", "legal knowledge search", "client intake automation law firm", "legal operations software", "private legal AI"],
+    "faqs": [
+      {"question": "Does the AI provide legal advice?", "answer": "The system can assist authorized professionals with preparation, research over approved sources, extraction, and drafting. It should not present itself as a substitute for licensed legal judgment."},
+      {"question": "How are client and matter boundaries protected?", "answer": "Identity, firm, matter, ethical-wall, document, and action permissions are applied before retrieval or tool use. Cross-matter leakage is explicitly tested and logged."},
+      {"question": "Can the system cite the source behind an answer?", "answer": "Yes. Retrieval can return document, section, page, and excerpt references so a professional can inspect the authority before using or approving the output."}
+    ]
+  },
+  {
+    "slug": "accounting",
+    "kind": "industry",
+    "name": "Accounting",
+    "eyebrow": "AI for accounting operations",
+    "headline": "Accounting automation that organizes evidence before the deadline",
+    "description": "Improve client intake, document collection, categorization support, reconciliation preparation, workpaper assembly, review queues, and recurring communication.",
+    "challenge": "Accounting teams repeatedly request missing evidence, download attachments, rename files, transfer fields, prepare reconciliations, and chase approvals. Busy periods amplify inconsistent checklists and unclear client status.",
+    "approach": "Codestra creates a secure client-to-workpaper workflow. Documents are validated and linked to requests, extracted data is checked against rules, exceptions are assigned, and professional reviewers approve entries and deliverables.",
+    "capabilities": ["Client request and document collection portals", "Invoice, receipt, and statement extraction", "Reconciliation and exception preparation", "Recurring task, deadline, and review orchestration"],
+    "outcomes": ["Fewer incomplete client submissions", "Less manual file and field organization", "Faster review of clear cases and exceptions", "Visible status across client, preparer, and reviewer"],
+    "keywords": ["accounting automation services", "AI for accounting firms", "client document collection portal", "bookkeeping workflow automation", "reconciliation automation", "accounting document AI", "tax workflow automation", "professional services automation"],
+    "faqs": [
+      {"question": "Can AI categorize transactions automatically?", "answer": "It can recommend categories with evidence and confidence, but policy, materiality, entity context, and review thresholds determine which cases may proceed and which require a professional."},
+      {"question": "Can clients see what documents are still missing?", "answer": "Yes. A portal can present a live checklist, secure upload, validation feedback, due dates, messages, and completion status without exposing internal workpapers."},
+      {"question": "Can this connect to an accounting ERP?", "answer": "Yes. Approved records can flow through an adapter to the ERP, while source documents, reviewer identity, mapping version, and integration result remain traceable."}
+    ]
+  },
+  {
+    "slug": "government",
+    "kind": "industry",
+    "name": "Government & Public Sector",
+    "eyebrow": "AI for public services",
+    "headline": "Public-sector AI that improves service access and administrative capacity",
+    "description": "Modernize constituent intake, case routing, document processing, staff knowledge, inspections, grants, and service communication with accountable automation.",
+    "challenge": "Public services must support diverse users, legacy systems, accessibility, records obligations, multiple languages, complex eligibility, and high scrutiny. Opaque automation can erode trust even when the intent is efficiency.",
+    "approach": "Codestra designs transparent, accessible workflows with explicit authority, source evidence, appeal and escalation paths, public-record and retention controls, security boundaries, and measurable service outcomes.",
+    "capabilities": ["Accessible constituent portals and guided intake", "Case, document, and correspondence automation", "Staff knowledge search and service copilots", "Inspection, grant, permit, and task orchestration"],
+    "outcomes": ["Faster routing and response for public requests", "Reduced administrative burden on staff", "Better accessibility and status visibility", "Auditable rules, evidence, and human decision ownership"],
+    "keywords": ["government AI solutions", "public sector automation", "constituent service portal", "government document automation", "public service chatbot", "permit workflow software", "grant management automation", "responsible government AI"],
+    "faqs": [
+      {"question": "How is public-sector AI made transparent?", "answer": "The service explains what automation does, preserves source and rule evidence, identifies responsible authorities, supports human review and appeal, and publishes appropriate performance and error measures."},
+      {"question": "Can the experience meet accessibility requirements?", "answer": "Accessibility is designed into navigation, forms, language, keyboard use, contrast, error feedback, documents, and testing rather than added after the interface is complete."},
+      {"question": "Can modern workflows integrate with legacy government systems?", "answer": "Yes. APIs are preferred, but controlled adapters, queues, file exchange, and carefully governed RPA can bridge systems while a longer-term modernization path is defined."}
+    ]
+  },
+  {
+    "slug": "energy",
+    "kind": "industry",
+    "name": "Energy & Utilities",
+    "eyebrow": "AI for energy operations",
+    "headline": "Energy and utility AI that connects field evidence to operational decisions",
+    "description": "Apply forecasting, document intelligence, inspection, maintenance, customer service, and workflow automation across energy and utility operations.",
+    "challenge": "Energy operations combine physical assets, field crews, weather, customer demand, regulatory reporting, safety, and legacy operational technology. Data timing and system boundaries matter as much as model accuracy.",
+    "approach": "Codestra begins with a bounded operational decision, validates telemetry and field evidence, separates IT and OT authority, designs safe fallback, and integrates insights into work orders, planning, customer communication, or review queues.",
+    "capabilities": ["Demand, load, and operational forecasting", "Asset inspection and maintenance prioritization", "Field document and work-order automation", "Customer service and outage communication workflows"],
+    "outcomes": ["Earlier visibility into demand and asset risk", "More focused inspection and maintenance work", "Faster field-to-office information flow", "Consistent customer and regulatory communication"],
+    "keywords": ["energy AI solutions", "utility workflow automation", "predictive maintenance energy", "utility demand forecasting", "field service AI", "energy document automation", "outage communication automation", "energy software development"],
+    "faqs": [
+      {"question": "Can AI connect directly to operational technology?", "answer": "Safety-critical control requires strict OT governance. We normally begin with read-only or advisory use, separated networks, approved interfaces, and human control before any operational command is considered."},
+      {"question": "How can vision AI support field inspection?", "answer": "Images can be checked for defined conditions, linked to asset and location records, scored for confidence, and routed to qualified reviewers with the original evidence preserved."},
+      {"question": "Can forecasting use weather and external data?", "answer": "Yes. External signals can be governed with provenance, availability, licensing, and fallback rules, then combined with historical demand and operational data in reproducible pipelines."}
+    ]
+  },
+  {
+    "slug": "telecommunications",
+    "kind": "industry",
+    "name": "Telecommunications",
+    "eyebrow": "AI for communications operations",
+    "headline": "Telecommunications AI for faster service, network operations, and customer workflows",
+    "description": "Build automation for provisioning, support, routing, billing cases, network-event triage, sales operations, messaging, and contact-center assistance.",
+    "challenge": "Telecom operations span carriers, DIDs, SIP, messaging providers, network events, provisioning, billing, identity, and customer support. Small synchronization errors can interrupt service or create hard-to-reconcile charges.",
+    "approach": "Codestra defines authoritative inventory and command paths, normalizes provider events, adds idempotency and reconciliation, and places AI around triage, knowledge, summaries, and recommendations without bypassing telecom controls.",
+    "capabilities": ["Provisioning and inventory workflow automation", "Network event, alarm, and ticket triage", "Contact-center agent assist and voice AI", "Messaging, billing, and provider integration"],
+    "outcomes": ["Faster provisioning and issue routing", "Reduced manual provider and inventory reconciliation", "More complete support context for agents", "Traceable telecom commands and delivery events"],
+    "keywords": ["telecommunications AI", "telecom workflow automation", "VoIP software development", "SIP provisioning automation", "contact center AI", "SMS API integration", "telecom billing automation", "network operations AI"],
+    "faqs": [
+      {"question": "Can Codestra integrate SIP, SMS, email, and CRM workflows?", "answer": "Yes. Each channel has a provider adapter and event contract, while Kong, queues, identity, and Odoo can provide one governed operational path across channels."},
+      {"question": "How are duplicate provider events handled?", "answer": "Provider message and event identifiers are stored in a durable inbox, signatures are verified, and consumers deduplicate before changing internal delivery or billing state."},
+      {"question": "Can AI assist a contact-center agent during a call?", "answer": "Yes. Real-time or post-call workflows can retrieve approved guidance, summarize context, prepare dispositions and notes, and schedule follow-up while the agent controls final CRM changes."}
+    ]
+  },
+  {
+    "slug": "education",
+    "kind": "industry",
+    "name": "Education",
+    "eyebrow": "AI for education operations",
+    "headline": "Education AI that supports learners and staff without replacing educators",
+    "description": "Improve admissions, student support, scheduling, knowledge, document intake, communications, tutoring assistance, and administrative workflows.",
+    "challenge": "Education organizations manage high-volume questions, deadlines, records, financial processes, accessibility, minors' data, and diverse learner needs. Generic AI can provide incorrect guidance or blur the line between support and academic judgment.",
+    "approach": "Codestra grounds answers in approved institutional information, makes role and learner boundaries explicit, preserves educator decisions, adds escalation and source references, and evaluates service access, accuracy, completion, and equity.",
+    "capabilities": ["Admissions and enrollment workflow automation", "Student-service knowledge and conversational support", "Document, scheduling, and reminder workflows", "Educator copilots and bounded learning assistance"],
+    "outcomes": ["Faster answers to routine student questions", "Fewer incomplete applications and missed tasks", "Reduced administrative burden on staff", "Clear escalation to the responsible educator or office"],
+    "keywords": ["education AI development", "student service automation", "university chatbot development", "admissions workflow automation", "education document processing", "AI tutoring platform development", "school operations software", "higher education AI"],
+    "faqs": [
+      {"question": "Can the AI answer institution-specific policy questions?", "answer": "Yes. Responses can be restricted to approved, current institutional sources with citations and office escalation when the source is missing or the question requires judgment."},
+      {"question": "How is student information protected?", "answer": "The system minimizes data, applies student and staff permissions, separates institutions and courses, protects minors where applicable, redacts logs, and follows approved retention and provider policies."},
+      {"question": "Does the system replace teachers or advisors?", "answer": "No. It can prepare context, support routine guidance, and automate administration, while educators and authorized staff remain responsible for learning, welfare, eligibility, and consequential decisions."}
+    ]
+  }
+]

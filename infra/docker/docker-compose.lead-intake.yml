@@ -1,0 +1,94 @@
+name: codestra-lead-intake
+
+services:
+  lead-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: codestra_leads
+      POSTGRES_USER: codestra_leads
+      POSTGRES_PASSWORD_FILE: /run/secrets/lead_db_password
+    secrets:
+      - lead_db_password
+    volumes:
+      - lead-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U codestra_leads -d codestra_leads"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - lead-private
+    security_opt:
+      - no-new-privileges:true
+
+  lead-migrate:
+    build:
+      context: ../../services/lead-intake-adapter
+      dockerfile: Dockerfile
+    command: ["python", "scripts/migrate.py"]
+    env_file:
+      - ../../.env.odoo.production
+    depends_on:
+      lead-db:
+        condition: service_healthy
+    networks:
+      - lead-private
+    restart: "no"
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+
+  codestra-lead-adapter:
+    build:
+      context: ../../services/lead-intake-adapter
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../../.env.odoo.production
+    depends_on:
+      lead-db:
+        condition: service_healthy
+      lead-migrate:
+        condition: service_completed_successfully
+    expose:
+      - "8080"
+    networks:
+      - lead-private
+      - kong-private
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 30s
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health/live', timeout=2)",
+        ]
+      interval: 15s
+      timeout: 3s
+      start_period: 15s
+      retries: 5
+
+networks:
+  lead-private:
+    internal: true
+  kong-private:
+    external: true
+    name: codestra-kong-private
+
+volumes:
+  lead-db-data:
+
+secrets:
+  lead_db_password:
+    file: ../../secrets/lead_db_password.txt
