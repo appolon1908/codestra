@@ -53,7 +53,7 @@ EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Infustruction-repo": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Keycloak": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Middleware-": MIDDLEWARE_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908/codestra": '9e003fc287fb6ef5c664a8c57402b898f297dc680d56aa90d6a3588347980f09',
+    "appolon1908/codestra": '8d01d594b4d7d825aaf1281937e35e47276b57131c8aa85b2beec256b8620dce',
     "appolon1908-hue/beyvra-backend": BACKEND_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/backend2": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-frontend": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
@@ -63,8 +63,7 @@ EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Telnexa-web": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
 }
 MANUAL_RELEASE_INTENT_SHA256 = (
-    "2362835ba774c42766bb5da01d72b184"
-    "2d66ef7a63635971d15378a730e301b5"
+    '82eaf91a206cb3715742a78081b5504b944876dbb7a636d1b7cd07736fef9d84'
 )
 SCHEMA = "codestra.production-orchestrator-contract.v1"
 PHASES = ["plan", "staging", "canary", "production"]
@@ -80,7 +79,7 @@ SAFETY_KEYS = {
 }
 ALLOWED_ACTIONS = {
     "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
-    "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+    'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9',
     "sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6",
 }
 PINNED_WORKFLOW_PARSER_INSTALL = (
@@ -672,10 +671,10 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
     "appolon1908/codestra": {
-        '.github/workflows/ci.yml': '1d55c321b78584fa491c45e8791e92f6d2931fd4227adf25d2f3c4295aa40ec0',
-        '.github/workflows/web-quality.yml': '9635ab0df5cdbfe6832512b824f07f43b218ba5160863d3d38c7dae5586e8e9d',
-        '.github/workflows/lead-intake-quality.yml': '25e07c2dce0afb2780818d7a0bbfcd442287f1d567d91ab007f92fdf1c0535eb',
-        '.github/workflows/ghcr-readonly-preflight.yml': '88e1789d8cb421a2a9d8be03e4c4e9525467c66d4853e55c090fe165dd6cacf9',
+        '.github/workflows/ci.yml': 'c4d25a8afc96c76028cb088e8586388981c2bcb6bbef585e463640dba4032c7a',
+        '.github/workflows/web-quality.yml': '5c8397653dfd8d2f4bb98736c914e58add3bbfbbcc31b453d5726f7aadfcf500',
+        '.github/workflows/lead-intake-quality.yml': '1f15ac2bfa45f16ed755e793c2709798799dd34db852f185726ee8225a5ddcb5',
+        '.github/workflows/ghcr-readonly-preflight.yml': 'b8f54c3dfdb7612b88591aa19ed6694c19b7cb7004547b11db343cfc03d3d262',
     },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
@@ -802,7 +801,7 @@ APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256: dict[
     "appolon1908/codestra": {
         ".github/workflows/web-quality.yml": {
             'lighthouserc.json': 'f055723de41d935d28c05ba27f12223228600893aeb9ed4fa416055d7efb8e48',
-            'package-lock.json': '19bed7155395146070d6cc94b19de81e96006ef188c2f0b7b1c9a5ee30cfafde',
+            'package-lock.json': 'cfe08cf33da5941c8d2fc5457818f45bfc4c96421c1c20b39ecae03159d789aa',
         },
         ".github/workflows/lead-intake-quality.yml": {
             'services/lead-intake-adapter/app/__init__.py': '1e66d2f1077c99964e4650aeb8215aae8dd803c577f3b97da7e2eacd9d15288f',
@@ -9385,6 +9384,39 @@ def validate_portfolio_control_plane_bindings() -> None:
             bindings[dependency] = expected
 
 
+def validate_codestra_control_plane_bindings() -> None:
+    repository = "appolon1908/codestra"
+    if load_contract().get("repository") != repository:
+        return
+    for path in APPROVED_CONTROL_PLANE_WORKFLOW_SHA256[repository]:
+        workflow = (ROOT / path).read_text(encoding="utf-8")
+        require(
+            not workflow_has_runtime_mutation(workflow, path),
+            f"reviewed Codestra validation workflow was rejected: {path}",
+        )
+        altered = yaml.load(workflow, Loader=UniqueKeyLoader)
+        altered["jobs"]["unreviewed-deploy"] = {
+            "runs-on": "ubuntu-24.04",
+            "steps": [{"run": "kubectl apply -f runtime.yml"}],
+        }
+        try:
+            require_mutating_jobs_disabled(yaml.safe_dump(altered), path)
+        except ContractError:
+            pass
+        else:
+            raise ContractError(f"unreviewed Codestra workflow mutation was accepted: {path}")
+    for path, bindings in APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256[repository].items():
+        for dependency, expected in bindings.items():
+            bindings[dependency] = "0" * 64
+            try:
+                require(
+                    verified_control_plane_dependencies(repository, path) is None,
+                    f"Codestra dependency drift was accepted: {dependency}",
+                )
+            finally:
+                bindings[dependency] = expected
+
+
 def validate_ephemeral_lead_database(workflow: str) -> None:
     document = yaml.load(workflow, Loader=UniqueKeyLoader)
     job = document["jobs"]["adapter-contract"]
@@ -9453,6 +9485,7 @@ def main() -> int:
     validate_local_lighthouse_regressions()
     validate_ephemeral_lead_database_regressions()
     validate_portfolio_control_plane_bindings()
+    validate_codestra_control_plane_bindings()
     validate(contract)
     validate_negative_regressions(contract)
     validate_intent_negative_regressions(contract)
