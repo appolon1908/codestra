@@ -53,7 +53,7 @@ EXPECTED_RELEASE_VALIDATOR_SECURITY_SHA256 = {
     "appolon1908-hue/Infustruction-repo": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Keycloak": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/Middleware-": MIDDLEWARE_RELEASE_VALIDATOR_SECURITY_SHA256,
-    "appolon1908/codestra": '8d01d594b4d7d825aaf1281937e35e47276b57131c8aa85b2beec256b8620dce',
+    "appolon1908/codestra": 'ab84354994a059b4b7ba68f1ddc5f970354382dd4c08995624cb6d73cd7d2c1c',
     "appolon1908-hue/beyvra-backend": BACKEND_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/backend2": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
     "appolon1908-hue/beyvra-frontend": STANDARD_RELEASE_VALIDATOR_SECURITY_SHA256,
@@ -671,10 +671,10 @@ APPROVED_COMPLEX_SCRIPT_DEPENDENCY_SCAN: dict[str, frozenset[str]] = {
 }
 APPROVED_CONTROL_PLANE_WORKFLOW_SHA256: dict[str, dict[str, str]] = {
     "appolon1908/codestra": {
-        '.github/workflows/ci.yml': 'c4d25a8afc96c76028cb088e8586388981c2bcb6bbef585e463640dba4032c7a',
-        '.github/workflows/web-quality.yml': '5c8397653dfd8d2f4bb98736c914e58add3bbfbbcc31b453d5726f7aadfcf500',
-        '.github/workflows/lead-intake-quality.yml': '1f15ac2bfa45f16ed755e793c2709798799dd34db852f185726ee8225a5ddcb5',
-        '.github/workflows/ghcr-readonly-preflight.yml': 'b8f54c3dfdb7612b88591aa19ed6694c19b7cb7004547b11db343cfc03d3d262',
+        '.github/workflows/ci.yml': 'c7d50efc0b8a3d4681141aa19687f5d6602851d867aaa0bacb6120e208cfe0ec',
+        '.github/workflows/web-quality.yml': '3e906e7299bb6979ea2b7dc38babe9d227006524327938ff66c7044cdd4681d9',
+        '.github/workflows/lead-intake-quality.yml': 'e6b99b1b32279e519b1c447360c3f0de425bac6cb0e314a21b6f1ac70163d7d2',
+        '.github/workflows/ghcr-readonly-preflight.yml': 'ceb37db270492acea4a262fac5a60804cfaf442c3062afb77fc42bcbfbbe202d',
     },
     "appolon1908-hue/Middleware-": {
         ".github/workflows/portfolio-production-ruleset-apply.yml": (
@@ -801,7 +801,7 @@ APPROVED_CONTROL_PLANE_DEPENDENCY_SHA256: dict[
     "appolon1908/codestra": {
         ".github/workflows/web-quality.yml": {
             'lighthouserc.json': 'f055723de41d935d28c05ba27f12223228600893aeb9ed4fa416055d7efb8e48',
-            'package-lock.json': 'cfe08cf33da5941c8d2fc5457818f45bfc4c96421c1c20b39ecae03159d789aa',
+            'package-lock.json': 'bf90ba3abe7ca0759b5f2233c72f601199c2cc33ae2ee6eead6e5132ddbd39d2',
         },
         ".github/workflows/lead-intake-quality.yml": {
             'services/lead-intake-adapter/app/__init__.py': '1e66d2f1077c99964e4650aeb8215aae8dd803c577f3b97da7e2eacd9d15288f',
